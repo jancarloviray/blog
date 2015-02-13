@@ -25,15 +25,13 @@
         
         {% include comments.html %}
       </div>
+      
+      <div class="footer">
+        <p>&copy; {{ site.time | date: '%Y' }}. All rights reserved.</p>
+      </div>
     </div>
 
     <label for="sidebar-checkbox" class="sidebar-toggle"></label>
-
-    <div class="footer">
-        <p>
-          &copy; {{ site.time | date: '%Y' }}. All rights reserved.
-        </p>
-    </div>
 
     <script>
       (function(document) {
