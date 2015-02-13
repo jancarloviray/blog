@@ -5,7 +5,7 @@ comments: True
 ---
 
 <p class="message">
-Hey there! Welcome to my blog! I am Jan Carlo Viray, Senior Front-End Developer in Orange County, CA. Hope you learn a thing or two. Always feel free to leave comments.
+Hey there! Welcome to my blog! I am Jan Carlo Viray, **Senior Front-End Developer in Orange County, CA**. Hope you learn a thing or two. Always feel free to leave comments.
 </p>
 
 Follow me here:
