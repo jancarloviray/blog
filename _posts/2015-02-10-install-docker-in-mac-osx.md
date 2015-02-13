@@ -9,11 +9,11 @@ comments: True
 
 ## Using Docker in Mac OSX
 
-“Because the Docker Engine uses Linux-specific kernel features, you’ll need to use a lightweight virtual machine (VM) to run it on OSX. You use the OS X Docker client to control the virtualized Docker Engine to build, run and manage Docker containers.” - [docker.com](https://docs.docker.com/installation/mac/)
+> “Because the Docker Engine uses Linux-specific kernel features, you’ll need to use a lightweight virtual machine (VM) to run it on OSX. You use the OS X Docker client to control the virtualized Docker Engine to build, run and manage Docker containers.” - [docker.com](https://docs.docker.com/installation/mac/)
 
 Before continuing, install [Boot2Docker](https://github.com/boot2docker/boot2docker). It will install a virtual machine (using VirtualBox) that is all set up to run the Docker daemon. Click [here](https://github.com/boot2docker/osx-installer/releases) to get the latest releases.
 
-I added per-line information to hopefully make things a bit clearer. Let me know your experience and opinions about Docker through the comments below.
+I added per-line information to hopefully make things a bit clearer.
 
 ## Quick Start
 
@@ -69,3 +69,5 @@ boot2docker ip
 # access the image’s port 80
 open $(echo ‘http://’$(boot2docker ip))
 ```
+
+Let me know your experience and opinions about Docker through the comments below.
