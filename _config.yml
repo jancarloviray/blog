@@ -12,7 +12,7 @@ relative_permalinks: true
 title:               Jan Carlo Viray
 tagline:             'Full-Stack Agile Engineer'
 description:         'Lessons learned. Inspirations and thoughts. Balancing ambition and humility. Made by <a href="https://twitter.com/jancarloviray" target="_blank">@jancarloviray</a>.'
-url:                 http://jancarloviray.github.io
+url:                 http://jancarloviray.github.io/
 baseurl:             http://jancarloviray.github.io/
 paginate:            5
 
