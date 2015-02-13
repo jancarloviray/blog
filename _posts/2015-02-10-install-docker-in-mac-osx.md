@@ -5,7 +5,7 @@ permalink: blog/install-docker-in-mac-osx-detailed
 comments: True
 ---
 
-[Docker](https://www.docker.com/) has been one of the technologies I have recently been watching. It is a great new paradigm for devops and deployment. I believe the future is on containers. Here's a quick intro on installing it on your Mac OSX machine.
+[Docker](https://www.docker.com/) is one of the "disruptive" technologies I have recently been watching. It is a great new paradigm for devops and deployment. I believe the future is on containers. Here's a quick intro on installing it on your Mac OSX machine.
 
 ## Using Docker in Mac OSX
 
