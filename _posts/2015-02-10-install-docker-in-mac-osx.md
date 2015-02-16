@@ -17,7 +17,7 @@ I added per-line information to hopefully make things a bit clearer.
 
 ## Quick Start
 
-```bash
+{% highlight bash %}
 # assuming that Boot2Docker is installed...
 
 # initialize boot2docker and download latest ISO
@@ -68,6 +68,6 @@ boot2docker ip
 
 # access the image’s port 80
 open $(echo ‘http://’$(boot2docker ip))
-```
+{% endhighlight %}
 
 Let me know your experience and opinions about Docker through the comments below.
