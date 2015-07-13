@@ -5,7 +5,7 @@ permalink: blog/docker-overview
 comments: True
 ---
 
-Docker is a growing technology for and spreading like wildfire. Time to delve in the basics and apply it to all my projects!
+Docker is a growing technology for and spreading like wildfire. Time to delve in the basics and apply it on your projects!
 
 Docker is here to offer an efficient, speedy way to port applications across systems and machines. It is light and lean, allowing you to quickly contain applications and run them within their own secure environments (via Linux Containers: LXC).
 
