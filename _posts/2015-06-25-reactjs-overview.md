@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Everything About ReactJS
-permalink: blog/disable-terminal-line-wrap
+title: ReactJS Overview
+permalink: blog/reactjs-overview
 comments: True
 ---
 
