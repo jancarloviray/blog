@@ -5,7 +5,7 @@ permalink: blog/docker-cheat-sheet
 comments: True
 ---
 
-A summary of commands I have come across to. Could be a cheatsheet in the future after I aggregate all of these.
+A summary of commands I have come across while using Docker in my projects. 
 
 *Note: if you are using Boot2Docker, then do not type sudo otherwise you will get an error*
 
