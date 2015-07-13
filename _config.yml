@@ -11,16 +11,16 @@ relative_permalinks: true
 # Setup
 title:               Jan Carlo Viray
 tagline:             'Senior Front-End Developer / Full-Stack Agile'
-description:         'Lessons learned. Inspirations and thoughts. Balancing ambition and humility. Made by <a href="https://twitter.com/jancarloviray" target="_blank">@jancarloviray</a>.'
+description:         'Lessons learned. Inspirations and thoughts. Made by <a href="https://twitter.com/jancarloviray" target="_blank">@jancarloviray</a>.'
 url:                 http://www.jancarloviray.com
 shorturl:            jancarloviray.com
 baseurl:             http://jancarloviray.github.io/
-paginate:            5
+paginate:            10
 
 # About/contact
 author:
   name:              Jan Carlo Viray
-  url:               https://twitter.com/@jancarloviray
+  url:               https://twitter.com/jancarloviray
   email:             virayjancarlo@yahoo.com
 
 github:
