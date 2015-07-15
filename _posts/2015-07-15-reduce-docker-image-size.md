@@ -1,7 +1,7 @@
 ---
 layout: post
-title: What Does Docker Link Do?
-permalink: blog/what-does-docker-link-do
+title: How To Reduce Docker Image Size?
+permalink: blog/reduce-docker-image-size
 comments: True
 ---
 
