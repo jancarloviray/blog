@@ -11,6 +11,6 @@ I am Jan Carlo Viray, **Senior Front-End Developer in Orange County, CA**. Hope 
 Follow me here:
 
 * [@jancarloviray](http://twitter.com/jancarloviray)
-* [LinkedIn](www.linkedin.com/in/jancarloviray)
+* [LinkedIn](http://www.linkedin.com/in/jancarloviray)
 * [Github](https://github.com/jancarloviray)
 * [StackOverflow](http://stackoverflow.com/users/985895/jan-carlo-viray)
