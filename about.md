@@ -10,10 +10,8 @@ I am Jan Carlo Viray, **Senior Front-End Developer in Orange County, CA**. Hope 
 
 Follow me here:
 
-* <a href="http://twitter.com/jancarloviray" target="_blank">Hello, world!</a>
-
-* [Twitter: @jancarloviray](http://twitter.com/jancarloviray)
-* [Portfolio](http://jcviray.com)
-* [LinkedIn](http://www.linkedin.com/in/jancarloviray)
-* [Github](https://github.com/jancarloviray)
-* [StackOverflow](http://stackoverflow.com/users/985895/jan-carlo-viray)
+* <a href="http://twitter.com/jancarloviray" target="_blank">Twitter: @jancarloviray</a>
+* <a href="http://jcviray.com" target="_blank">Portfolio</a>
+* <a href="http://www.linkedin.com/in/jancarloviray" target="_blank">LinkedIn</a>
+* <a href="https://github.com/jancarloviray" target="_blank">Github</a>
+* <a href="http://stackoverflow.com/users/985895/jan-carlo-viray" target="_blank">StackOverflow</a>
