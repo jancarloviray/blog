@@ -9,7 +9,7 @@ Vagrant provides easy to configure, reproducible, and portable work environments
 
 ## Quick Start
 
-```shell
+```
 vagrant init hashicorp/precise32
 vagrant up
 ```
@@ -19,7 +19,7 @@ vagrant up
 
 Create a file and call it Vagrantfile
 
-```ruby
+```
 Vagrant.configure(2) do |config|
 	config.vm.box = "precise64"
 	config.vm.network :forwarded_port, guest: 80, host: 8800
@@ -29,14 +29,14 @@ end
 
 Once you have that, run this command
 
-```shell
+```
 vagrant up
 ```
 
 ## VirtualBox Configurations
 ----------------------
 
-```ruby
+```
 Vagrant.configure(2) do |config|
 	config.vm.box = "ubuntu/trusty32"
 
@@ -63,7 +63,7 @@ end
 
 `config.vm.synced_folder "host/relative/path", "/guest/absolute/path"`
 
-```ruby
+```
 Vagrant.configure(2) do |config|
 	# note that you can have this config multiple times but
 	# it should only be used for source code since there is
@@ -100,7 +100,7 @@ vagrant reload
 ## Quick Networking Sample
 -------
 
-```ruby
+```
 Vagrant.configure(2) do |config|
 
 	# expose guest port 80 to host 8080
@@ -111,7 +111,7 @@ end
 ## Teardown
 -----
 
-```bash
+```
 # suspends the state (uses host resources still)
 vagrant suspend
 
@@ -125,14 +125,14 @@ vagrant destroy
 ## Writing Shell Scripts for Provisioning
 -----------------------------------
 
-```ruby
+```
 # note that paths are relative the the project root
 config.vm.provision "shell", path: "provision.sh"
 ```
 
 # provision.sh
 
-```bash
+```
 #! /usr/bin/env bash
 
 # note that all these will be run as sudo
@@ -143,14 +143,12 @@ rm -rf /var/www
 ln -fs /vagrant /var/www
 ```
 
-
-
 ## Networking In-Depth
 ----------------
 
 Note that it is possible to compose networking options, so long as the guest machine has room for additional network interfaces. For example:
 
-```ruby
+```
 # forwarded ports
 config.vm.network :forwarded_port, guest: 80, host: 8800
 # host-only networking
@@ -161,7 +159,7 @@ Also, note that with VirtualBox, Vagrant requires the first network device attac
 
 ### Forwarded Ports
 
-```ruby
+```
 Vagrant.configure(2) do |config|
 	config.vm.network :forwarded_port, guest: 80, host: 8800
 	# or with auto-collision detection/correction
@@ -171,7 +169,7 @@ Vagrant.configure(2) do |config|
 end
 ```
 
-```bash
+```
 vagrant reload
 vagrant ssh
 ```
@@ -196,14 +194,14 @@ With private network, you can do the following:
 - communicate between multiple guests
 - use NFS for shared directories
 
-```ruby
+```
 Vagrant.configure(2) do |config|
 	# must enter static IP (any is fine)
 	config.vm.network "private_network", ip: "192.168.33.10"
 end
 ```
 
-```bash
+```
 vagrant reload
 vagrant ssh
 ping 192.168.33.10
@@ -232,7 +230,7 @@ Note that the moment multiple machines are introduced into a Vagrant environment
 
 The ideal network when communicating between two guest machines is by using *host-only networking*
 
-```ruby
+```
 Vagrant.configure(2) do |config|
 	config.vm.box = "precise64"
 
@@ -250,7 +248,7 @@ Vagrant.configure(2) do |config|
 end
 ```
 
-```bash
+```
 # db_provision.sh
 
 # this makes it so that when installing MySQL server, it
