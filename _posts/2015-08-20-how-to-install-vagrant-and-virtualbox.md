@@ -1,11 +1,11 @@
 ---
 layout: post
 title: How to install Vagrant and VirtualBox
-permalink: blog/how-to
+permalink: blog/how-to-install-vagrant-and-virtualbox
 comments: True
 ---
 
-Vagrant provides easy to configure, reproducible, and portable work environments controlled by a single consistent workflow to help maximize the productivity and flexibility of you and your team. If you're a developer, Vagrant will isolate dependencies and their configuration within a single disposable, consistent environment, without sacrificing any of the tools you're used to working with (editors, browsers, debuggers, etc.). Once you or someone else creates a single Vagrantfile, you just need to vagrant up and everything is installed and configured for you to work. To get started, download these dependencies: [Vagrant](http://www.vagrantup.com/downloads) and [VirtualBox](https://www.virtualbox.org/)
+Vagrant provides easy to configure, reproducible, and portable work environments controlled by a single consistent workflow to help maximize the productivity and flexibility of you and your team. If you're a developer, Vagrant will isolate dependencies and their configuration within a single disposable, consistent environment, without sacrificing any of the tools you're used to working with (editors, browsers, debuggers, etc.). Once you or someone else creates a single Vagrantfile, you just need to vagrant up and everything is installed and configured for you to work. To get started, download [Vagrant](http://www.vagrantup.com/downloads) and [VirtualBox](https://www.virtualbox.org/).
 
 ## Quick Start
 
