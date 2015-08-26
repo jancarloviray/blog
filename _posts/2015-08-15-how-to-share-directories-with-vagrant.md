@@ -25,14 +25,16 @@ Vagrant.configure(2) do |config|
 
 	# note that you can also add type. NFS is the faster
 	# bidirectional file syncing. In order for this to work,
-	# the host machine must have `nfsd` installed. It comes
+	# the host machine must have nfsd installed. It comes
 	# preinstalled on OSX and is a simple package install on Linux
 	config.vm.synced_folder "." "/vagrant", type: "nfs"
 
 	# owner/group
 	config.vm.synced_folder "." "/vagrant", owner: "root", group: "root"
 end
+```
 
+```shell
 # To reconfigure the guest machine, vagrant reload must be run.
 # This halts the machine and starts it up again with
 # the new configuration.
