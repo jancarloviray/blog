@@ -15,7 +15,7 @@ description:         'Lessons learned. Inspirations and thoughts. Made by <a hre
 url:                 http://www.jancarloviray.com
 shorturl:            www.jancarloviray.com
 baseurl:             http://jancarloviray.github.io/
-paginate:            10
+paginate:            20
 
 # About/contact
 author:
