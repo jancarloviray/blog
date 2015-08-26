@@ -7,7 +7,7 @@ comments: True
 
 To share directories, add this to your config. `config.vm.synced_folder "host/relative/path", "/guest/absolute/path"`. Below is an example within a full configuration file.
 
-```ruby
+```
 Vagrant.configure(2) do |config|
 	# note that you can have this config multiple times but
 	# it should only be used for source code since there is
@@ -34,7 +34,7 @@ Vagrant.configure(2) do |config|
 end
 ```
 
-```shell
+```
 # To reconfigure the guest machine, vagrant reload must be run.
 # This halts the machine and starts it up again with
 # the new configuration.
