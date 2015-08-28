@@ -7,8 +7,6 @@ comments: True
 
 Here is a compilation of best practices I have learned and compiled building React.js applications. Feel free to add to this content by visiting my [blog source](https://github.com/jancarloviray/jancarloviray.github.io) and sending a pull request.
 
-# Best Practice React
-
 ## jQuery vs React
 
 *jQuery Style*
@@ -44,7 +42,7 @@ Here is a compilation of best practices I have learned and compiled building Rea
 
 - Computed data should not go in state
 - React components must not go in state. They must be built in `render`
-- Duplicated data from props. Try to use props as source of truth where possible. 
+- Duplicated data from props. Try to use props as source of truth where possible.
 
 ### What Shouldn't Go in State?
 
@@ -64,7 +62,7 @@ Here is a compilation of best practices I have learned and compiled building Rea
 - Always use proptypes, especially considering if/when application grows.
 - Every `propType` that is not `isRequired` should have a corresponding field in `getDefaultProps()`
 
-```javascript
+```
 propTypes: {
 	arrayProp: React.PropTypes.array,
 	boolType: React.PropTypes.bool,
@@ -83,11 +81,11 @@ propTypes: {
 
 ## Do More in Render()
 
-- avoid logic in `componentWillReceiveProps` or `componentWillMount`. Instead, move it to `render()` 
+- avoid logic in `componentWillReceiveProps` or `componentWillMount`. Instead, move it to `render()`
 
 ## Component Organisation
 
-```javascript
+```
 React.createClass({
 	propTypes: {},
 	mixins: [],
@@ -105,3 +103,29 @@ React.createClass({
 	render: function(){}
 });
 ```
+
+## FLUX
+
+Flux really has three main parts: Actions, Dispatchers and Stores.
+
+*Actions* are user interactions that occur in your react components, ie: user clicks delete
+
+*Dispatchers* is a singleton registry.. basically just a centralized list of callbacks. Dispatchers are what talks to stores.
+
+*Stores* hold your application's data. When a store's data is updates, React components changes UI to reflect data. UI never updates the data directly. Data never updates the UI directly. **Updates in the UI are rendered due to changes in the store**
+
+### Actions
+
+Actions encapsulate specific events that occur within the application, ie: save user, delete item.
+
+### Dispatcher
+
+Dispatchers are central hub. They contain list of callbacks. Stores register to dispatchers. Dispatcher then broadcasts payload to registered callbacks.
+
+### Stores
+
+Stores are where application data and state are located. It contains logic and retrieval. It is *not* a model - it *contains* models.
+
+### Controller Views
+
+A top level component that flows data down to children. It is the one that interact with stores. It holds data in state. It sends data to children as props.
