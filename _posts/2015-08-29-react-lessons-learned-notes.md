@@ -1,7 +1,7 @@
 ---
 layout: post
-title: React.js Best Practices Compilation
-permalink: blog/react-best-practices-compilation
+title: React.js Lessons Learned
+permalink: blog/reactjs-lessons-learned
 comments: True
 ---
 
