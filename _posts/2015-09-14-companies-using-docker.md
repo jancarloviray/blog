@@ -1,3 +1,10 @@
+---
+layout: post
+title: Companies Using Docker
+permalink: blog/companies-using-docker
+comments: True
+---
+
 Going with the flow of "companies using [insert tech]", here are the companies using Docker. Big companies with the need for scalable and distributed systems seem to have adopted docker. Here's the list.
 
 - Google App Engine
