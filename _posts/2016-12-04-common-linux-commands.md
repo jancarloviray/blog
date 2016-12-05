@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Commong Linux Commands
+title: Common Linux Commands
 permalink: blog/common-linux-commands
 comments: True
 ---
@@ -51,13 +51,13 @@ Here are some of the more common linux commands I use when managing files and se
 
 `cut -d: -f3 getThirdColumn.txt`
 
-- note that (-d:) means to use colon (:) as the delimiter and (-f3) means to process 3rd column of each line
+Note that (-d:) means to use colon (:) as the delimiter and (-f3) means to process 3rd column of each line
 
 ### How to sort the contents in a file?
 
 `cut -d: -f3 parseme.txt | sorn -n`
 
-- this pipes the content into a sorted stream and prints in screen
+This pipes the content into a sorted stream and prints in screen
 
 ## Bash 
 
@@ -73,7 +73,7 @@ Add `exit 0` at the end of the script file
 
 `chmod +x myscript.sh`
 
-- note that you must have the shebang on top of file
+Note that you must have the shebang on top of file
 
 ## Creating Jobs/Services
 
@@ -81,7 +81,7 @@ Add `exit 0` at the end of the script file
 
 Append `&` at the end of the command. For example, `tail -f /var/log/syslog &`. 
 
-Note that *when you exit the shell, the process will also terminate with a hangup signal (kill -SIGHUP <pid>).* This means that if you're ssh'd to a server, you run a process and put it in a background and you exit the server.. the process will also then terminate.
+Note that *when you exit the shell, the process will also terminate with a hangup signal (kill -SIGHUP [pid]).* This means that if you're ssh'd to a server, you run a process and put it in a background and you exit the server.. the process will also then terminate.
 
 ### How to run a script in the background without getting it terminated on shell exit?
 
@@ -215,7 +215,7 @@ Examples:
 
 ### How to change user's current group?
 
-`newgrp [grpname]
+`newgrp [grpname]`
 
 ### How to change to root user?
 
@@ -284,3 +284,4 @@ scp /some/file someSvr:/some/dir
 // remote to origin
 scp someSvr:/tmp/hosts .
 ```
+
