@@ -1,7 +1,3 @@
-# Dependencies
-markdown:            redcarpet
-highlighter:         pygments
-
 # Permalinks
 #
 # Use of `relative_permalinks` ensures post links from the index work properly.
@@ -25,7 +21,7 @@ author:
 
 github:
   repo:              https://github.com/jancarloviray/jancarloviray.github.io
-  
+
 pages_list:
   About: '/about/'
   Archive: '/archive/'
