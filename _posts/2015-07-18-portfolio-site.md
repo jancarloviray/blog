@@ -1,7 +1,7 @@
 ---
 layout: post
 title: New Portfolio Site
-permalink: blog/jan-carlo-viray-portfolio
+permalink: blog/jan-carlo-viray-portfolio/
 comments: True
 ---
 

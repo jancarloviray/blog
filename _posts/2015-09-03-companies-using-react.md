@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Companies Using React
-permalink: blog/companies-using-react
+permalink: blog/companies-using-react/
 comments: True
 ---
 

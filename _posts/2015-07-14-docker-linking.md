@@ -1,7 +1,7 @@
 ---
 layout: post
 title: What Does Docker Link Do?
-permalink: blog/what-does-docker-link-do
+permalink: blog/what-does-docker-link-do/
 comments: True
 ---
 

@@ -1,11 +1,11 @@
 ---
 layout: post
 title: Docker Commands Cheat Sheet
-permalink: blog/docker-cheat-sheet
+permalink: blog/docker-cheat-sheet/
 comments: True
 ---
 
-A summary of commands I have come across while using Docker in my projects. 
+A summary of commands I have come across while using Docker in my projects.
 
 *Note: if you are using Boot2Docker, then do not type sudo otherwise you will get an error*
 
@@ -149,7 +149,7 @@ sudo docker logs -f -t [containerID]
 
 - first, we specified the **Docker** binary and the command we wanted to execute, **run**. Note that the **docker run** combination runs the container.
 - Next, we specified an image. If it is not installed, it will download it.
-- Next is the command we run inside the container. 
+- Next is the command we run inside the container.
 - Note that docker containers are only active so long as the command you specify is active.
 
 #### Interactive Container
@@ -232,11 +232,11 @@ A *data volume* is a specially-designated directory within one or more container
 # sudo docker run -d -P --name [newName] \
 # -v [volumeName] [imageName] [commandToExecute]
 #
-# Use the `-v` flag with `docker create` 
+# Use the `-v` flag with `docker create`
 # or `docker run` command
-# Note that you can use it multiple times 
+# Note that you can use it multiple times
 # to mount multiple data volumes
-# The following code will create a new volume 
+# The following code will create a new volume
 # inside a container at `/webapp`
 
 sudo docker run -d -P --name web -v /webapp training/webapp python appy.py
@@ -246,19 +246,19 @@ sudo docker run -d -P --name web -v /webapp training/webapp python appy.py
 #
 # sudo docker run -d -P --name [newName] \
 # -v [/dir/from/host]:[/dir/in/cont] \
-# [imageName] [commandToExecute] 
+# [imageName] [commandToExecute]
 #
-# `-v` flag is also used to mount a directory from 
+# `-v` flag is also used to mount a directory from
 # your Docker daemon’s host into a container.
-# Note that if you are using Boot2Docker, it only 
+# Note that if you are using Boot2Docker, it only
 # has limited access to your /Users directory
-# so, you mount it like this: 
+# so, you mount it like this:
 # `sudo docker run -v /Users/<path>:/<containerPath>`
-# The following will mount the host directory, 
+# The following will mount the host directory,
 # /src/webapp into the container at /opt/webapp.
-# NOTE: if the path /opt/webapp already exists 
+# NOTE: if the path /opt/webapp already exists
 # inside the container’s image, its contents will
-# be replaced by the contens of /src/webapp on 
+# be replaced by the contens of /src/webapp on
 # the host to stay consistent with the expected
 # behavior of `mount`
 

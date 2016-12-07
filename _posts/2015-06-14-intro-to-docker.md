@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Basic Docker Overview
-permalink: blog/docker-overview
+permalink: blog/docker-overview/
 comments: True
 ---
 
@@ -33,7 +33,7 @@ By default, a container that you have pulled from the Registry will not be runni
 
 Whatever the command does will not be forgotten within the image. If you install something through apt-get, it will not be forgotten. However, it will not yet be persistent.
 
-To save a persistent change, you can ‘commit’ it by running `docker commit [id] [new/name]`. You typically only need to put in the first two or three characters of the ID of the container. To find the ID, run `docker ps -l`. 
+To save a persistent change, you can ‘commit’ it by running `docker commit [id] [new/name]`. You typically only need to put in the first two or three characters of the ID of the container. To find the ID, run `docker ps -l`.
 
 The commit will be a new repo, and will return a new image ID.
 
@@ -75,9 +75,9 @@ docker run [full/name/of/image] echo ‘hello world’
 
 # install a program and make it persist
 # note that whatever you do to the container will
-# not be forgotten, but you need to run `commit` to 
+# not be forgotten, but you need to run `commit` to
 # persist the changes.
-# here, we use -y argument to run the command 
+# here, we use -y argument to run the command
 # in non-interactive mode
 docker run [full/name/of/image] apt-get install ping -y
 

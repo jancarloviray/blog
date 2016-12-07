@@ -1,7 +1,7 @@
 ---
 layout: post
 title: React Best Practice Compilation
-permalink: blog/react-best-practice-compilation
+permalink: blog/react-best-practice-compilation/
 comments: True
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Disable Terminal Line Wrap
-permalink: blog/disable-terminal-line-wrap
+permalink: blog/disable-terminal-line-wrap/
 comments: True
 ---
 

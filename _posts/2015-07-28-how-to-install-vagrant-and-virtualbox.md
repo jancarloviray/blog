@@ -1,7 +1,7 @@
 ---
 layout: post
 title: How to install Vagrant and VirtualBox
-permalink: blog/how-to-install-vagrant-and-virtualbox
+permalink: blog/how-to-install-vagrant-and-virtualbox/
 comments: True
 ---
 

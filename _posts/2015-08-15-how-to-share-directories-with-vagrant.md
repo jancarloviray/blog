@@ -1,7 +1,7 @@
 ---
 layout: post
 title: How to share/sync directory inside Vagrant
-permalink: blog/how-to-share-sync-directory-inside-vagrant
+permalink: blog/how-to-share-sync-directory-inside-vagrant/
 comments: True
 ---
 

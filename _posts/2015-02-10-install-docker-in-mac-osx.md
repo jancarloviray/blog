@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Install Docker in Mac OSX
-permalink: blog/install-docker-in-mac-osx-detailed
+permalink: blog/install-docker-in-mac-osx-detailed/
 comments: True
 ---
 

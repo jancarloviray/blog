@@ -1,7 +1,7 @@
 ---
 layout: post
 title: ReactJS Overview
-permalink: blog/reactjs-overview
+permalink: blog/reactjs-overview/
 comments: True
 ---
 
@@ -35,7 +35,7 @@ I like how the jsx and component (not business!) logic is in just one file.
 
 ### Updating
 
-- componentWillReceiveProps: invoked when a component is receiving new props. This method is not called for the initial render. Use this as an opportunity to react to a prop transition before render() is called by updateing the state using this.setState(). 
+- componentWillReceiveProps: invoked when a component is receiving new props. This method is not called for the initial render. Use this as an opportunity to react to a prop transition before render() is called by updateing the state using this.setState().
 - shouldComponentUpdate: invoked before rendering when new props or state are being received. This method is not called for the initial render or when `forceUpdate` is used. Use this as an opportunity to `return false` when you’re certain that the transition to the new props and state will not require a component update. If this returns false, then render() will be skipped until the next state change. This is a great place to do performance improvements if needed. ie:
 `shouldComponentUpdate: function(nextProps, nextState){ return nextProps.id !== this.props.id; }`
 - componentWillUpdate: invoked immediately before rendering when new props or state are being received. This method is not called for the initial render. Use this as an opportunity to perform preparation before an update occurs.
@@ -97,7 +97,7 @@ render: function(){
 
 - `state` is created within the component itself.
 - A `state` should be considered private data.
-- A state starts with a default value when a component mounts and then suffers from mutations in time (mostly generated from user events). 
+- A state starts with a default value when a component mounts and then suffers from mutations in time (mostly generated from user events).
 - A state is optional. Since it increases complexity and reduces predictability, a component without state is preferable.  Try to avoid having states as much as possible
 - A state should be serializable at one point in time - a snapshot.
 - A compoenent manages its own state internally, but besides setting an initial state, has no business fiddling with the state of its children.
@@ -121,7 +121,7 @@ var Component = React.createClass({
     getInitialState: function(){
         return { name: ‘Chris’};
     },
-    handleClick: function(){ 
+    handleClick: function(){
         this.setState({ name: ‘Bob’ });
     },
     render: function(){
@@ -143,7 +143,7 @@ First thing you’ll want to do is to draw boxes around every component and subc
 
 ### Step 2: Build a static version in React
 
-Take your data model and build the UI with no interactivity. This usually requires a lot of typing and no thinking. 
+Take your data model and build the UI with no interactivity. This usually requires a lot of typing and no thinking.
 
 To build a static version of your app, you’ll want to build components that reuse other components and pass data using props. props are a way of passing data from parent to child. Here, you’re not going to use state at all. State is reserved only for interactivity, that is, data that changes over time.
 
@@ -153,7 +153,7 @@ At this point, you’ll have reusable components, props that make use of your mo
 
 To make your UI interactive, you need to be able to trigger changes to your underlying data model. Here, you will use state.
 
-To build your app correctly, you first need to think of the minimal set of mutable state that your app needs. 
+To build your app correctly, you first need to think of the minimal set of mutable state that your app needs.
 
 NOTE: Figure out what the absolute minimal representation of the state of your application needs to be and compute everything else you need on-demand. For example: if you are building a “todo list”, just keep an array of the todo items around; do not keep a separate state variable for the count! Instead, when you want to render the todo count, simply take the length of the todo items array. REMEMBER TO USE STATE AS LEAST AS YOU CAN!
 
@@ -167,7 +167,7 @@ In our example application, here’s our data:
 
 Now that you’ve identified what the minimal set of app state is, you need to identify which components mutates or owns the state.
 
-Remember, React is all about ‘one-way’ data flow down the component hierarchy. It may not be immediately clear which component should own the state. 
+Remember, React is all about ‘one-way’ data flow down the component hierarchy. It may not be immediately clear which component should own the state.
 
 For each piece of state in your application, follow these steps to figure it out:
 - identify every component that renders something based on that state

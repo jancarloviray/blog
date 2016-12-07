@@ -1,7 +1,7 @@
 ---
 layout: post
 title: React.js Lessons Learned
-permalink: blog/reactjs-lessons-learned
+permalink: blog/reactjs-lessons-learned/
 comments: True
 ---
 

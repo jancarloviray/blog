@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Companies Using Angular
-permalink: blog/companies-using-angular
+permalink: blog/companies-using-angular/
 comments: True
 ---
 

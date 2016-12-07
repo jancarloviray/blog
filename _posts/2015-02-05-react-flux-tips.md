@@ -1,7 +1,7 @@
 ---
 layout: post
 title: React and Flux Tips
-permalink: blog/react-flux-tips
+permalink: blog/react-flux-tips/
 comments: True
 ---
 

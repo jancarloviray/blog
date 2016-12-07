@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Docker Run
-permalink: blog/docker-run
+permalink: blog/docker-run/
 comments: True
 ---
 

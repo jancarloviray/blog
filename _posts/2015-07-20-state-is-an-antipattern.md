@@ -1,7 +1,7 @@
 ---
 layout: post
 title: State is an Anti-Pattern
-permalink: blog/state-is-an-anti-pattern
+permalink: blog/state-is-an-anti-pattern/
 comments: True
 ---
 

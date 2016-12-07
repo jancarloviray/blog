@@ -1,7 +1,7 @@
 ---
 layout: post
 title: How To Reduce Docker Image Size?
-permalink: blog/reduce-docker-image-size
+permalink: blog/reduce-docker-image-size/
 comments: True
 ---
 

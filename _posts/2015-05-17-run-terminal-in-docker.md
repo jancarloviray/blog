@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Run Terminal in Docker
-permalink: blog/run-terminal-in-docker
+permalink: blog/run-terminal-in-docker/
 comments: True
 ---
 

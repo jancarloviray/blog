@@ -1,7 +1,7 @@
 ---
 layout: post
 title: ES7 Async and Await Simplified
-permalink: blog/es7-async-await-javascript-simplified
+permalink: blog/es7-async-await-javascript-simplified/
 comments: True
 ---
 

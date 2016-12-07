@@ -1,7 +1,7 @@
 ---
 layout: post
 title: How to update all Docker images
-permalink: blog/how-to-update-all-docker-images
+permalink: blog/how-to-update-all-docker-images/
 comments: True
 ---
 

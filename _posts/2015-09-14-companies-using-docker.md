@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Companies Using Docker
-permalink: blog/companies-using-docker
+permalink: blog/companies-using-docker/
 comments: True
 ---
 

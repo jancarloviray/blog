@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Common Linux Commands
-permalink: blog/common-linux-commands
+permalink: blog/common-linux-commands/
 comments: True
 ---
 
@@ -59,7 +59,7 @@ Note that (-d:) means to use colon (:) as the delimiter and (-f3) means to proce
 
 This pipes the content into a sorted stream and prints in screen
 
-## Bash 
+## Bash
 
 ### How to specify a file's runner?
 
@@ -79,7 +79,7 @@ Note that you must have the shebang on top of file
 
 ### How to run a script in the background?
 
-Append `&` at the end of the command. For example, `tail -f /var/log/syslog &`. 
+Append `&` at the end of the command. For example, `tail -f /var/log/syslog &`.
 
 Note that *when you exit the shell, the process will also terminate with a hangup signal (kill -SIGHUP [pid]).* This means that if you're ssh'd to a server, you run a process and put it in a background and you exit the server.. the process will also then terminate.
 
@@ -188,7 +188,7 @@ Example: `chmod 467 file` will allow read-only for user, read-write only for gro
 
 You can also use the format: `chmod u=r,g=rw,o=rwx file1`
 
-Important arguments: 
+Important arguments:
 - (-r) for recursive
 - (-v) for verbose
 
@@ -250,7 +250,7 @@ Host server1
   HostName 192.168...
   User root
   Port 22
-  
+
 Host server2
   HostName 192....
   User root

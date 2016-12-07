@@ -1,7 +1,7 @@
 ---
 layout: post
 title: React Props in State an Anti-Pattern
-permalink: blog/react-props-in-state-anti-pattern
+permalink: blog/react-props-in-state-anti-pattern/
 comments: True
 ---
 
