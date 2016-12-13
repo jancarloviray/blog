@@ -2,6 +2,7 @@
 layout: post
 title: What Does Docker Link Do?
 permalink: blog/what-does-docker-link-do/
+excerpt_separator: <!--more-->
 comments: True
 ---
 
@@ -47,6 +48,8 @@ root@aed84ee21bde:/opt/webapp# cat /etc/hosts
 ```
 
 Notice two relevant host entries.
+
+<!--more-->
 
 - The first is an entry for the `web` container that uses the Container ID as a host name
 - The second uses the link alias to reference the IP address of the `db` container.
