@@ -14,6 +14,7 @@ url:                 http://www.jancarloviray.com
 shorturl:            www.jancarloviray.com
 baseurl:             http://jancarloviray.github.io
 paginate:            20
+timezone:            America/Los_Angeles
 
 # About/contact
 author:
