@@ -35,14 +35,92 @@ sudo -u postgres psql
 CREATE ROLE [role_name] WITH LOGIN CREATEDB PASSWORD '[password]';
 ```
 
-# Change a User's Password
-`ALTER ROLE [role_name] WITH PASSWORD '[new_password]';`
+### Change a User's Password
 
-# Allow User to Create Databases
-`ALTER USER <username> WITH CREATEDB;`
+```
+ALTER ROLE [role_name] WITH PASSWORD '[new_password]';
+```
 
-# List Roles
-`\du`
+### Allow User to Create Databases
+
+```
+ALTER USER <username> WITH CREATEDB;
+```
+
+### List Roles
+
+```
+\du
+```
+
+## Database
+
+### List all Databses
+
+```
+\l
+```
+
+### Create Database
+
+```
+CREATE DATABASE [name] OWNER [role_name];
+```
+
+### Drop Database
+
+```
+DROP DATABASE IF EXISTS [name];
+```
+
+### Export as CSV
+
+```
+COPY (SELECT * FROM widgets) TO '/absolute/path/to/export.csv'
+WITH FORMAT csv, HEADER true;
+```
+
+### Backup All Databases
+
+```
+pg_dump -Fc
+```
+
+### Create Database Dump (binary)
+
+```
+pg_dump -U [role_name] [db_name] -Fc > backup.dump
+```
+
+### Convert Binary Dump to SQL file
+
+```
+pg_restore binary_file.backup > sql_file.sql
+```
+
+### Create Schema Only Dump (sql)
+
+```
+pg_dump -U [role_name] [db_name] -s > schema.sql
+```
+
+### Restore Database From a Dump
+
+```
+PGPASSWORD=<password> pg_restore -Fc --no-acl --no-owner -U <user> -d <database> <filename.dump>
+```
+
+### Copy Database
+
+```
+createdb -T app_db app_db_backup
+```
+
+### Change Database Ownership
+
+```
+ALTER DATABASE acme OWNER TO zaiste;
+```
 
 ## Tips and Techniques
 
