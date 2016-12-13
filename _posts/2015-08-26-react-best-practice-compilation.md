@@ -2,6 +2,7 @@
 layout: post
 title: React Best Practice Compilation
 permalink: blog/react-best-practice-compilation/
+excerpt_separator: <!--more-->
 comments: True
 ---
 
@@ -33,6 +34,8 @@ Here is a compilation of best practices I have learned and compiled building Rea
 
 - Leave calculations and conditionals to the render function.
 - Note that everytime `state` is changed, `render` is called again.
+
+<!--more-->
 
 ### What Should Go in State?
 
