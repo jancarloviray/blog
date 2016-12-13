@@ -204,6 +204,29 @@ Access an Array (SQL arrays are 1-indexed instead of the typical 0-index arrays!
 SELECT ('{one, two, three}'::text[])[1]; -- one
 ```
 
+#### Enum
+
+Are fast, transparent mapping of words to integer and lives in `pg_enum`. Use this as labels, otherwise, it's similar to other languages.
+
+```
+--- Create Enum Implicitly
+CREATE TYPE weekdays AS ('Mon', 'Tue', 'Wed', 'Thu', 'Fri');
+
+-- Enum Example
+CREATE TYPE server_states AS ENUM ('running', 'uncertain', 'offline', 'restarting');
+CREATE TABLE enum_test(id serial, state server_states);
+INSERT INTO enum_test(state) VALUES ('offline');
+
+-- Example of Bad Insert 
+INSERT INTO enum_test(state) VALUES ('destroyed');
+-- ERROR:  invalid input value for enum server_states: "offline1"
+-- LINE 1: insert into enum_test(state) values ('offline1');
+
+-- You Can Add New Values
+ALTER TYPE server_states ADD VALUE 'destroyed' AFTER 'offline';
+INSERT INTO enum_test(state) VALUES ('destroyed');
+```
+
 ## Table
 
 ### List Tables
