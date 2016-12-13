@@ -2,6 +2,7 @@
 layout: post
 title: How to share/sync directory inside Vagrant
 permalink: blog/how-to-share-sync-directory-inside-vagrant/
+excerpt_separator: <!--more-->
 comments: True
 ---
 
@@ -33,6 +34,7 @@ Vagrant.configure(2) do |config|
 	config.vm.synced_folder "." "/vagrant", owner: "root", group: "root"
 end
 ```
+<!--more-->
 
 ```
 # To reconfigure the guest machine, vagrant reload must be run.
