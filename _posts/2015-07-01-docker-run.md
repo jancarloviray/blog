@@ -2,6 +2,7 @@
 layout: post
 title: Docker Run
 permalink: blog/docker-run/
+excerpt_separator: <!--more-->
 comments: True
 ---
 
@@ -10,6 +11,8 @@ What happens in a `docker run` command?
 More specifically, what happens when you run this code: `sudo docker run -i -t ubuntu /bin/bash`?
 
 Pulling from [docs](docs.docker.com), this is what docker does:
+
+<!--more-->
 
 - *Pulls the ubuntu image*: docker checks for the presence of the ubuntu image and, if it doesn’t exist locally, then Docker downloads it from [Docker Hub](hub.docker.com). If image exists, then Docker uses it.
 - *Creates a new container*: once docker has the image, it uses it to create a container.
