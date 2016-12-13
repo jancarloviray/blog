@@ -2,6 +2,7 @@
 layout: post
 title: React.js Lessons Learned
 permalink: blog/reactjs-lessons-learned/
+excerpt_separator: <!--more-->
 comments: True
 ---
 
@@ -45,6 +46,8 @@ React.createClass({
 
 - Actions should be split into two types: view actions and server actions. This will separate user interaction such as clicking a button from retrieving data.
 - Actions should be fire and forget and must not have callbacks. *If you need to respond to the result of an action, you should be listening for a **completion or error event*** This enforces data being kept in the store and not on a component.
+
+<!--more-->
 
 ## Personal Brainstorm
 
