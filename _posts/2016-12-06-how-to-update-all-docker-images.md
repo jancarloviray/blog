@@ -14,11 +14,11 @@ docker images | grep -v REPOSITORY | awk '{print $1}' | xargs -L1 docker pull
 
 Docker does not overwrite old images for us. **To cleanup old images**:
 
+<!--more-->
+
 ```
 docker images | grep "<none>" | awk '{print $3}' | xargs -L1 docker rmi
 ```
-
-<!--more-->
 
 Note that you must wait for the update process to finish. Here's a summary of what each command does...
 
