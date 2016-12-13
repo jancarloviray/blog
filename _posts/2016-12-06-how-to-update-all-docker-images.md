@@ -14,7 +14,9 @@ Docker does not overwrite old images for us. **To cleanup old images**:
 ```
 docker images | grep "<none>" | awk '{print $3}' | xargs -L1 docker rmi
 ```
-...<!--more-->
+
+<!--more-->
+
 Note that you must wait for the update process to finish. Here's a summary of what each command does...
 
 - `docker images` lists all images in the system
