@@ -2,10 +2,13 @@
 layout: post
 title: Common Linux Commands
 permalink: blog/common-linux-commands/
+excerpt_separator: <!--more-->
 comments: True
 ---
 
-Here are some of the more common linux commands I use when managing files and services in a unix environment. Here's a mind-map overview if you're into that. Expand this blog topic if you'd like to see the text version or read more. ![Linux Commands](https://raw.githubusercontent.com/jancarloviray/jancarloviray.github.io/master/_media/Linux.png)
+Here are some of the more common linux commands I use when managing files and services in a unix environment. Here's a mind-map overview if you're into that. Expand this blog topic if you'd like to see the text version or read more. 
+
+<!-- ![Linux Commands](https://raw.githubusercontent.com/jancarloviray/jancarloviray.github.io/master/_media/Linux.png) -->
 
 ## Archiving
 
@@ -16,6 +19,32 @@ Here are some of the more common linux commands I use when managing files and se
 ### How to compress a file?
 
 `tar czf zipped.tar.gz unzipped.pdf`
+
+## Creating Jobs/Services
+
+### How to run a script in the background?
+
+Append `&` at the end of the command. For example, `tail -f /var/log/syslog &`.
+
+Note that *when you exit the shell, the process will also terminate with a hangup signal (kill -SIGHUP [pid]).* This means that if you're ssh'd to a server, you run a process and put it in a background and you exit the server.. the process will also then terminate.
+
+### How to run a script in the background without getting it terminated on shell exit?
+
+Append `nohup` in your command, which means "no hangup". It's a poor man's way of running a process as a daemon. Use this only on processes that will take some time, but will not hang around too long.
+
+<!--more-->
+
+### How to check for background tasks?
+
+`jobs`
+
+### How to bring back a task into the foreground?
+
+`fg [job-id]`
+
+### How to bring back a task in the background?
+
+After you suspend it (CTRL+Z), you bring it back using `bg [job-id]`
 
 ## Text Streams
 
@@ -74,30 +103,6 @@ Add `exit 0` at the end of the script file
 `chmod +x myscript.sh`
 
 Note that you must have the shebang on top of file
-
-## Creating Jobs/Services
-
-### How to run a script in the background?
-
-Append `&` at the end of the command. For example, `tail -f /var/log/syslog &`.
-
-Note that *when you exit the shell, the process will also terminate with a hangup signal (kill -SIGHUP [pid]).* This means that if you're ssh'd to a server, you run a process and put it in a background and you exit the server.. the process will also then terminate.
-
-### How to run a script in the background without getting it terminated on shell exit?
-
-Append `nohup` in your command, which means "no hangup". It's a poor man's way of running a process as a daemon. Use this only on processes that will take some time, but will not hang around too long.
-
-### How to check for background tasks?
-
-`jobs`
-
-### How to bring back a task into the foreground?
-
-`fg [job-id]`
-
-### How to bring back a task in the background?
-
-After you suspend it (CTRL+Z), you bring it back using `bg [job-id]`
 
 ## Managing System Services
 
