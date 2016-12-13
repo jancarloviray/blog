@@ -7,7 +7,7 @@
   {% if page.title == "Home" %}
   <meta http-equiv="last-modified" content="{{ site.time }}" />
   {% else %}
-  <meta http-equiv="last-modified" content="{{ post.date | date_to_long_string }}" />
+  <meta http-equiv="last-modified" content="{{ page.date | date_to_long_string }}" />
   {% endif %}
 
   <!-- Enable responsiveness on mobile devices-->
