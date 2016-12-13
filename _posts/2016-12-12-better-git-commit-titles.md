@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Better Git Commit Titles
-permalink: blog/better-git-commit-titles/
+permalink: /blog/better-git-commit-titles/
 comments: True
 ---
 
