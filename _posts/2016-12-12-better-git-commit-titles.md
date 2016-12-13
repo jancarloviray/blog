@@ -29,6 +29,7 @@ Instantly, you notice a big and small picture based on those commit titles. With
 ## Commit Message Format
 
 Each commit message consists of a header, a body and a footer. The header has a special format that includes a type, a scope and a subject:
+
 ```
 <type>(<scope>): <subject>
 <BLANK LINE>
@@ -37,4 +38,5 @@ Each commit message consists of a header, a body and a footer. The header has a 
 <footer>
 The header is mandatory and the scope of the header is optional.
 ```
+
 Any line of the commit message cannot be longer 100 characters! This allows the message to be easier to read on GitHub as well as in various git tools.
