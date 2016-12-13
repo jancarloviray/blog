@@ -8,6 +8,18 @@ excerpt_separator: <!--more-->
 
 Please note that this post will continually be in development as a collection of tips, common commands and best practices. Feel free to [create a pull request](https://github.com/jancarloviray/jancarloviray.github.io) if you'd like to add or improve this post. Thanks in advance and I hope this helps you!
 
+## Productivity Tips inside `psql`
+
+- `\?` shows help with psql commands
+- `\x [on|off|auto]` for expanded output (default is "off")
+- `\timing [on|off]` to toggle timing of commands - great for benchmarking queries
+- `\c other-db` to connect to another database without quitting the psql console
+- `\l+` to list databases
+- `\dn+` to list schemas
+- `\dt+` to list tables
+- `\e` to invoke your `$EDITOR` and use a real editor
+- `\q` to quit
+
 ## PostgreSQL Installation and Configuration
 
 ### Add APT repository
