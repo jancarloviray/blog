@@ -2,6 +2,7 @@
 layout: post
 title: Basic Docker Overview
 permalink: blog/docker-overview/
+excerpt_separator: <!--more-->
 comments: True
 ---
 
@@ -40,6 +41,8 @@ The commit will be a new repo, and will return a new image ID.
 To check running containers, use `docker ps`.
 
 To inspect a container, run `docker inspect [containerId]`.
+
+<!--more-->
 
 ### Docker Images
 
