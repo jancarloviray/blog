@@ -34,6 +34,8 @@ sudo -u postgres psql
 \password
 ```
 
+## User
+
 ### Create a User and a Role
 
 ```
@@ -128,6 +130,79 @@ ALTER DATABASE mydb OWNER TO jancarlo;
 ```
 
 <!--more-->
+
+## Data Types
+
+### Basic Types and Best Practices
+
+#### Surrogate Keys
+
+Use `uuid` for primary key
+
+```
+CREATE EXTENSION pgcrypto;
+SELECT gen_random_uuid();
+```
+
+#### Text
+
+Use `text` and avoid `varchar` or `char` and especially `varchar(n)` unless you specifically want to have a hard limit. Read [this](http://stackoverflow.com/questions/4848964/postgresql-difference-between-text-and-varchar-character-varying). Performance wise, `text` is faster.
+
+Use indexes for pattern matching. 
+
+```
+CREATE INDEX ON users (name);
+SELECT * FROM accounts WHERE email LIKE 'Peter%';
+```
+
+For suffix lookups, use functional indexes.
+
+```
+CREATE INDEX backsearch ON users (reverse(email));
+SELECT * FROM accounts WHERE reverse(email) LIKE reverse('%doe.com');
+```
+
+#### Dates and Times
+
+Always use `timestamptz` instead of `time`.
+
+Use `date` when you just need the date.
+
+#### Boolean
+
+Use `bool` and not `bit`.
+
+#### Numbers
+
+- Avoid `money` since it's not up to standards
+- Use `numeric` instead of `float` or `integer`
+
+#### Arrays
+
+Make an array
+
+```
+SELECT ARRAY[1, 2, 3];
+```
+
+Another way.
+
+```
+SELECT '{1, 2, 3}'::numeric[];
+```
+
+Extend an Array
+
+```
+SELECT ARRAY[1,2] || 3;
+SELECT ARRAY[1,2] || ARRAY[3, 4];
+```
+
+Access an Array (SQL arrays are 1-indexed instead of the typical 0-index arrays!)
+
+```
+SELECT ('{one, two, three}'::text[])[1]; -- one
+```
 
 ## Table
 
