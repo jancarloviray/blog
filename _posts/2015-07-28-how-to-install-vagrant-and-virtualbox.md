@@ -2,6 +2,7 @@
 layout: post
 title: How to install Vagrant and VirtualBox
 permalink: blog/how-to-install-vagrant-and-virtualbox/
+excerpt_separator: <!--more-->
 comments: True
 ---
 
@@ -28,6 +29,8 @@ end
 ```
 
 Once you have that, run this command
+
+<!--more-->
 
 ```
 vagrant up
