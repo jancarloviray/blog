@@ -2,6 +2,7 @@
 layout: post
 title: Docker Commands Cheat Sheet
 permalink: blog/docker-cheat-sheet/
+excerpt_separator: <!--more-->
 comments: True
 ---
 
@@ -50,6 +51,8 @@ sudo docker search ubuntu
 # pull ubuntu v14.04
 sudo pull ubuntu:14.04
 ```
+
+<!--more-->
 
 ### Modifying an Image
 ---
