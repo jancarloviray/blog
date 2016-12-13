@@ -2,6 +2,7 @@
 layout: post
 title: How To Reduce Docker Image Size?
 permalink: blog/reduce-docker-image-size/
+excerpt_separator: <!--more-->
 comments: True
 ---
 
@@ -22,3 +23,4 @@ ID=$(docker run -d image-name /bin/bash)
 (docker export $ID | gzip -c > image.tgz)
 gzip -dc image.tgz | docker import - flat-image-name
 ```
+<!--more-->
