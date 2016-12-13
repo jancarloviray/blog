@@ -103,6 +103,8 @@ ALTER USER <username> WITH CREATEDB;
 CREATE DATABASE [name] OWNER [role_name];
 ```
 
+<!--more-->
+
 ### Drop Database
 
 ```
@@ -157,8 +159,6 @@ createdb -T app_db app_db_backup
 ```
 ALTER DATABASE mydb OWNER TO jancarlo;
 ```
-
-<!--more-->
 
 ## Data Types
 
