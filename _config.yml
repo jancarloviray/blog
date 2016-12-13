@@ -8,8 +8,8 @@ permalink:           pretty
 
 # Setup
 title:               Jan Carlo Viray
-tagline:             'Lead Senior Front-End Engineer in Los Angeles, CA. Angular. React. Node. Postgres. AWS. Docker. Data Visualization. Full Stack Developer'
-description:         'Lessons learned. Inspirations and thoughts. Made by <a href="https://twitter.com/jancarloviray" target="_blank">jancarloviray</a>.'
+tagline:             'Senior Front-End Engineer &middot; React, Node, AWS, Postgres, Docker, Data Visualization &middot; Full Stack Developer'
+description:         'Official site of Jan Carlo Viray. Lead Senior Front-End Engineer in Los Angeles, CA and Orange County, CA. Angular. React. Node. Postgres. AWS. Docker. Data Visualization. Full Stack.'
 url:                 http://www.jancarloviray.com
 shorturl:            www.jancarloviray.com
 baseurl:             http://jancarloviray.github.io
