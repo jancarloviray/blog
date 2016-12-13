@@ -6,7 +6,7 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-## Installation and Configuration
+## PostgreSQL Installation and Configuration
 
 ### Add APT repository
 
@@ -125,7 +125,109 @@ createdb -T app_db app_db_backup
 ALTER DATABASE mydb OWNER TO jancarlo;
 ```
 
+<!--more-->
+
+## Table
+
+### List Tables
+
+```
+\dt
+```
+
+### Create Table
+
+```
+CREATE TABLE mytable (
+  id BIGINT PRIMARY KEY,
+  name VARCHAR(20),
+  price INT,
+  created_at timestamp without time zone default now()
+)
+```
+
+### Insert into Table
+
+```
+INSERT INTO mytable VALUES(1,'widget1',100)
+INSERT INTO mytable(name, price) VALUES ('widget2', 101)
+```
+
+### Drop Table
+
+```
+DROP TABLE IF EXISTS mytable
+```
+
+### Delete all Rows from Table
+
+```
+DELETE FROM mytable;
+```
+
+### Drop Table and Dependencies
+
+```
+DROP TABLE table_name CASCADE;
+```
+
+## Column
+
+### Create Enum Type
+
+```
+CREATE TYPE environment AS ENUM ('development', 'staging', 'production');
+```
+
+### Add Column to Table
+
+```
+ALTER TABLE [table_name] ADD COLUMN [column_name] [data_type];
+```
+
+### Remove Column from Table
+
+```
+ALTER TABLE [table_name] DROP COLUMN [column_name];
+```
+
+### Change Column Data Type
+
+```
+ALTER TABLE [table_name] ALTER COLUMN [column_name] [data_type];
+```
+
+### Change Column Name
+
+```
+ALTER TABLE [table_name] RENAME COLUMN [column_name] TO [new_column_name];
+```
+
+### Set Default Value for Existing Column
+
+```
+ALTER TABLE [table_name] ALTER_COLUMN created_at SET DEFAULT now();
+```
+
+### Add UNIQUE constrain to Existing Column
+
+```
+ALTER TABLE [table_name] ADD UNIQUE ([column_name]);
+```
+
 ## Tips and Techniques
+
+### Render NULL visible in psql
+
+```
+\pset null ¤
+```
+
+### Extended Display Mode in Auto
+
+```
+\x auto
+```
 
 ### Write `where` before doing a `delete` or `update`
 
@@ -134,7 +236,3 @@ Before you run your code and most especially during deletes and updates, make su
 ### Get list of databases and their users
 
 `\l`
-
-<!--more-->
-
-Still in development...
