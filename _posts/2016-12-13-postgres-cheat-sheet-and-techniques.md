@@ -11,14 +11,31 @@ Please note that this post will continually be in development as a collection of
 ## Productivity Tips inside `psql`
 
 - `\?` shows help with psql commands
-- `\x [on|off|auto]` for expanded output (default is "off")
-- `\timing [on|off]` to toggle timing of commands - great for benchmarking queries
-- `\c other-db` to connect to another database without quitting the psql console
+- `\c other-db` to connect to another db without quitting the console
 - `\l+` to list databases
 - `\dn+` to list schemas
 - `\dt+` to list tables
+- `\dt+ *.users` to list tables with pattern `*.users`
+- `\df *somefuncname*` to find functions with pattern `*somefuncname*`
 - `\e` to invoke your `$EDITOR` and use a real editor
 - `\q` to quit
+
+Add these to your `~/.psqlrc` file!
+
+- `\set COMP_KEYWORD_CASE upper` to auto-complete keywords in CAPS
+- `\pset null ¤` to render NULL as ¤ instead
+- `\x [on|off|auto]` for expanded output (default is "off")
+- `\timing [on|off]` to toggle timing of commands - great for benchmarks
+
+Compare Outputs
+
+```
+db=# \o a.txt
+db=# EXPLAIN SELECT * FROM users WHERE id IN (SELECT user_id FROM groups WHERE name = 'admins');
+db=# \o b.txt
+db=# EXPLAIN SELECT users.* FROM users LEFT JOIN groups WHERE groups.name = 'admins';
+db=# \! vimdiff a.txt b.txt
+```
 
 ## PostgreSQL Installation and Configuration
 
@@ -348,19 +365,18 @@ ALTER TABLE [table_name] ALTER_COLUMN created_at SET DEFAULT now();
 ALTER TABLE [table_name] ADD UNIQUE ([column_name]);
 ```
 
+## Monitoring and Logging
+
+### Get Total Number of Connections
+
+```
+SELECT count(*) FROM pg_stat_activity;
+
+-- break down connections by state
+SELECT state, count(*) FROM pg_stat_activity GROUP BY state;
+```
+
 ## Tips and Techniques
-
-### Render NULL visible in psql
-
-```
-\pset null ¤
-```
-
-### Extended Display Mode in Auto
-
-```
-\x auto
-```
 
 ### Write `where` before doing a `delete` or `update`
 
