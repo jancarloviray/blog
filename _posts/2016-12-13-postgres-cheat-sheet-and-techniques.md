@@ -277,6 +277,50 @@ SELECT * FROM filmsjsonb; -- format is ugly here
 SELECT jsonb_pretty(data) FROM filmsjsonb WHERE id=1; -- prettify json format
 ```
 
+##### Defining Columns
+
+```
+CREATE TABLE cards (
+  id integer NOT NULL,
+  board_id integer NOT NULL,
+  data jsonb
+);
+```
+
+##### Inserting JSON data
+
+```
+INSERT INTO cards VALUES (1, 1, '{"name": "Paint house", "tags": ["Improvements", "Office"], "finished": true}');
+INSERT INTO cards VALUES (2, 1, '{"name": "Wash dishes", "tags": ["Clean", "Kitchen"], "finished": false}');
+```
+
+##### Querying Data
+
+```
+SELECT data->>'name' AS name FROM cards
+```
+
+##### Filtering Results
+
+```
+SELECT * FROM cards WHERE data->>'finished' = 'true';
+```
+
+##### Checking for Column Existence
+
+```
+SELECT count(*) FROM cards WHERE data ? 'ingredients';
+```
+
+##### Expanding Data into Rows
+
+```
+SELECT
+  jsonb_array_elements_text(data->'tags') as tag
+FROM cards
+WHERE id = 1;
+```
+
 ## Table
 
 ### List Tables
