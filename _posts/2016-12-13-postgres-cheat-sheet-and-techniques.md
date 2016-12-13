@@ -218,9 +218,7 @@ CREATE TABLE enum_test(id serial, state server_states);
 INSERT INTO enum_test(state) VALUES ('offline');
 
 -- Example of Bad Insert 
-INSERT INTO enum_test(state) VALUES ('destroyed');
--- ERROR:  invalid input value for enum server_states: "offline1"
--- LINE 1: insert into enum_test(state) values ('offline1');
+INSERT INTO enum_test(state) VALUES ('destroyed'); -- ERROR:  invalid input value for enum server_states: "destroyed"
 
 -- You Can Add New Values
 ALTER TYPE server_states ADD VALUE 'destroyed' AFTER 'offline';
