@@ -2,6 +2,7 @@
 layout: post
 title: ReactJS Overview
 permalink: blog/reactjs-overview/
+excerpt_separator: <!--more-->
 comments: True
 ---
 
@@ -29,6 +30,8 @@ I like how the jsx and component (not business!) logic is in just one file.
 ## lifecycle of components
 
 ### Mounting
+
+<!--more-->
 
 - componentWillMount: invoked once, on both client and server, before rendering occurs.
 - componentDidMount: invoked once only on the client (not on the server), immediately after the initail rendering occurs. At this point in the lifecycle, the component has a DOM representation which you can access via `this.getDOMNode()`. If you want to integrate other JS frameworks, set timers or intervals or send AJAX requests, perform those operations in this method.
