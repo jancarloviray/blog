@@ -4,6 +4,12 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="google-site-verification" content="9ydcDU3gJ0xsS4oVirHKKbXAGu1RAz1Q61GE08ImNgo" />
 
+  {% if page.title == "Home" %}
+    <meta http-equiv="last-modified" content="{{ site.time }}" />
+  {% else %}
+    <meta http-equiv="last-modified" content="{{ page.date }}" />
+  {% endif %}
+
   <!-- Enable responsiveness on mobile devices-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
@@ -11,7 +17,7 @@
     {% if page.title == "Home" %}
       {{ site.title }} &middot; {{ site.tagline }} - Orange County, CA
     {% else %}
-      {{ page.title }} &middot; {{ site.title }}
+      {{ page.title }} {{ page.date }} &middot; {{ site.title }}
     {% endif %}
   </title>
 
