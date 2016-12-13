@@ -17,7 +17,7 @@
     {% if page.title == "Home" %}
       {{ site.title }} &middot; {{ site.tagline }}
     {% else %}
-      {{ page.title }} by {{ site.author.name }} &middot; {{ page.date }}
+      {{ page.title }} by {{ site.author.name }} &middot; {{ page.date | date_to_string }}
     {% endif %}
   </title>
 
