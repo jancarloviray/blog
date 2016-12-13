@@ -6,6 +6,8 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
+Please note that this post will continually be in development as a collection of tips, common commands and best practices. Feel free to [create a pull request](https://github.com/jancarloviray/jancarloviray.github.io) if you'd like to add or improve this post. Thanks in advance and I hope this helps you!
+
 ## PostgreSQL Installation and Configuration
 
 ### Add APT repository
