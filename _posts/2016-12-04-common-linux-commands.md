@@ -6,7 +6,7 @@ excerpt_separator: <!--more-->
 comments: True
 ---
 
-Here are some of the more common linux commands I use when managing files and services in a unix environment. Here's a mind-map overview if you're into that. Expand this blog topic if you'd like to see the text version or read more. 
+Expand this blog topic if you'd like to see the text version or read more.
 
 <!--![Linux Commands](https://raw.githubusercontent.com/jancarloviray/jancarloviray.github.io/master/_media/Linux.png)-->
 
