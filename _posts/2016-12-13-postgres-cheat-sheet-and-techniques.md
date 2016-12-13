@@ -119,7 +119,7 @@ createdb -T app_db app_db_backup
 ### Change Database Ownership
 
 ```
-ALTER DATABASE acme OWNER TO zaiste;
+ALTER DATABASE mydb OWNER TO jancarlo;
 ```
 
 ## Tips and Techniques
