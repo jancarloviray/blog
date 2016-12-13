@@ -1,0 +1,23 @@
+{% if page.title == "Home" %}
+  {{ site.title }} | {{ site.tagline }}
+{% else %}
+<script type="application/ld+json">
+{ 
+"@context": "http://schema.org", 
+"@type": "BlogPosting",
+"headline": "{{ page.title }}",
+"editor": "{{ site.author.name }}", 
+"genre": "search engine optimization", 
+"keywords": "seo sales b2b", 
+"url": "{{ site.url }}/{{ page.url }}",
+"datePublished": "{{ page.date }}",
+"dateCreated": "{{ page.date }}",
+"description": "We love to do stuff to help people and stuff",
+"articleBody": "{{ page.excerpt }}",
+"author": {
+"@type": "Person",
+"name": "{{ site.author.name }}"
+}
+}
+</script>
+{% endif %}
