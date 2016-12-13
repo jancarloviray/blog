@@ -183,11 +183,8 @@ Make an array
 
 ```
 SELECT ARRAY[1, 2, 3];
-```
 
-Another way.
-
-```
+-- another way
 SELECT '{1, 2, 3}'::numeric[];
 ```
 
@@ -209,7 +206,6 @@ SELECT ('{one, two, three}'::text[])[1]; -- one
 Are fast, transparent mapping of words to integer and lives in `pg_enum`. Use this as labels, otherwise, it's similar to other languages.
 
 ```
---- Create Enum Implicitly
 CREATE TYPE weekdays AS ('Mon', 'Tue', 'Wed', 'Thu', 'Fri');
 
 -- Enum Example
@@ -223,6 +219,33 @@ INSERT INTO enum_test(state) VALUES ('destroyed'); -- ERROR:  invalid input valu
 -- You Can Add New Values
 ALTER TYPE server_states ADD VALUE 'destroyed' AFTER 'offline';
 INSERT INTO enum_test(state) VALUES ('destroyed');
+```
+
+#### JSON
+
+Use `jsonb` which is a binary-encoded version of JSON. This means space padding is gone and is more efficient than `json`. Don't use `json` type.
+
+```
+CREATE TABLE filmsjsonb ( id BIGSERIAL PRIMARY KEY, data JSONB ); 
+
+INSERT INTO filmsjsonb (data) VALUES ('{  
+  "title": "The Shawshank Redemption",
+  "num_votes": 1566874,
+  "rating": 9.3,
+  "year": "1994",
+  "type": "feature",
+  "can_rate": true,
+  "tconst": "tt0111161",
+  "image": {
+    "url": "http://ia.media-imdb.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1_.jpg",  
+    "width": 933,
+    "height": 1388
+  }
+}');
+
+SELECT * FROM filmsjsonb; -- format is ugly here
+
+SELECT jsonb_pretty(data) FROM filmsjsonb WHERE id=1; -- prettify json format
 ```
 
 ## Table
