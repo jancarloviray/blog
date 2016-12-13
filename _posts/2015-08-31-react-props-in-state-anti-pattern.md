@@ -2,14 +2,17 @@
 layout: post
 title: React Props in State an Anti-Pattern
 permalink: blog/react-props-in-state-anti-pattern/
+excerpt_separator: <!--more-->
 comments: True
 ---
 
 **Passing the initial state to a component as a prop is an anti-pattern because the `getInitialState` method is only called the first time the component renders - and never called after that.** This means that if you re-render the parent, while passing a *different* value as a prop, the component will not update the UI because it will keep the state from the first time it was rendered. This will make the application very prone to errors.
 
-**Solution? Make the components stateless. They are easier to test because they render an output based on an input. Have the parent component contain the passed-in data as its own *state*, then if the state changes, it re-renders its children, while passing in everything they need through `props`.**
+Solution? **Make the components stateless.** They are easier to test because they render an output based on an input. Have the parent component contain the passed-in data as its own *state*, then if the state changes, it re-renders its children, while passing in everything they need through `props`.
 
 What does this look like in React?
+
+<!--more-->
 
 The parent component (or so called "Controller View") would get all of the data through an ajax call (use flux pattern) and place it in `getInitialState`.
 
