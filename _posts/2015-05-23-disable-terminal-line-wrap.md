@@ -2,6 +2,7 @@
 layout: post
 title: Disable Terminal Line Wrap
 permalink: blog/disable-terminal-line-wrap/
+excerpt_separator: <!--more-->
 comments: True
 ---
 
@@ -12,3 +13,5 @@ this_command_produces_wide_output | less -S
 ```
 
 Bam! Use horizontal arrow keys to view the rest of the line.
+
+<!--more-->
