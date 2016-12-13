@@ -8,31 +8,41 @@ excerpt_separator: <!--more-->
 
 ## Installation and Configuration
 
+### Add APT repository
+
 ```
-# Add APT repository
-$ sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
-$ wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
+```
 
-# Install Postgres
-$ sudo apt-get update
-$ sudo apt-get install postgresql postgresql-contrib postgresql-client libpq-dev
+### Install Postgres
 
-# Set a Password
-$ sudo -u postgres psql
-(psql) \password
+```
+sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib postgresql-client libpq-dev
+```
 
-# Create a User and a Role
-(psql) CREATE ROLE [role_name] WITH LOGIN CREATEDB PASSWORD '[password]';
+### Set a Password
+
+```
+sudo -u postgres psql
+\password
+```
+
+### Create a User and a Role
+
+```
+CREATE ROLE [role_name] WITH LOGIN CREATEDB PASSWORD '[password]';
+```
 
 # Change a User's Password
-(psql) ALTER ROLE [role_name] WITH PASSWORD '[new_password]';
+`ALTER ROLE [role_name] WITH PASSWORD '[new_password]';`
 
 # Allow User to Create Databases
-(psql) ALTER USER <username> WITH CREATEDB;
+`ALTER USER <username> WITH CREATEDB;`
 
 # List Roles
-(psql) \du
-```
+`\du`
 
 ## Tips and Techniques
 
