@@ -65,19 +65,44 @@ Inside Postgres prompt, create a new Postgres user with the same name as the use
 
 ```sql
 CREATE USER postgres_user WITH PASSWORD 'password';
-# create database and associate with user
+-- create database and associate with user
 CREATE DATABASE my_postgres_db OWNER postgres_user;
 ```
 
 Exit the prompt `\q`.
 
-Also exit the current shell (associated with "postgres" system account) with `exit`
+Also exit current shell (associated with "postgres" system account) `exit`
 
 ```shell
 # Log into the user you created
 sudo su - postgres_user
 # Sign into the database you created
 psql my_postgres_db
+```
+
+```sql
+CREATE TABLE pg_equipment (
+  equip_id serial PRIMARY KEY,
+  type varchar (50) NOT NULL,
+  color varchar (25) NOT NULL,
+  location varchar(25) check (location in ('north', 'south', 'west', 'east', 'northeast', 'southeast', 'southwest', 'northwest')),
+  install_date date
+);
+-- add column
+ALTER TABLE pg_equipment ADD COLUMN functioning bool;
+-- add a default value to column
+ALTER TABLE pg_equipment ALTER COLUMN functioning SET DEFAULT 'true';
+-- set column to not null
+ALTER TABLE pg_equipment ALTER COLUMN functioning SET NOT NULL;
+-- rename column
+ALTER TABLE pg_equipment RENAME COLUMN functioning TO working_order;
+-- remove column
+ALTER TABLE pg_equipment DROP COLUMN working_order;
+
+-- rename entire table
+ALTER TABLE pg_equipment RENAME TO playground_equip;
+-- drop table
+DROP TABLE IF EXISTS playground_equip;
 ```
 
 ## Roles (Unix-style Users)
