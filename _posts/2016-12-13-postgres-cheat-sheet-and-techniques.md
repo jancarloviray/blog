@@ -50,7 +50,9 @@ sudo apt-get install postgresql postgresql-contrib
 
 On installation, Postgres is set up to use "ident" authentication. This associates roles with a matching Unix account. If a role exists, it can be signed in by logging into the associated Linux account. The installation created a user called "postgres" that is associated with the default Postgres role. To log into that account, run `sudo -i -u postgres`. You will then get a shell as a "postgres" user. Get into Postgres by typing `psql`
 
-### Quick Start
+By default, users are only allowed to login locally if the system username matches the PostgreSQL username. *PostgreSQL assumes that when you log in, you will be using a username that matches your operating system username, and that you will be connecting to a database with the same name as well.* To change the default behavior, run this: `psql -U user_name -d database_name -h 127.0.0.1`
+
+### Quick Start and Overview
 
 ```shell
 # create a new Unix system user
@@ -81,6 +83,7 @@ psql my_postgres_db
 ```
 
 ```sql
+-- create a table
 CREATE TABLE pg_equipment (
   equip_id serial PRIMARY KEY,
   type varchar (50) NOT NULL,
@@ -88,6 +91,7 @@ CREATE TABLE pg_equipment (
   location varchar(25) check (location in ('north', 'south', 'west', 'east', 'northeast', 'southeast', 'southwest', 'northwest')),
   install_date date
 );
+
 -- add column
 ALTER TABLE pg_equipment ADD COLUMN functioning bool;
 -- add a default value to column
@@ -98,23 +102,77 @@ ALTER TABLE pg_equipment ALTER COLUMN functioning SET NOT NULL;
 ALTER TABLE pg_equipment RENAME COLUMN functioning TO working_order;
 -- remove column
 ALTER TABLE pg_equipment DROP COLUMN working_order;
-
 -- rename entire table
 ALTER TABLE pg_equipment RENAME TO playground_equip;
+
 -- drop table
 DROP TABLE IF EXISTS playground_equip;
 ```
 
+Exit the postgres prompt `\q`
+
+Also exit the shell associated with "postgres_user" `exit`. This should bring you back to root user.
+
+```shell
+# log into default "postgres" user
+sudo su - postgres
+# Download sample database. If you don't have wget, run `apt-get update` and `apt-get install`
+wget http://pgfoundry.org/frs/download.php/527/world-1.0.tar.gz
+# extract archive and change to content directory
+tar xzvf world-1.0.tar.gz
+cd dbsamples-0.1/world
+# create database to import the file structure
+createdb -T template0 worlddb
+# import sql
+psql worlddb < world.sql
+# log into database
+psql worlddb
+```
+
+```sql
+-- `\dt+` to see list of tables in this database
+-- `\d city` to see column that make up the city table and see information such as "check constraints", "indexes", and "foreign-key constaints"
+
+-- select
+SELECT * FROM city;
+SELECT name,continent FROM country;
+
+-- order by
+SELECT name,continent FROM country ORDER BY continent;
+SELECT name,continent FROM country ORDER BY continent,name;
+
+-- filter
+SELECT name FROM city WHERE countrycode = 'USA';
+SELECT name FROM city WHERE countrycode = 'USA' AND name LIKE 'N%';
+SELECT name FROM city WHERE countrycode = 'USA' AND name LIKE 'N%' ORDER BY name;
+
+-- join
+SELECT country.NAME AS country,
+       city.NAME AS capital,
+       continent
+FROM country JOIN city ON country.capital = city.id
+ORDER BY continent, country;
+```
+
 ## Roles (Unix-style Users)
+
+### List Roles
+
+```
+\du
+```
 
 ### Create a User and a Role
 
 ```sql
 -- create role but don't give a password
 CREATE ROLE jonathan LOGIN;
--- create role with a password (CREATE USER is the same as CREATE ROLE except that it implies LOGIN)
-CREATE USER davide WITH PASSWORD 'jw8s0F4';
+
+-- create role with a password (CREATE USER is same as CREATE ROLE except it implies LOGIN)
+CREATE USER someuser WITH PASSWORD 'pass';
+
 -- create role that can create databases and manage roles
+CREATE ROLE role_name WITH optional_permissions;
 CREATE ROLE admin WITH CREATEDB CREATEROLE;
 ```
 
@@ -124,16 +182,20 @@ CREATE ROLE admin WITH CREATEDB CREATEROLE;
 ALTER ROLE [role_name] WITH PASSWORD '[new_password]';
 ```
 
-### Allow User to Create Databases
+### Drop Role
 
 ```sql
-ALTER USER <username> WITH CREATEDB;
+DROP ROLE IF EXISTS role_name;
 ```
 
-### List Roles
+### Define and Change Provileges
 
-```
-\du
+```sql
+-- `\h CREATE ROLE` to check attributes
+ALTER ROLE role_name WITH attribute_options;
+
+ALTER ROLE demo_role WITH NOLOGIN;
+ALTER ROLE demo_role WITH LOGIN;
 ```
 
 ## Database
