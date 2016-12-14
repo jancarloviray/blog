@@ -19,7 +19,7 @@ timezone:            America/Los_Angeles
 # About/contact
 author:
   name:              Jan Carlo Viray
-  quote:             'A year from now you\'ll wish you started today &mdash; <cite>Karen Lamb</cite>'
+  quote:             'A year from now you&rsquo;ll wish you started today &mdash; <cite>Karen Lamb</cite>'
   url:               https://twitter.com/jancarloviray
   email:             virayjancarlo@yahoo.com
   twitter:           https://twitter.com/jancarloviray
