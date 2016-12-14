@@ -8,6 +8,20 @@ excerpt_separator: <!--more-->
 
 This post is continually in updated. Modify it by editing it [here](https://github.com/jancarloviray/jancarloviray.github.io/edit/master/_posts/2016-12-13-postgres-cheat-sheet-and-techniques.md). Thanks in advance and I hope this helps you!
 
+## Create a Postgres Docker Container
+
+```shell
+# download postgres image
+docker pull postgres
+# create docker container and expose ports
+docker run -itdP --name pgvm postgres /bin/bash
+# open up a shell and start playing!
+docker exec -it pgvm /bin/bash
+# cleanup
+docker stop pgvm
+docker rm pgvm
+```
+
 ## Productivity Tips inside `psql`
 
 - `\?` shows help with psql commands
@@ -46,7 +60,7 @@ sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
 ```
 
-On installation, Postgres is set up to use "ident" authentication, meaning it associates roles with a matching Unix system account. If a role exists, it can be signing in by logging into the associated Linux system account. The installation created a user account called "postgres" that is associated with the default Postgres role. To log into that account, run `sudo -i -u postgres`. You will then get a shell as a "postgres" user. Get into Postgres by typing `psql`
+On installation, Postgres is set up to use "ident" authentication. This associates roles with a matching Unix account. If a role exists, it can be signed in by logging into the associated Linux account. The installation created a user called "postgres" that is associated with the default Postgres role. To log into that account, run `sudo -i -u postgres`. You will then get a shell as a "postgres" user. Get into Postgres by typing `psql`
 
 ## Roles (Unix-style Users)
 
