@@ -6,7 +6,7 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-This post is continually updated. Modify it by editing [this](https://github.com/jancarloviray/jancarloviray.github.io/edit/master/_posts/2016-12-13-postgres-cheat-sheet-and-techniques.md). Thanks in advance and I hope this helps!
+This post is continually updated. Modify it by editing [this](https://github.com/jancarloviray/jancarloviray.github.io/edit/master/_posts/2016-12-14-postgres-cheat-sheet-tips-and-summary.md). Thanks in advance and I hope this helps!
 
 ## Create a Postgres Container
 
