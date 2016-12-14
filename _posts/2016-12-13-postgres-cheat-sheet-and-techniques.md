@@ -6,7 +6,7 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-Please note that this post will continually be in development as a collection of tips, common commands and best practices. Feel free to [create a pull request](https://github.com/jancarloviray/jancarloviray.github.io) if you'd like to add or improve this post. Thanks in advance and I hope this helps you!
+This post is continually in updated. Modify it by editing it [here](https://github.com/jancarloviray/jancarloviray.github.io/edit/master/_posts/2016-12-13-postgres-cheat-sheet-and-techniques.md). Thanks in advance and I hope this helps you!
 
 ## Productivity Tips inside `psql`
 
@@ -39,38 +39,26 @@ EXPLAIN SELECT users.* FROM users LEFT JOIN groups WHERE groups.name = 'admins';
 
 ## PostgreSQL Installation and Configuration
 
-### Add APT repository
-
-```shell
-sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
-
-wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
-```
-
 ### Install Postgres
 
 ```shell
 sudo apt-get update
-
-sudo apt-get install postgresql postgresql-contrib postgresql-client libpq-dev
+sudo apt-get install postgresql postgresql-contrib
 ```
 
-### Set a Password
+On installation, Postgres is set up to use "ident" authentication, meaning it associates roles with a matching Unix system account. If a role exists, it can be signing in by logging into the associated Linux system account. The installation created a user account called "postgres" that is associated with the default Postgres role. To log into that account, run `sudo -i -u postgres`. You will then get a shell as a "postgres" user. Get into Postgres by typing `psql`
 
-```shell
-sudo -u postgres psql
-```
-
-```
-\password
-```
-
-## User
+## Roles (Unix-style Users)
 
 ### Create a User and a Role
 
 ```sql
-CREATE ROLE [role_name] WITH LOGIN CREATEDB PASSWORD '[password]';
+-- create role but don't give a password
+CREATE ROLE jonathan LOGIN;
+-- create role with a password (CREATE USER is the same as CREATE ROLE except that it implies LOGIN)
+CREATE USER davide WITH PASSWORD 'jw8s0F4';
+-- create role that can create databases and manage roles
+CREATE ROLE admin WITH CREATEDB CREATEROLE;
 ```
 
 ### Change a User's Password
@@ -99,13 +87,26 @@ ALTER USER <username> WITH CREATEDB;
 \l
 ```
 
+### Connect to a Database
+
+```shell
+psql -d postgres
+```
+
+### Get Information on Current Database
+
+```
+\conninfo
+```
+
 ### Create Database
 
 ```sql
 CREATE DATABASE [name] OWNER [role_name];
-```
 
-<!--more-->
+CREATE USER postgres_user WITH PASSWORD 'password';
+CREATE DATABASE my_postgres_db OWNER postgres_user;
+```
 
 ### Drop Database
 
@@ -113,53 +114,136 @@ CREATE DATABASE [name] OWNER [role_name];
 DROP DATABASE IF EXISTS [name];
 ```
 
-### Export as CSV
+<!--more-->
+
+## Table
+
+### List Tables
+
+```
+\dt
+```
+
+### Create Table
+
+Basic Syntax
 
 ```sql
-COPY (SELECT * FROM widgets) TO '/absolute/path/to/export.csv'
-WITH FORMAT csv, HEADER true;
+CREATE TABLE table_name (
+    column_name1 col_type (field_length) column_constraints,
+    column_name2 col_type (field_length),
+    column_name3 col_type (field_length)
+);
 ```
-
-### Backup All Databases
-
-```shell
-pg_dump -Fc
-```
-
-### Create Database Dump (binary)
-
-```shell
-pg_dump -U [role_name] [db_name] -Fc > backup.dump
-```
-
-### Convert Binary Dump to SQL file
-
-```shell
-pg_restore binary_file.backup > sql_file.sql
-```
-
-### Create Schema Only Dump (sql)
-
-```shell
-pg_dump -U [role_name] [db_name] -s > schema.sql
-```
-
-### Restore Database From a Dump
-
-```shell
-PGPASSWORD=<password> pg_restore -Fc --no-acl --no-owner -U <user> -d <database> <filename.dump>
-```
-
-### Copy Database
-
-```shell
-createdb -T app_db app_db_backup
-```
-
-### Change Database Ownership
 
 ```sql
-ALTER DATABASE mydb OWNER TO jancarlo;
+CREATE TABLE mytable (
+  id BIGINT PRIMARY KEY,
+  name VARCHAR(20),
+  price INT,
+  created_at timestamp without time zone default now()
+)
+
+CREATE TABLE playground (
+    equip_id serial PRIMARY KEY,
+    type varchar (50) NOT NULL,
+    color varchar (25) NOT NULL,
+    location varchar(25) check (location in ('north', 'south', 'west', 'east', 'northeast', 'southeast', 'southwest', 'northwest')),
+    install_date date
+);
+```
+
+### Check Table
+
+```
+\d
+```
+
+### Insert into Table
+
+```sql
+INSERT INTO playground (type, color, location, install_date) VALUES ('slide', 'blue', 'south', '2014-04-28');
+INSERT INTO playground (type, color, location, install_date) VALUES ('swing', 'yellow', 'northwest', '2010-08-16');
+```
+
+### Drop Table
+
+```sql
+DROP TABLE IF EXISTS mytable
+```
+
+### Delete all Rows from Table
+
+```sql
+DELETE FROM mytable;
+```
+
+### Drop Table AND Dependencies
+
+```sql
+DROP TABLE table_name CASCADE;
+```
+
+## Table Columns
+
+### Create Enum Type
+
+```sql
+CREATE TYPE environment AS ENUM ('development', 'staging', 'production');
+```
+
+### Add Column to Table
+
+```sql
+ALTER TABLE [table_name] ADD COLUMN [column_name] [data_type];
+
+ALTER TABLE playground ADD last_maint date;
+```
+
+### Remove Column from Table
+
+```sql
+ALTER TABLE [table_name] DROP COLUMN [column_name];
+
+ALTER TABLE playground DROP last_maint;
+```
+
+### Change Column Data Type
+
+```sql
+ALTER TABLE [table_name] ALTER COLUMN [column_name] [data_type];
+```
+
+### Change Column Name
+
+```sql
+ALTER TABLE [table_name] RENAME COLUMN [column_name] TO [new_column_name];
+```
+
+### Set Default Value for Existing Column
+
+```sql
+ALTER TABLE [table_name] ALTER_COLUMN created_at SET DEFAULT now();
+```
+
+### Add UNIQUE constrain to Existing Column
+
+```sql
+ALTER TABLE [table_name] ADD UNIQUE ([column_name]);
+```
+
+## Rows
+
+### Update Data in a Table
+
+```sql
+UPDATE playground SET color = 'red' WHERE type = 'swing';
+```
+
+### Delete Data in a Table
+
+```sql
+DELETE FROM playground WHERE type = 'slide';
 ```
 
 ## Data Types
@@ -179,7 +263,7 @@ SELECT gen_random_uuid();
 
 Use `text` and avoid `varchar` or `char` and especially `varchar(n)` unless you specifically want to have a hard limit. Read [this](http://stackoverflow.com/questions/4848964/postgresql-difference-between-text-and-varchar-character-varying). Performance wise, `text` is faster.
 
-Use indexes for pattern matching. 
+Use indexes for pattern matching.
 
 ```sql
 CREATE INDEX ON users (name);
@@ -244,7 +328,7 @@ CREATE TYPE server_states AS ENUM ('running', 'uncertain', 'offline', 'restartin
 CREATE TABLE enum_test(id serial, state server_states);
 INSERT INTO enum_test(state) VALUES ('offline');
 
--- Example of Bad Insert 
+-- Example of Bad Insert
 INSERT INTO enum_test(state) VALUES ('destroyed'); -- ERROR:  invalid input value for enum server_states: "destroyed"
 
 -- You Can Add New Values
@@ -257,9 +341,9 @@ INSERT INTO enum_test(state) VALUES ('destroyed');
 Use `jsonb` which is a binary-encoded version of JSON. This means space padding is gone and is more efficient than `json`. Don't use `json` type.
 
 ```sql
-CREATE TABLE filmsjsonb ( id BIGSERIAL PRIMARY KEY, data JSONB ); 
+CREATE TABLE filmsjsonb ( id BIGSERIAL PRIMARY KEY, data JSONB );
 
-INSERT INTO filmsjsonb (data) VALUES ('{  
+INSERT INTO filmsjsonb (data) VALUES ('{
   "title": "The Shawshank Redemption",
   "num_votes": 1566874,
   "rating": 9.3,
@@ -268,7 +352,7 @@ INSERT INTO filmsjsonb (data) VALUES ('{
   "can_rate": true,
   "tconst": "tt0111161",
   "image": {
-    "url": "http://ia.media-imdb.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1_.jpg",  
+    "url": "http://ia.media-imdb.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1_.jpg",
     "width": 933,
     "height": 1388
   }
@@ -323,92 +407,55 @@ FROM cards
 WHERE id = 1;
 ```
 
-## Table
+## Backup and Export
 
-### List Tables
-
-```
-\dt
-```
-
-### Create Table
+### Export as CSV
 
 ```sql
-CREATE TABLE mytable (
-  id BIGINT PRIMARY KEY,
-  name VARCHAR(20),
-  price INT,
-  created_at timestamp without time zone default now()
-)
+COPY (SELECT * FROM widgets) TO '/absolute/path/to/export.csv'
+WITH FORMAT csv, HEADER true;
 ```
 
-### Insert into Table
+### Backup All Databases
 
-```sql
-INSERT INTO mytable VALUES(1,'widget1',100)
-INSERT INTO mytable(name, price) VALUES ('widget2', 101)
+```shell
+pg_dump -Fc
 ```
 
-### Drop Table
+### Create Database Dump (binary)
 
-```sql
-DROP TABLE IF EXISTS mytable
+```shell
+pg_dump -U [role_name] [db_name] -Fc > backup.dump
 ```
 
-### Delete all Rows from Table
+### Convert Binary Dump to SQL file
 
-```sql
-DELETE FROM mytable;
+```shell
+pg_restore binary_file.backup > sql_file.sql
 ```
 
-### Drop Table and Dependencies
+### Create Schema Only Dump (sql)
 
-```sql
-DROP TABLE table_name CASCADE;
+```shell
+pg_dump -U [role_name] [db_name] -s > schema.sql
 ```
 
-## Column
+### Restore Database From a Dump
 
-### Create Enum Type
-
-```sql
-CREATE TYPE environment AS ENUM ('development', 'staging', 'production');
+```shell
+PGPASSWORD=<password> pg_restore -Fc --no-acl --no-owner -U <user> -d <database> <filename.dump>
 ```
 
-### Add Column to Table
+### Copy Database
 
-```sql
-ALTER TABLE [table_name] ADD COLUMN [column_name] [data_type];
+```shell
+createdb -T app_db app_db_backup
 ```
 
-### Remove Column from Table
+### Change Database Ownership
 
 ```sql
-ALTER TABLE [table_name] DROP COLUMN [column_name];
-```
-
-### Change Column Data Type
-
-```sql
-ALTER TABLE [table_name] ALTER COLUMN [column_name] [data_type];
-```
-
-### Change Column Name
-
-```sql
-ALTER TABLE [table_name] RENAME COLUMN [column_name] TO [new_column_name];
-```
-
-### Set Default Value for Existing Column
-
-```sql
-ALTER TABLE [table_name] ALTER_COLUMN created_at SET DEFAULT now();
-```
-
-### Add UNIQUE constrain to Existing Column
-
-```sql
-ALTER TABLE [table_name] ADD UNIQUE ([column_name]);
+ALTER DATABASE mydb OWNER TO jancarlo;
 ```
 
 ## Monitoring and Logging
