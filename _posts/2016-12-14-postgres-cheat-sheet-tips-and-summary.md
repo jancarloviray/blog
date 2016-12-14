@@ -111,19 +111,27 @@ CREATE TABLE pg_equipment (
 );
 
 -- add column
-ALTER TABLE pg_equipment ADD COLUMN functioning bool;
+ALTER TABLE pg_equipment
+ADD COLUMN functioning bool;
+
 -- add a default value to column
-ALTER TABLE pg_equipment ALTER COLUMN functioning SET DEFAULT 'true';
+ALTER TABLE pg_equipment
+ALTER COLUMN functioning SET DEFAULT 'true';
+
 -- set column to not null
-ALTER TABLE pg_equipment ALTER COLUMN functioning SET NOT NULL;
+ALTER TABLE pg_equipment
+ALTER COLUMN functioning SET NOT NULL;
 
 -- rename column
-ALTER TABLE pg_equipment RENAME COLUMN functioning TO working_order;
+ALTER TABLE pg_equipment
+RENAME COLUMN functioning TO working_order;
 -- remove column
-ALTER TABLE pg_equipment DROP COLUMN working_order;
+ALTER TABLE pg_equipment
+DROP COLUMN working_order;
 
 -- rename entire table
-ALTER TABLE pg_equipment RENAME TO playground_equip;
+ALTER TABLE pg_equipment
+RENAME TO playground_equip;
 -- drop table
 DROP TABLE IF EXISTS playground_equip;
 ```
@@ -342,22 +350,28 @@ DELETE FROM mytable;
 
 ```sql
 -- Add Column to Table
-ALTER TABLE table_name ADD COLUMN column_name data_type;
+ALTER TABLE table_name
+ADD COLUMN column_name data_type;
 
 -- Remove Column from Table
-ALTER TABLE table_name DROP COLUMN column_name;
+ALTER TABLE table_name
+DROP COLUMN column_name;
 
 -- Change Column Data Type
-ALTER TABLE table_name ALTER COLUMN column_name data_type;
+ALTER TABLE table_name
+ALTER COLUMN column_name data_type;
 
 -- Change Column Name
-ALTER TABLE table_name RENAME COLUMN column_name TO new_name;
+ALTER TABLE table_name
+RENAME COLUMN column_name TO new_name;
 
 -- Set Default Value for Existing Column
-ALTER TABLE table_name ALTER_COLUMN created_at SET DEFAULT now();
+ALTER TABLE table_name
+ALTER_COLUMN created_at SET DEFAULT now();
 
 -- Add UNIQUE constrain to Existing Column
-ALTER TABLE table_name ADD UNIQUE (column_name);
+ALTER TABLE table_name
+ADD UNIQUE (column_name);
 ```
 
 ## General SQL
@@ -609,7 +623,11 @@ pg_dump postgres > postgres_db.bak
 
 # backup a database remotely
 pg_dump -U user_name -h remote_host -p remote_port name_of_database > name_of_backup_file
+```
 
+### Restore a Database
+
+```shell
 # create a restored database
 # psql empty_database < backup_file
 createdb -T template0 restored_database
@@ -618,7 +636,7 @@ psql restored_database < database.bak
 # restore partially but stop on error
 psql --set ON_ERROR_STOP=on restored_database < backup_file
 
-# restore, but on error, roll-back
+# restore, but on error, roll-back; real-world use case
 psql --single-transaction restored_database < backup_file
 ```
 
@@ -642,16 +660,19 @@ pg_dump -U [role_name] [db_name] -s > schema.sql
 ### Create Indexes
 
 ```sql
-CREATE INDEX idx_salary ON employees(salary);
+CREATE INDEX idx_salary
+ON employees(salary);
 
-CREATE INDEX idx_salary ON employees(last_name, salary);
+CREATE INDEX idx_salary
+ON employees(last_name, salary);
 ```
 
 ### Create Indexes Concurrently
 
 ```sql
 # this prevents locking your table
-CREATE INDEX CONCURRENTLY idx_salary ON employees(last_name, salary);
+CREATE INDEX CONCURRENTLY idx_salary
+ON employees(last_name, salary);
 ```
 
 ## Monitoring and Logging
