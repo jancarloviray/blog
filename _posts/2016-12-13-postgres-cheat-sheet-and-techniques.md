@@ -8,13 +8,16 @@ excerpt_separator: <!--more-->
 
 This post is continually updated. Modify it by editing [this](https://github.com/jancarloviray/jancarloviray.github.io/edit/master/_posts/2016-12-13-postgres-cheat-sheet-and-techniques.md). Thanks in advance and I hope this helps!
 
-## Create a Postgres Docker Container
+## Create a Postgres Container
 
 ```shell
 docker pull postgres
-# create container and expose ports
-docker run -itdP --name pgvm postgres /bin/bash
-docker exec -it pgvm /bin/bash
+docker run --name pg -d postgres
+docker exec -it pg bash
+
+# inside container
+su - postgres
+psql
 ```
 
 ## Productivity Tips inside `psql`
