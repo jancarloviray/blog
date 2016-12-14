@@ -50,6 +50,28 @@ sudo apt-get install postgresql postgresql-contrib
 
 On installation, Postgres is set up to use "ident" authentication. This associates roles with a matching Unix account. If a role exists, it can be signed in by logging into the associated Linux account. The installation created a user called "postgres" that is associated with the default Postgres role. To log into that account, run `sudo -i -u postgres`. You will then get a shell as a "postgres" user. Get into Postgres by typing `psql`
 
+### Quick Start
+
+After installation, create a new Unix system user: `sudo adduser postgres_user`
+
+Log onto the default Postgres user called "postgres" with `sudo su - postgres`
+
+Get inside Postgres prompt: `psql`
+
+Inside Postgres prompt, create a new Postgres user with the same name as the user we created earlier, "postgres_user".
+
+```sql
+CREATE USER postgres_user WITH PASSWORD 'password';
+# create database and associate with user
+CREATE DATABASE my_postgres_db OWNER postgres_user;
+```
+
+Exit the prompt `\q`. Also exit the current shell (associated with "postgres" system account) with `exit`.
+
+Log into the user you created with `sudo su - postgres_user`
+
+Sign into the database you created with `psql my_postgres_db`
+
 ## Roles (Unix-style Users)
 
 ### Create a User and a Role
