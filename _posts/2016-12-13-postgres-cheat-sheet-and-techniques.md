@@ -17,9 +17,6 @@ docker pull postgres
 docker run -itdP --name pgvm postgres /bin/bash
 # open up a shell and start playing!
 docker exec -it pgvm /bin/bash
-# cleanup
-docker stop pgvm
-docker rm pgvm
 ```
 
 ## Productivity Tips inside `psql`
