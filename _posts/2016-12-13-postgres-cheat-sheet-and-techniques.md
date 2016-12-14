@@ -29,19 +29,19 @@ Add these to your `~/.psqlrc` file!
 
 Compare Outputs
 
-```
-db=# \o a.txt
-db=# EXPLAIN SELECT * FROM users WHERE id IN (SELECT user_id FROM groups WHERE name = 'admins');
-db=# \o b.txt
-db=# EXPLAIN SELECT users.* FROM users LEFT JOIN groups WHERE groups.name = 'admins';
-db=# \! vimdiff a.txt b.txt
+```sql
+\o a.txt
+EXPLAIN SELECT * FROM users WHERE id IN (SELECT user_id FROM groups WHERE name = 'admins');
+\o b.txt
+EXPLAIN SELECT users.* FROM users LEFT JOIN groups WHERE groups.name = 'admins';
+\! vimdiff a.txt b.txt
 ```
 
 ## PostgreSQL Installation and Configuration
 
 ### Add APT repository
 
-```
+```bash
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
 
 wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
@@ -49,7 +49,7 @@ wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key a
 
 ### Install Postgres
 
-```
+```bash
 sudo apt-get update
 
 sudo apt-get install postgresql postgresql-contrib postgresql-client libpq-dev
@@ -57,7 +57,7 @@ sudo apt-get install postgresql postgresql-contrib postgresql-client libpq-dev
 
 ### Set a Password
 
-```
+```bash
 sudo -u postgres psql
 
 \password
@@ -67,19 +67,19 @@ sudo -u postgres psql
 
 ### Create a User and a Role
 
-```
+```sql
 CREATE ROLE [role_name] WITH LOGIN CREATEDB PASSWORD '[password]';
 ```
 
 ### Change a User's Password
 
-```
+```sql
 ALTER ROLE [role_name] WITH PASSWORD '[new_password]';
 ```
 
 ### Allow User to Create Databases
 
-```
+```sql
 ALTER USER <username> WITH CREATEDB;
 ```
 
@@ -99,7 +99,7 @@ ALTER USER <username> WITH CREATEDB;
 
 ### Create Database
 
-```
+```sql
 CREATE DATABASE [name] OWNER [role_name];
 ```
 
