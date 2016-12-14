@@ -161,8 +161,7 @@ SELECT * FROM city;
 SELECT name,continent FROM country;
 
 -- order by
-SELECT name,continent FROM country ORDER BY continent;
-SELECT name,continent FROM country ORDER BY continent,name;
+SELECT name,continent FROM country ORDER BY continent, name;
 
 -- filter
 SELECT name FROM city WHERE countrycode = 'USA';
@@ -247,21 +246,15 @@ DROP ROLE IF EXISTS role_name;
 
 ### Define and Change Provileges
 
-```sql
--- `\h CREATE ROLE` to check attributes
-ALTER ROLE role_name WITH attribute_options;
+Use `\h CREATE ROLE` to check attributes
 
+```sql
+-- ALTER ROLE role_name WITH attribute_options;
 ALTER ROLE demo_role WITH NOLOGIN;
 ALTER ROLE demo_role WITH LOGIN;
 ```
 
 ## Database
-
-### List all Databses
-
-```
-\l
-```
 
 ### Connect to a Database
 
@@ -269,25 +262,20 @@ ALTER ROLE demo_role WITH LOGIN;
 psql -d postgres
 ```
 
-### Get Information on Current Database
+### psql
 
-```
-\conninfo
-```
+- `\l` to list all databases
+- `\conninfo` to get info on current db
+- `c dbname` to connect to a different db
 
-### Create Database
+### Database
 
 ```sql
-CREATE DATABASE [name] OWNER [role_name];
+-- CREATE DATABASE [name] OWNER [role_name];
 
 CREATE USER postgres_user WITH PASSWORD 'password';
 CREATE DATABASE my_postgres_db OWNER postgres_user;
-```
-
-### Drop Database
-
-```sql
-DROP DATABASE IF EXISTS [name];
+DROP DATABASE IF EXISTS my_postgres_db;
 ```
 
 ## Table
@@ -338,87 +326,73 @@ VALUES ('slide', 'blue', 'south', '2014-04-28');
 ### Drop Table
 
 ```sql
+-- drop table
 DROP TABLE IF EXISTS mytable
-```
 
-### Delete all Rows from Table
-
-```sql
-DELETE FROM mytable;
-```
-
-### Drop Table AND Dependencies
-
-```sql
+-- drop table and dependencies
 DROP TABLE table_name CASCADE;
+
+-- just delete all rows from table
+DELETE FROM mytable;
 ```
 
 ## Table Columns
 
-### Create Enum Type
+### Modifying Table Columns
 
 ```sql
-CREATE TYPE environment
-AS ENUM ('development', 'staging', 'production');
-```
+-- Add Column to Table
+ALTER TABLE table_name ADD COLUMN column_name data_type;
 
-### Add Column to Table
+-- Remove Column from Table
+ALTER TABLE table_name DROP COLUMN column_name;
 
-```sql
-ALTER TABLE [table_name] ADD COLUMN [column_name] [data_type];
+-- Change Column Data Type
+ALTER TABLE table_name ALTER COLUMN column_name data_type;
 
-ALTER TABLE playground ADD last_maint date;
-```
+-- Change Column Name
+ALTER TABLE table_name RENAME COLUMN column_name TO new_name;
 
-### Remove Column from Table
+-- Set Default Value for Existing Column
+ALTER TABLE table_name ALTER_COLUMN created_at SET DEFAULT now();
 
-```sql
-ALTER TABLE [table_name] DROP COLUMN [column_name];
-
-ALTER TABLE playground DROP last_maint;
-```
-
-### Change Column Data Type
-
-```sql
-ALTER TABLE [table_name] ALTER COLUMN [column_name] [data_type];
-```
-
-### Change Column Name
-
-```sql
-ALTER TABLE [table] RENAME COLUMN [column] TO [new_name];
-```
-
-### Set Default Value for Existing Column
-
-```sql
-ALTER TABLE [table_name] ALTER_COLUMN created_at SET DEFAULT now();
-```
-
-### Add UNIQUE constrain to Existing Column
-
-```sql
-ALTER TABLE [table_name] ADD UNIQUE ([column_name]);
-```
-
-## Rows
-
-### Update Data in a Table
-
-```sql
-UPDATE playground SET color = 'red' WHERE type = 'swing';
-```
-
-### Delete Data in a Table
-
-```sql
-DELETE FROM playground WHERE type = 'slide';
+-- Add UNIQUE constrain to Existing Column
+ALTER TABLE table_name ADD UNIQUE (column_name);
 ```
 
 ## General SQL
 
+```sql
+CREATE TABLE weather (
+    city            varchar(80),
+    temp_lo         int,
+    temp_hi         int,
+    prcp            real,
+    date            date
+);
+
+-- basic insert
+INSERT INTO weather VALUES (’San Francisco’, 46, 50, 0.25, ’1994-11-27’);
+
+-- explicit columns
+INSERT INTO weather (city, temp_lo, temp_hi, prcp, date)
+VALUES (’San Francisco’, 43, 57, 0.0, ’1994-11-29’);
+
+-- unordered columns
+INSERT INTO weather (date, city, temp_hi, temp_lo)
+VALUES (’1994-11-29’, ’Hayward’, 54, 37);
+```
+
 ### Querying
+
+```sql
+SELECT * FROM weather;
+SELECT city, temp_lo, temp_hi, prcp, date FROM weather;
+SELECT * FROM weather WHERE city = ’San Francisco’ AND prcp > 0.0;
+
+-- expressions
+SELECT city, (temp_hi + temp_lo)/2 AS temp_avg, date FROM weather;
+```
 
 ### Joins
 
@@ -444,7 +418,6 @@ WHERE
 SELECT *
 FROM employee_view
 ```
-
 
 ## Data Types
 
