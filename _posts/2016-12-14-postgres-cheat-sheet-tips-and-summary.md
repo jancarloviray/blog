@@ -47,11 +47,12 @@ sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
 ```
 
-On installation, Postgres is set up to use **ident** auth, which associates roles with a matching Unix account. The installation created a system user called **postgres**. This is associated with the default Postgres role. Log into that account by running `sudo -u postgres`. Run postgres prompt with `psql` which without argument, runs `psql -U [current_unix_user] -d [current_unix_user_as_db_name]`
+On installation, Postgres is set up to use **ident** auth, which associates roles with a matching Unix account. The installation created a system user called **postgres**. This is associated with the default Postgres role. Log into that account by running `sudo -u postgres`. Run postgres prompt with `psql` which without argument, runs `psql -U current_sys_user -d current_sys_user_as_db_name`
 
 By default, users are only allowed to login locally if the system username matches the PostgreSQL username. *PostgreSQL assumes that when you log in, you will be using a username that matches your system username, and that you will be connecting to a database with the same name as well.*
 
-To bypass the default behavior, run: `psql -U some_user -d some_db_name -h 127.0.0.1`
+To bypass the default behavior, run:
+`psql -U some_user -d some_db_name -h 127.0.0.1`
 
 ### Quick Start and Overview
 
@@ -79,6 +80,7 @@ CREATE USER postgres_user WITH PASSWORD 'password';
 ```sql
 -- create database
 CREATE DATABASE my_postgres_db;
+
 -- associate created database to postgres_user
 GRANT ALL PRIVILEGES ON DATABASE my_postgres_db TO postgres_user;
 ```
@@ -90,6 +92,7 @@ Also exit current shell (associated with "postgres" system account) `exit`
 ```shell
 # Log into the user you created
 sudo su - postgres_user
+
 # Sign into the database you created
 psql my_postgres_db
 ```
@@ -124,6 +127,7 @@ ALTER COLUMN functioning SET NOT NULL;
 -- rename column
 ALTER TABLE pg_equipment
 RENAME COLUMN functioning TO working_order;
+
 -- remove column
 ALTER TABLE pg_equipment
 DROP COLUMN working_order;
@@ -131,6 +135,7 @@ DROP COLUMN working_order;
 -- rename entire table
 ALTER TABLE pg_equipment
 RENAME TO playground_equip;
+
 -- drop table
 DROP TABLE IF EXISTS playground_equip;
 ```
@@ -144,15 +149,20 @@ Also exit the shell associated with "postgres_user" `exit`. This should bring yo
 ```shell
 # log into default "postgres" user
 sudo su - postgres
+
 # Download sample database. If you don't have wget, run `apt-get update` and `apt-get install`
 wget http://pgfoundry.org/frs/download.php/527/world-1.0.tar.gz
+
 # extract archive and change to content directory
 tar xzvf world-1.0.tar.gz
 cd dbsamples-0.1/world
+
 # create database to import the file structure
 createdb -T template0 worlddb
+
 # import sql
 psql worlddb < world.sql
+
 # log into database
 psql worlddb
 ```
@@ -161,7 +171,9 @@ psql worlddb
 
 ```sql
 -- `\dt+` to see list of tables in this database
--- `\d city` to see column that make up the city table and see information such as "check constraints", "indexes", and "foreign-key constaints"
+-- `\d city` to see columns that make up the city table
+-- and see information such as "check constraints",
+-- "indexes", and "foreign-key constaints"
 
 -- select
 SELECT * FROM city;
