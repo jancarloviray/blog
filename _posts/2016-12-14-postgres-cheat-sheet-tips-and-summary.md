@@ -6,9 +6,9 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-This post is continually updated. Modify it by editing [this](https://github.com/jancarloviray/jancarloviray.github.io/edit/master/_posts/2016-12-14-postgres-cheat-sheet-tips-and-summary.md). Thanks in advance and I hope this helps!
+This post is continually updated. Modify it creating a pull request [here](https://github.com/jancarloviray/jancarloviray.github.io/blob/master/_posts/2016-12-14-postgres-cheat-sheet-tips-and-summary.md). Thanks in advance and I hope this helps!
 
-## Create a Postgres Container
+## Create a Postgres Docker Container
 
 ```shell
 docker pull postgres
@@ -26,7 +26,6 @@ psql
 - `\c other-db` to connect to another db without quitting the console
 - `\l+` to list databases
 - `\dn+` to list schemas
-- `\dt+` to list tables
 - `\dt+ *.users` to list tables with pattern `*.users`
 - `\df *somefuncname*` to find functions with pattern `*somefuncname*`
 - `\e` to invoke your `$EDITOR` and use a real editor
@@ -48,9 +47,9 @@ sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
 ```
 
-On installation, Postgres is set up to use **ident** auth. This associates roles with a matching Unix account. The installation created a system user called **postgres** that is associated with the default Postgres role. Log into that account by running `sudo -i -u postgres`. You will then get a shell as a "postgres" user. Get inside Postgres with `psql`. By default, `psql` alone runs `psql -U [current_unix_username] -d [current_unix_username_as_db_name]`.
+On installation, Postgres is set up to use **ident** auth, which associates roles with a matching Unix account. The installation created a system user called **postgres**. This is associated with the default Postgres role. Log into that account by running `sudo -u postgres`. Run postgres prompt with `psql` which without argument, runs `psql -U [current_unix_user] -d [current_unix_user_as_db_name]`
 
-By default, users are only allowed to login locally if the system username matches the PostgreSQL username. *PostgreSQL assumes that when you log in, you will be using a username that matches your operating system username, and that you will be connecting to a database with the same name as well.*
+By default, users are only allowed to login locally if the system username matches the PostgreSQL username. *PostgreSQL assumes that when you log in, you will be using a username that matches your system username, and that you will be connecting to a database with the same name as well.*
 
 To bypass the default behavior, run: `psql -U some_user -d some_db_name -h 127.0.0.1`
 
