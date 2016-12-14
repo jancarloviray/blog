@@ -29,7 +29,7 @@ Add these to your `~/.psqlrc` file!
 
 Compare Outputs
 
-```sql
+```
 \o a.txt
 EXPLAIN SELECT * FROM users WHERE id IN (SELECT user_id FROM groups WHERE name = 'admins');
 \o b.txt
@@ -41,7 +41,7 @@ EXPLAIN SELECT users.* FROM users LEFT JOIN groups WHERE groups.name = 'admins';
 
 ### Add APT repository
 
-```bash
+```shell
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
 
 wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
@@ -49,7 +49,7 @@ wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key a
 
 ### Install Postgres
 
-```bash
+```shell
 sudo apt-get update
 
 sudo apt-get install postgresql postgresql-contrib postgresql-client libpq-dev
@@ -57,9 +57,11 @@ sudo apt-get install postgresql postgresql-contrib postgresql-client libpq-dev
 
 ### Set a Password
 
-```bash
+```shell
 sudo -u postgres psql
+```
 
+```
 \password
 ```
 
@@ -107,56 +109,56 @@ CREATE DATABASE [name] OWNER [role_name];
 
 ### Drop Database
 
-```
+```sql
 DROP DATABASE IF EXISTS [name];
 ```
 
 ### Export as CSV
 
-```
+```sql
 COPY (SELECT * FROM widgets) TO '/absolute/path/to/export.csv'
 WITH FORMAT csv, HEADER true;
 ```
 
 ### Backup All Databases
 
-```
+```shell
 pg_dump -Fc
 ```
 
 ### Create Database Dump (binary)
 
-```
+```shell
 pg_dump -U [role_name] [db_name] -Fc > backup.dump
 ```
 
 ### Convert Binary Dump to SQL file
 
-```
+```shell
 pg_restore binary_file.backup > sql_file.sql
 ```
 
 ### Create Schema Only Dump (sql)
 
-```
+```shell
 pg_dump -U [role_name] [db_name] -s > schema.sql
 ```
 
 ### Restore Database From a Dump
 
-```
+```shell
 PGPASSWORD=<password> pg_restore -Fc --no-acl --no-owner -U <user> -d <database> <filename.dump>
 ```
 
 ### Copy Database
 
-```
+```shell
 createdb -T app_db app_db_backup
 ```
 
 ### Change Database Ownership
 
-```
+```sql
 ALTER DATABASE mydb OWNER TO jancarlo;
 ```
 
@@ -168,7 +170,7 @@ ALTER DATABASE mydb OWNER TO jancarlo;
 
 Use `uuid` for primary key
 
-```
+```sql
 CREATE EXTENSION pgcrypto;
 SELECT gen_random_uuid();
 ```
@@ -179,14 +181,14 @@ Use `text` and avoid `varchar` or `char` and especially `varchar(n)` unless you 
 
 Use indexes for pattern matching. 
 
-```
+```sql
 CREATE INDEX ON users (name);
 SELECT * FROM accounts WHERE email LIKE 'Peter%';
 ```
 
 For suffix lookups, use functional indexes.
 
-```
+```sql
 CREATE INDEX backsearch ON users (reverse(email));
 SELECT * FROM accounts WHERE reverse(email) LIKE reverse('%doe.com');
 ```
@@ -210,7 +212,7 @@ Use `bool` and not `bit`.
 
 Make an array
 
-```
+```sql
 SELECT ARRAY[1, 2, 3];
 
 -- another way
@@ -219,14 +221,14 @@ SELECT '{1, 2, 3}'::numeric[];
 
 Extend an Array
 
-```
+```sql
 SELECT ARRAY[1,2] || 3;
 SELECT ARRAY[1,2] || ARRAY[3, 4];
 ```
 
 Access an Array (SQL arrays are 1-indexed instead of the typical 0-index arrays!)
 
-```
+```sql
 SELECT ('{one, two, three}'::text[])[1]; -- one
 ```
 
@@ -234,7 +236,7 @@ SELECT ('{one, two, three}'::text[])[1]; -- one
 
 Are fast, transparent mapping of words to integer and lives in `pg_enum`. Use this as labels, otherwise, it's similar to other languages.
 
-```
+```sql
 CREATE TYPE weekdays AS ('Mon', 'Tue', 'Wed', 'Thu', 'Fri');
 
 -- Enum Example
@@ -254,7 +256,7 @@ INSERT INTO enum_test(state) VALUES ('destroyed');
 
 Use `jsonb` which is a binary-encoded version of JSON. This means space padding is gone and is more efficient than `json`. Don't use `json` type.
 
-```
+```sql
 CREATE TABLE filmsjsonb ( id BIGSERIAL PRIMARY KEY, data JSONB ); 
 
 INSERT INTO filmsjsonb (data) VALUES ('{  
@@ -279,7 +281,7 @@ SELECT jsonb_pretty(data) FROM filmsjsonb WHERE id=1; -- prettify json format
 
 ##### Defining Columns
 
-```
+```sql
 CREATE TABLE cards (
   id integer NOT NULL,
   board_id integer NOT NULL,
@@ -289,32 +291,32 @@ CREATE TABLE cards (
 
 ##### Inserting JSON data
 
-```
+```sql
 INSERT INTO cards VALUES (1, 1, '{"name": "Paint house", "tags": ["Improvements", "Office"], "finished": true}');
 INSERT INTO cards VALUES (2, 1, '{"name": "Wash dishes", "tags": ["Clean", "Kitchen"], "finished": false}');
 ```
 
 ##### Querying Data
 
-```
+```sql
 SELECT data->>'name' AS name FROM cards
 ```
 
 ##### Filtering Results
 
-```
+```sql
 SELECT * FROM cards WHERE data->>'finished' = 'true';
 ```
 
 ##### Checking for Column Existence
 
-```
+```sql
 SELECT count(*) FROM cards WHERE data ? 'ingredients';
 ```
 
 ##### Expanding Data into Rows
 
-```
+```sql
 SELECT
   jsonb_array_elements_text(data->'tags') as tag
 FROM cards
@@ -331,7 +333,7 @@ WHERE id = 1;
 
 ### Create Table
 
-```
+```sql
 CREATE TABLE mytable (
   id BIGINT PRIMARY KEY,
   name VARCHAR(20),
@@ -342,26 +344,26 @@ CREATE TABLE mytable (
 
 ### Insert into Table
 
-```
+```sql
 INSERT INTO mytable VALUES(1,'widget1',100)
 INSERT INTO mytable(name, price) VALUES ('widget2', 101)
 ```
 
 ### Drop Table
 
-```
+```sql
 DROP TABLE IF EXISTS mytable
 ```
 
 ### Delete all Rows from Table
 
-```
+```sql
 DELETE FROM mytable;
 ```
 
 ### Drop Table and Dependencies
 
-```
+```sql
 DROP TABLE table_name CASCADE;
 ```
 
@@ -369,43 +371,43 @@ DROP TABLE table_name CASCADE;
 
 ### Create Enum Type
 
-```
+```sql
 CREATE TYPE environment AS ENUM ('development', 'staging', 'production');
 ```
 
 ### Add Column to Table
 
-```
+```sql
 ALTER TABLE [table_name] ADD COLUMN [column_name] [data_type];
 ```
 
 ### Remove Column from Table
 
-```
+```sql
 ALTER TABLE [table_name] DROP COLUMN [column_name];
 ```
 
 ### Change Column Data Type
 
-```
+```sql
 ALTER TABLE [table_name] ALTER COLUMN [column_name] [data_type];
 ```
 
 ### Change Column Name
 
-```
+```sql
 ALTER TABLE [table_name] RENAME COLUMN [column_name] TO [new_column_name];
 ```
 
 ### Set Default Value for Existing Column
 
-```
+```sql
 ALTER TABLE [table_name] ALTER_COLUMN created_at SET DEFAULT now();
 ```
 
 ### Add UNIQUE constrain to Existing Column
 
-```
+```sql
 ALTER TABLE [table_name] ADD UNIQUE ([column_name]);
 ```
 
@@ -413,7 +415,7 @@ ALTER TABLE [table_name] ADD UNIQUE ([column_name]);
 
 ### Get Total Number of Connections
 
-```
+```sql
 SELECT count(*) FROM pg_stat_activity;
 
 -- break down connections by state
