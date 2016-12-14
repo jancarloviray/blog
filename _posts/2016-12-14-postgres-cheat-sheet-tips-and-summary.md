@@ -385,15 +385,15 @@ CREATE TABLE weather (
 );
 
 -- basic insert
-INSERT INTO weather VALUES (’San Francisco’, 46, 50, 0.25, ’1994-11-27’);
+INSERT INTO weather VALUES ('San Francisco', 46, 50, 0.25, '1994-11-27');
 
 -- explicit columns
 INSERT INTO weather (city, temp_lo, temp_hi, prcp, date)
-VALUES (’San Francisco’, 43, 57, 0.0, ’1994-11-29’);
+VALUES ('San Francisco', 43, 57, 0.0, '1994-11-29');
 
 -- unordered columns
 INSERT INTO weather (date, city, temp_hi, temp_lo)
-VALUES (’1994-11-29’, ’Hayward’, 54, 37);
+VALUES ('1994-11-29', 'Hayward', 54, 37);
 ```
 
 ### Querying
@@ -401,7 +401,7 @@ VALUES (’1994-11-29’, ’Hayward’, 54, 37);
 ```sql
 SELECT * FROM weather;
 SELECT city, temp_lo, temp_hi, prcp, date FROM weather;
-SELECT * FROM weather WHERE city = ’San Francisco’ AND prcp > 0.0;
+SELECT * FROM weather WHERE city = 'San Francisco' AND prcp > 0.0;
 
 -- expressions
 SELECT city, (temp_hi + temp_lo)/2 AS temp_avg, date FROM weather;
