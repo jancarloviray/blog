@@ -54,6 +54,8 @@ By default, users are only allowed to login locally if the system username match
 
 ### Quick Start and Overview
 
+#### Add a System User
+
 ```shell
 # create a new Unix system user
 sudo adduser postgres_user
@@ -67,10 +69,19 @@ Notice how we can connect without a password. This is because Postgres has authe
 
 Inside Postgres prompt, create a new Postgres user with the same name as the user we created earlier, "postgres_user".
 
+#### Add a Postgres User
+
 ```sql
 CREATE USER postgres_user WITH PASSWORD 'password';
--- create database and associate with user
-CREATE DATABASE my_postgres_db OWNER postgres_user;
+```
+
+#### Create a Database for Postgres User
+
+```sql
+-- create database
+CREATE DATABASE my_postgres_db;
+-- associate created database to postgres_user
+GRANT ALL PRIVILEGES ON DATABASE my_postgres_db TO postgres_user;
 ```
 
 Exit the prompt `\q`.
@@ -84,7 +95,7 @@ sudo su - postgres_user
 psql my_postgres_db
 ```
 
-Let's add a sample table.
+#### Let's add a Sample Table
 
 ```sql
 -- create a table
@@ -117,7 +128,7 @@ Exit the postgres prompt `\q`
 
 Also exit the shell associated with "postgres_user" `exit`. This should bring you back to root user.
 
-Let's now import a sample database.
+#### Let's now import a sample database
 
 ```shell
 # log into default "postgres" user
@@ -134,6 +145,8 @@ psql worlddb < world.sql
 # log into database
 psql worlddb
 ```
+
+#### Let's query the sample database
 
 ```sql
 -- `\dt+` to see list of tables in this database
@@ -158,6 +171,34 @@ SELECT country.NAME AS country,
        continent
 FROM country JOIN city ON country.capital = city.id
 ORDER BY continent, country;
+```
+
+#### Let's work with JSON
+
+```sql
+-- create table with a json column
+CREATE TABLE products (
+  id serial PRIMARY KEY,
+  name varchar,
+  attributes JSONB
+);
+
+-- insert some data
+INSERT INTO products (name, attributes) VALUES (
+ 'Geek Love: A Novel', '{
+    "author": "Katherine Dunn",
+    "pages": 368,
+    "category": "fiction"}'
+ );
+
+-- create an index
+CREATE INDEX idx_products_attributes ON products USING GIN (attributes);
+
+-- query an attribute
+SELECT attributes->'category' FROM products;
+
+-- extract query as text
+SELECT attributes->>'category' FROM products;
 ```
 
 <!--more-->
@@ -370,6 +411,36 @@ UPDATE playground SET color = 'red' WHERE type = 'swing';
 ```sql
 DELETE FROM playground WHERE type = 'slide';
 ```
+
+## General SQL
+
+### Querying
+
+### Joins
+
+### Views
+
+Views are virtual tables. It just encapsulates a query to make life easier. Note that it does not actually duplicate or persist data.
+
+```sql
+CREATE OR REPLACE VIEW employee_view AS
+SELECT
+  employees.last_name,
+  employees.salary,
+  departments.department
+FROM
+  employees,
+  employee_departments,
+  departments
+WHERE
+  employees.id = employee_departments.employee_id
+  AND departments.id = employee_departments.department_id
+
+-- query the view
+SELECT *
+FROM employee_view
+```
+
 
 ## Data Types
 
@@ -588,6 +659,23 @@ pg_restore binary_file.backup > sql_file.sql
 pg_dump -U [role_name] [db_name] -s > schema.sql
 ```
 
+## Indexes
+
+### Create Indexes
+
+```sql
+CREATE INDEX idx_salary ON employees(salary);
+
+CREATE INDEX idx_salary ON employees(last_name, salary);
+```
+
+### Create Indexes Concurrently
+
+```sql
+# this prevents locking your table
+CREATE INDEX CONCURRENTLY idx_salary ON employees(last_name, salary);
+```
+
 ## Monitoring and Logging
 
 ### Get Total Number of Connections
@@ -597,6 +685,22 @@ SELECT count(*) FROM pg_stat_activity;
 
 -- break down connections by state
 SELECT state, count(*) FROM pg_stat_activity GROUP BY state;
+```
+
+### Measure Size
+
+```sql
+-- measure database size
+SELECT pg_size_pretty(pg_database_size('learning'));
+
+-- measure table size
+SELECT pg_size_pretty(pg_relation_size('users'));
+
+-- measure index size
+SELECT pg_size_pretty(pg_relation_size('users_pkey'));
+
+-- measure table size along with indexes
+SELECT pg_size_pretty(pg_total_relation_size('users'));
 ```
 
 ## Security
