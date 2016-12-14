@@ -6,18 +6,16 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-This post is continually updated. Modify it creating a pull request [here](https://github.com/jancarloviray/jancarloviray.github.io/blob/master/_posts/2016-12-14-postgres-cheat-sheet-tips-and-summary.md).
+This post is continually updated. Modify this by creating a pull request [here](https://github.com/jancarloviray/jancarloviray.github.io/blob/master/_posts/2016-12-14-postgres-cheat-sheet-tips-and-summary.md)
 
 ## Create a Postgres Docker Container
 
 ```shell
 docker pull postgres
 docker run --name pg -d postgres
-docker exec -it pg bash
 
-# inside container
-su - postgres
-psql
+# enter the container
+docker exec -it pg bash
 ```
 
 ## Productivity Tips inside `psql`
@@ -47,8 +45,7 @@ This is for Ubuntu/Debian distribution. For other packages, read [this](https://
 ```shell
 sudo apt-get update
 
-# installs core, client, contrib and creates
-# new cluster and sets up system with defaults:
+# installs core, client, contrib and new cluster
 # config: /etc/postgresql/9.5/main
 # data: /var/lib/postgresql/9.5/main
 # port: 5432
@@ -58,13 +55,13 @@ sudo apt-get install postgresql-9.5
 service postgresql start
 ```
 
-Note that Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. Config is located in **pg_hba.conf**, e.g.: `cat /etc/postgresql/9.5/main/pg_hba.conf`. The installation also created a system user called **postgres** - `cat /etc/passwd`. This is associated with a default Postgres role.
+Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. Config is located in **pg_hba.conf**, e.g.: `cat /etc/postgresql/9.5/main/pg_hba.conf`. The installation also created a system user called **postgres** - `cat /etc/passwd`. This is associated with a default Postgres role.
 
-To run `psql`, you must log into that account first with `sudo -u postgres`. Then, you can run postgres client `psql` which without argument is equivalent to `psql -U current_sys_user -d current_sys_user_as_db_name`. By default, users are only allowed to login locally if the system username matches the PostgreSQL username.
+To run `psql`, you must log into that account first with `sudo -u postgres`. Then, you can run postgres client `psql` which without argument is equivalent to `psql -U current_sys_user -d current_sys_user_as_db_name`. By default, users are only allowed to login locally if the system username matches the PostgreSQL username. You can change this behavior in **pg_hba.conf**.
 
 Start the postgres service if it's down with `service postgresql start`
 
-Check if postgres is running and the config it uses `ps aux | grep postgres | grep -- -D`
+Check if postgres is running and the configuration file it is using with `ps aux | grep postgres | grep -- -D`
 
 ### Quick Start and Overview
 
