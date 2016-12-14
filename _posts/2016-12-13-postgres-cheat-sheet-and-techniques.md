@@ -6,17 +6,14 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-This post is continually in updated. Modify it by editing it [here](https://github.com/jancarloviray/jancarloviray.github.io/edit/master/_posts/2016-12-13-postgres-cheat-sheet-and-techniques.md). Thanks in advance and I hope this helps you!
+This post is continually updated. Modify it by editing [this](https://github.com/jancarloviray/jancarloviray.github.io/edit/master/_posts/2016-12-13-postgres-cheat-sheet-and-techniques.md). Thanks in advance and I hope this helps you.
 
 ## Create a Postgres Docker Container
 
 ```shell
-# download postgres image
-docker pull postgres
-# create docker container and expose ports
-docker run -itdP --name pgvm postgres /bin/bash
-# open up a shell and start playing!
-docker exec -it pgvm /bin/bash
+docker pull postgres # download postgres image
+docker run -itdP --name pgvm postgres /bin/bash # create docker container and expose ports
+docker exec -it pgvm /bin/bash # open up a shell and start playing!
 ```
 
 ## Productivity Tips inside `psql`
