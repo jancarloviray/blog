@@ -48,9 +48,11 @@ sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
 ```
 
-On installation, Postgres is set up to use "ident" authentication. This associates roles with a matching Unix account. If a role exists, it can be signed in by logging into the associated Linux account. The installation created a user called "postgres" that is associated with the default Postgres role. To log into that account, run `sudo -i -u postgres`. You will then get a shell as a "postgres" user. Get into Postgres by typing `psql`
+On installation, Postgres is set up to use **ident** auth. This associates roles with a matching Unix account. The installation created a system user called **postgres** that is associated with the default Postgres role. Log into that account by running `sudo -i -u postgres`. You will then get a shell as a "postgres" user. Get inside Postgres with `psql`. By default, `psql` alone runs `psql -U [current_unix_username] -d [current_unix_username_as_db_name]`.
 
-By default, users are only allowed to login locally if the system username matches the PostgreSQL username. *PostgreSQL assumes that when you log in, you will be using a username that matches your operating system username, and that you will be connecting to a database with the same name as well.* To change the default behavior, run this: `psql -U user_name -d database_name -h 127.0.0.1`
+By default, users are only allowed to login locally if the system username matches the PostgreSQL username. *PostgreSQL assumes that when you log in, you will be using a username that matches your operating system username, and that you will be connecting to a database with the same name as well.*
+
+To bypass the default behavior, run: `psql -U some_user -d some_db_name -h 127.0.0.1`
 
 ### Quick Start and Overview
 
@@ -64,8 +66,6 @@ sudo su - postgres
 # go inside postgres prompt
 psql
 ```
-
-Notice how we can connect without a password. This is because Postgres has authenticated by username, which it assumes is secured.
 
 Inside Postgres prompt, create a new Postgres user with the same name as the user we created earlier, "postgres_user".
 
@@ -99,13 +99,16 @@ psql my_postgres_db
 
 ```sql
 -- create a table
-CREATE TABLE pg_equipment (
-  equip_id serial PRIMARY KEY,
-  type varchar (50) NOT NULL,
-  color varchar (25) NOT NULL,
-  location varchar(25) check (location in ('north', 'south', 'west', 'east', 'northeast', 'southeast', 'southwest', 'northwest')),
-  install_date date
-);
+CREATE TABLE pg_equipment
+    (
+      equip_id serial PRIMARY KEY ,
+      type VARCHAR(50) NOT NULL ,
+      color VARCHAR(25) NOT NULL ,
+      location VARCHAR(25)
+        CHECK ( location IN ( 'north', 'south', 'west', 'east', 'northeast',
+                              'southeast', 'southwest', 'northwest' ) ) ,
+      install_date DATE
+    );
 
 -- add column
 ALTER TABLE pg_equipment ADD COLUMN functioning bool;
@@ -113,13 +116,14 @@ ALTER TABLE pg_equipment ADD COLUMN functioning bool;
 ALTER TABLE pg_equipment ALTER COLUMN functioning SET DEFAULT 'true';
 -- set column to not null
 ALTER TABLE pg_equipment ALTER COLUMN functioning SET NOT NULL;
+
 -- rename column
 ALTER TABLE pg_equipment RENAME COLUMN functioning TO working_order;
 -- remove column
 ALTER TABLE pg_equipment DROP COLUMN working_order;
+
 -- rename entire table
 ALTER TABLE pg_equipment RENAME TO playground_equip;
-
 -- drop table
 DROP TABLE IF EXISTS playground_equip;
 ```
@@ -166,11 +170,15 @@ SELECT name FROM city WHERE countrycode = 'USA' AND name LIKE 'N%';
 SELECT name FROM city WHERE countrycode = 'USA' AND name LIKE 'N%' ORDER BY name;
 
 -- join
-SELECT country.NAME AS country,
-       city.NAME AS capital,
-       continent
-FROM country JOIN city ON country.capital = city.id
-ORDER BY continent, country;
+SELECT
+  country.NAME AS country,
+  city.NAME AS capital,
+  continent
+FROM country
+JOIN city
+  ON country.capital = city.id
+ORDER BY continent,
+country;
 ```
 
 #### Let's work with JSON
@@ -192,7 +200,7 @@ INSERT INTO products (name, attributes) VALUES (
  );
 
 -- create an index
-CREATE INDEX idx_products_attributes ON products USING GIN (attributes);
+CREATE INDEX idx_products_attributes ON products USING GIN(attributes);
 
 -- query an attribute
 SELECT attributes->'category' FROM products;
@@ -303,19 +311,14 @@ CREATE TABLE table_name (
 ```
 
 ```sql
-CREATE TABLE mytable (
-  id BIGINT PRIMARY KEY,
-  name VARCHAR(20),
-  price INT,
-  created_at timestamp without time zone default now()
-)
-
 CREATE TABLE playground (
-    equip_id serial PRIMARY KEY,
-    type varchar (50) NOT NULL,
-    color varchar (25) NOT NULL,
-    location varchar(25) check (location in ('north', 'south', 'west', 'east', 'northeast', 'southeast', 'southwest', 'northwest')),
-    install_date date
+  equip_id serial PRIMARY KEY,
+  type varchar(50) NOT NULL,
+  color varchar(25) NOT NULL,
+  location varchar(25)
+  CHECK (location IN ('north', 'south', 'west', 'east', 'northeast',
+  'southeast', 'southwest', 'northwest')),
+  install_date date
 );
 ```
 
@@ -328,8 +331,8 @@ CREATE TABLE playground (
 ### Insert into Table
 
 ```sql
-INSERT INTO playground (type, color, location, install_date) VALUES ('slide', 'blue', 'south', '2014-04-28');
-INSERT INTO playground (type, color, location, install_date) VALUES ('swing', 'yellow', 'northwest', '2010-08-16');
+INSERT INTO playground (type, color, location, install_date)
+VALUES ('slide', 'blue', 'south', '2014-04-28');
 ```
 
 ### Drop Table
@@ -572,8 +575,10 @@ CREATE TABLE cards (
 ##### Inserting JSON data
 
 ```sql
-INSERT INTO cards VALUES (1, 1, '{"name": "Paint house", "tags": ["Improvements", "Office"], "finished": true}');
-INSERT INTO cards VALUES (2, 1, '{"name": "Wash dishes", "tags": ["Clean", "Kitchen"], "finished": false}');
+INSERT INTO cards
+  VALUES (1, 1, '{"name": "Paint house", "tags": ["Improvements", "Office"], "finished": true}');
+INSERT INTO cards
+  VALUES (2, 1, '{"name": "Wash dishes", "tags": ["Clean", "Kitchen"], "finished": false}');
 ```
 
 ##### Querying Data
