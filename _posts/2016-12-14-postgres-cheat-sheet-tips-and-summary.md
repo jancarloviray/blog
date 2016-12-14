@@ -726,3 +726,11 @@ EXPLAIN SELECT * FROM users WHERE id IN (SELECT user_id FROM groups WHERE name =
 EXPLAIN SELECT users.* FROM users LEFT JOIN groups WHERE groups.name = 'admins';
 \! vimdiff a.txt b.txt
 ```
+
+## Dos and Donts
+
+- Do not store images in your database. Instead, upload to a storage service like S3, then store image URL in your database as a text field.
+- Pagination is tough, but the worst technique is doing an `ORDER BY`, followed by a `LIMIT` and an `OFFSET` since this does not scale.
+- Do not use integers as primary keys since this does not scale and you'll eventually run out. Use UUIDs instead. `create extension "uuid-ossp"; select uuid_generate_v4();`
+- If you add a column with a default value on an existing table, this will trigger a full re-write of your table. Instead, it's better to allow null values at first so the operation is instant, then set your default, and then, with a background process go and retroactively update the data. When generating new schemas and you know that you should set a default value, go for it.
+- Instead of over-normalization, think about whether you can make a column an array of a type enum, like in a categories column in a post table.
