@@ -84,6 +84,8 @@ sudo su - postgres_user
 psql my_postgres_db
 ```
 
+Let's add a sample table.
+
 ```sql
 -- create a table
 CREATE TABLE pg_equipment (
@@ -114,6 +116,8 @@ DROP TABLE IF EXISTS playground_equip;
 Exit the postgres prompt `\q`
 
 Also exit the shell associated with "postgres_user" `exit`. This should bring you back to root user.
+
+Let's now import a sample database.
 
 ```shell
 # log into default "postgres" user
