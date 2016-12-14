@@ -156,6 +156,8 @@ FROM country JOIN city ON country.capital = city.id
 ORDER BY continent, country;
 ```
 
+<!--more-->
+
 ## Roles (Unix-style Users)
 
 ### List Roles
@@ -234,8 +236,6 @@ CREATE DATABASE my_postgres_db OWNER postgres_user;
 ```sql
 DROP DATABASE IF EXISTS [name];
 ```
-
-<!--more-->
 
 ## Table
 
