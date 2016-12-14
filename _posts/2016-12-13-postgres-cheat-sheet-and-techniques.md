@@ -52,11 +52,14 @@ On installation, Postgres is set up to use "ident" authentication. This associat
 
 ### Quick Start
 
-After installation, create a new Unix system user: `sudo adduser postgres_user`
-
-Log onto the default Postgres user called "postgres" with `sudo su - postgres`
-
-Get inside Postgres prompt: `psql`
+```shell
+# create a new Unix system user
+sudo adduser postgres_user
+# log onto the default postgres user created by default
+sudo su - postgres
+# go inside postgres prompt
+psql
+```
 
 Inside Postgres prompt, create a new Postgres user with the same name as the user we created earlier, "postgres_user".
 
@@ -66,11 +69,16 @@ CREATE USER postgres_user WITH PASSWORD 'password';
 CREATE DATABASE my_postgres_db OWNER postgres_user;
 ```
 
-Exit the prompt `\q`. Also exit the current shell (associated with "postgres" system account) with `exit`.
+Exit the prompt `\q`.
 
-Log into the user you created with `sudo su - postgres_user`
+Also exit the current shell (associated with "postgres" system account) with `exit`
 
-Sign into the database you created with `psql my_postgres_db`
+```shell
+# Log into the user you created
+sudo su - postgres_user
+# Sign into the database you created
+psql my_postgres_db
+```
 
 ## Roles (Unix-style Users)
 
