@@ -99,16 +99,16 @@ psql my_postgres_db
 
 ```sql
 -- create a table
-CREATE TABLE pg_equipment
-    (
-      equip_id serial PRIMARY KEY ,
-      type VARCHAR(50) NOT NULL ,
-      color VARCHAR(25) NOT NULL ,
-      location VARCHAR(25)
-        CHECK ( location IN ( 'north', 'south', 'west', 'east', 'northeast',
-                              'southeast', 'southwest', 'northwest' ) ) ,
-      install_date DATE
-    );
+CREATE TABLE pg_equipment (
+  equip_id serial PRIMARY KEY,
+  type VARCHAR(50) NOT NULL,
+  color VARCHAR(25) NOT NULL,
+  location VARCHAR(25)
+    CHECK (
+      location IN ('north', 'south', 'west', 'east')
+    ),
+  install_date DATE
+);
 
 -- add column
 ALTER TABLE pg_equipment ADD COLUMN functioning bool;
@@ -177,8 +177,7 @@ SELECT
 FROM country
 JOIN city
   ON country.capital = city.id
-ORDER BY continent,
-country;
+ORDER BY continent, country;
 ```
 
 #### Let's work with JSON
@@ -225,7 +224,8 @@ SELECT attributes->>'category' FROM products;
 -- create role but don't give a password
 CREATE ROLE jonathan LOGIN;
 
--- create role with a password (CREATE USER is same as CREATE ROLE except it implies LOGIN)
+-- create role with a password
+-- CREATE USER is same as CREATE ROLE except it implies LOGIN
 CREATE USER someuser WITH PASSWORD 'pass';
 
 -- create role that can create databases and manage roles
@@ -358,7 +358,8 @@ DROP TABLE table_name CASCADE;
 ### Create Enum Type
 
 ```sql
-CREATE TYPE environment AS ENUM ('development', 'staging', 'production');
+CREATE TYPE environment
+AS ENUM ('development', 'staging', 'production');
 ```
 
 ### Add Column to Table
@@ -386,7 +387,7 @@ ALTER TABLE [table_name] ALTER COLUMN [column_name] [data_type];
 ### Change Column Name
 
 ```sql
-ALTER TABLE [table_name] RENAME COLUMN [column_name] TO [new_column_name];
+ALTER TABLE [table] RENAME COLUMN [column] TO [new_name];
 ```
 
 ### Set Default Value for Existing Column
@@ -523,12 +524,13 @@ Are fast, transparent mapping of words to integer and lives in `pg_enum`. Use th
 CREATE TYPE weekdays AS ('Mon', 'Tue', 'Wed', 'Thu', 'Fri');
 
 -- Enum Example
-CREATE TYPE server_states AS ENUM ('running', 'uncertain', 'offline', 'restarting');
+CREATE TYPE server_states AS ENUM ('running', 'offline', 'restarting');
 CREATE TABLE enum_test(id serial, state server_states);
 INSERT INTO enum_test(state) VALUES ('offline');
 
 -- Example of Bad Insert
-INSERT INTO enum_test(state) VALUES ('destroyed'); -- ERROR:  invalid input value for enum server_states: "destroyed"
+-- ERROR:  invalid input value for enum server_states: "destroyed"
+INSERT INTO enum_test(state) VALUES ('destroyed');
 
 -- You Can Add New Values
 ALTER TYPE server_states ADD VALUE 'destroyed' AFTER 'offline';
@@ -576,9 +578,7 @@ CREATE TABLE cards (
 
 ```sql
 INSERT INTO cards
-  VALUES (1, 1, '{"name": "Paint house", "tags": ["Improvements", "Office"], "finished": true}');
-INSERT INTO cards
-  VALUES (2, 1, '{"name": "Wash dishes", "tags": ["Clean", "Kitchen"], "finished": false}');
+VALUES (1, 1, '{"name": "Paint house", "tags": ["Improvements", "Office"], "finished": true}');
 ```
 
 ##### Querying Data
@@ -629,7 +629,7 @@ psql -f backup_file postgres
 
 ### Backup a Database
 
-```sql
+```shell
 # backup a database
 sudo su - postgres
 pg_dump postgres > postgres_db.bak
