@@ -63,6 +63,8 @@ sudo su - postgres
 psql
 ```
 
+Notice how we can connect without a password. This is because Postgres has authenticated by username, which it assumes is secured.
+
 Inside Postgres prompt, create a new Postgres user with the same name as the user we created earlier, "postgres_user".
 
 ```sql
@@ -538,43 +540,48 @@ WITH FORMAT csv, HEADER true;
 ### Backup All Databases
 
 ```shell
-pg_dump -Fc
+# backup all
+pg_dumpall > backup_file
+
+# restore all
+psql -f backup_file postgres
 ```
 
-### Create Database Dump (binary)
+### Backup a Database
+
+```sql
+# backup a database
+sudo su - postgres
+pg_dump postgres > postgres_db.bak
+
+# backup a database remotely
+pg_dump -U user_name -h remote_host -p remote_port name_of_database > name_of_backup_file
+
+# create a restored database
+# psql empty_database < backup_file
+createdb -T template0 restored_database
+psql restored_database < database.bak
+
+# restore partially but stop on error
+psql --set ON_ERROR_STOP=on restored_database < backup_file
+
+# restore, but on error, roll-back
+psql --single-transaction restored_database < backup_file
+```
+
+### Create Binary Database Dump
 
 ```shell
 pg_dump -U [role_name] [db_name] -Fc > backup.dump
-```
 
-### Convert Binary Dump to SQL file
-
-```shell
+# if you want to convert it to sql file
 pg_restore binary_file.backup > sql_file.sql
 ```
 
-### Create Schema Only Dump (sql)
+### Create Schema Only Dump
 
 ```shell
 pg_dump -U [role_name] [db_name] -s > schema.sql
-```
-
-### Restore Database From a Dump
-
-```shell
-PGPASSWORD=<password> pg_restore -Fc --no-acl --no-owner -U <user> -d <database> <filename.dump>
-```
-
-### Copy Database
-
-```shell
-createdb -T app_db app_db_backup
-```
-
-### Change Database Ownership
-
-```sql
-ALTER DATABASE mydb OWNER TO jancarlo;
 ```
 
 ## Monitoring and Logging
@@ -587,6 +594,10 @@ SELECT count(*) FROM pg_stat_activity;
 -- break down connections by state
 SELECT state, count(*) FROM pg_stat_activity GROUP BY state;
 ```
+
+## Security
+
+...to be continued
 
 ## Tips and Techniques
 
