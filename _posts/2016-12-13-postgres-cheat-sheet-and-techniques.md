@@ -39,16 +39,6 @@ Add these to your `~/.psqlrc` file!
 - `\x [on|off|auto]` for expanded output (default is "off")
 - `\timing [on|off]` to toggle timing of commands - great for benchmarks
 
-Compare Outputs
-
-```
-\o a.txt
-EXPLAIN SELECT * FROM users WHERE id IN (SELECT user_id FROM groups WHERE name = 'admins');
-\o b.txt
-EXPLAIN SELECT users.* FROM users LEFT JOIN groups WHERE groups.name = 'admins';
-\! vimdiff a.txt b.txt
-```
-
 ## PostgreSQL Installation and Configuration
 
 ### Install Postgres
@@ -490,3 +480,13 @@ Before you run your code and most especially during deletes and updates, make su
 ### Get list of databases and their users
 
 `\l`
+
+### Compare Outputs
+
+```
+\o a.txt
+EXPLAIN SELECT * FROM users WHERE id IN (SELECT user_id FROM groups WHERE name = 'admins');
+\o b.txt
+EXPLAIN SELECT users.* FROM users LEFT JOIN groups WHERE groups.name = 'admins';
+\! vimdiff a.txt b.txt
+```
