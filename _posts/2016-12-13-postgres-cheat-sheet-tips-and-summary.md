@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Postgres Cheat Sheet and Techniques
-permalink: blog/postgres-cheat-sheet-and-techniques/
+title: Postgres Cheat Sheet, Tips and Summary
+permalink: blog/postgres-cheat-sheet-tips-and-summary/
 comments: True
 excerpt_separator: <!--more-->
 ---
