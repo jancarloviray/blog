@@ -57,9 +57,23 @@ service postgresql start
 
 Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. Config is located in **pg_hba.conf**, e.g.: `cat /etc/postgresql/9.5/main/pg_hba.conf`. The installation also created a system user called **postgres** - `cat /etc/passwd`. This is associated with a default Postgres role.
 
-To run `psql`, you must log into that account first with `sudo -u postgres`. Then, you can run postgres client `psql` which without argument is equivalent to `psql -U current_sys_user -d current_sys_user_as_db_name`. By default, users are only allowed to login locally if the system username matches the PostgreSQL username. You can change this behavior in **pg_hba.conf**.
+To run `psql`, you must log into that account first with `sudo -u postgres`. Then, you can run postgres client `psql` which without argument is equivalent to `psql -U current_sys_user -d current_sys_user_as_db_name`.
 
-Start the postgres service if it's down with `service postgresql start`
+By default, users are only allowed to login locally if the system username matches the PostgreSQL username. Optionally, you can change this behavior in **pg_hba.conf** manually or by running this:
+
+```shell
+sudo -u postgres
+psql
+
+# search-replace authentication method to md5
+sed -i 's/local.*all.*postgres.*peer/local all postgres md5/' /etc/postgresql/9.5/main/pg_hba.conf
+sed -i 's/local.*all.*all.*peer/local all all md5/' /etc/postgresql/9.5/main/pg_hba.conf
+
+# restart postgres
+service postgresql restart
+```
+
+Start the postgres service if it's down with `service postgresql start` or `/etc/init.d/postgresql start` in older sytems.
 
 Check if postgres is running and the configuration file it is using with `ps aux | grep postgres | grep -- -D`
 
