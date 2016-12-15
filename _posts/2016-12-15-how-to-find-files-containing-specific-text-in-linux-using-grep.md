@@ -12,6 +12,8 @@ How to find files containing a specific text recursively in Unix / Linux system?
 grep -rnw "pattern" /path/to/file
 ```
 
+<!--more-->
+
 Helpful options:
 
 - `-r` means recursively search
