@@ -38,7 +38,7 @@ This is for Ubuntu/Debian distribution. For other versions, read [this](https://
 apt-get update
 apt-get install -y software-properties-common wget sudo
 
-# add the postgres repository - if using Ubuntu Trusty, change xenial to trusty
+# add the repository - if using Ubuntu Trusty, change xenial to trusty
 # check your version first with, `cat /etc/lsb-release`
 sudo add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
 
@@ -73,9 +73,9 @@ sudo su -u postgres
 psql
 ```
 
-#### Optionally Remove Authentication
+#### Remove Authentication (NOT recommended)
 
-If you don't want to deal with authentication (not recommended), you can change the settings in `/etc/postgresql/9.6/main/pg_hba.conf` file by manually changing **peer** to **trust**. These commands will do it for you:
+If you don't want to deal with authentication for convenience (...famous last words) you can change the settings in `/etc/postgresql/9.6/main/pg_hba.conf` file by manually changing **peer** to **trust**. These commands will do it for you:
 
 ```shell
 # search-replace the methods
