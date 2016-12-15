@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to Find Files Containing Specific Text in Linux Using Grep
+title: How to Find Files Containing Specific Text
 permalink: blog/how-to-find-files-containing-specific-text-in-linux-using-grep/
 comments: True
 excerpt_separator: <!--more-->
