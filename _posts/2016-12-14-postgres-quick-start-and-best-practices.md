@@ -57,7 +57,7 @@ service postgresql start
 systemctl enable postgresql
 ```
 
-Note that Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. This is why you need to login as a specific user first before you can `psql`
+Note that Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. This is why you need to login as a specific user before you can `psql`. Check out **/etc/postgresql/9.6/main/pg_hba.conf** to change this behavior.
 
 The installation also created a system user called **postgres**, which is associated with a default role. Check out **/etc/passwd**.
 
@@ -87,15 +87,16 @@ ps aux | grep postgres | grep -- -D
 # `-c` points to the main config file postgresql.conf it will use
 ```
 
-The main configuration file is **postgresql.conf**. From there, postgres fetches other configuration stated inside the file.
+The main configuration file is **postgresql.conf** or whatever you saw in the results above **config_file=/etc/postgresql/9.6/main/postgresql.conf**. Open that file and check out the section callled "FILE LOCATIONS".
 
 ### Main Server Configuration
 
 `config_file = '/etc/postgresql/9.6/main/postgresql.conf'`
 
-Main server config where you can tune performance, change connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc. Some basic settings include:
+This is the main server config where you can tune performance, change connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc. Some basic settings include:
 
   - `listen_addresses` what IP addresses to listen on; use '*' to allow all; separate IP by comma.
+  - ...
 
 ### Client Authentication
 
@@ -111,16 +112,16 @@ This file is stored in the database cluster's data directory. HBA stands for hos
 
 **peer** works by obtaining the client's OS system user name from the kernel and uses it as the allowed database user name
 
-Check out the documentation for more.
+Check out the official documentation for more.
 
 ### User Name Mapping
 
 `ident_file = '/etc/postgresql/9.6/main/pg_ident.conf'`
 
-This maps external user names to their corresponding PostgreSQL user names. General form of setting is: *MAPNAME SYSTEM-USERNAME PG-USERNAME*. To use user name mapping, change `map=map-name` setting in **pg_hba.conf**. Here are some examples of mapping:
+This maps external user names to their corresponding PostgreSQL user names. General form of setting is: *mapname sys-name pg-name*. To use user name mapping, change `map=map-name` setting in **pg_hba.conf**. Here are some examples and scenarios of mapping:
 
 ```
-# mapname   system-username   pg-username
+# MAPNAME   SYSTEM-USERNAME   PG-USERNAME
 mymap       brian             brian
 mymap       jane              jane
 # "rob" has postgres role "bob"
@@ -137,7 +138,7 @@ mymap       brian             guest1
 
 ### Remove Default Authentication (NOT recommended)
 
-If you don't want to deal with authentication, you can change the settings in **pg_hba.conf** file by changing **peer** to **trust**. These commands will do it for you:
+If you don't want to deal with authentication, you can change the settings in **pg_hba.conf** file by changing **peer** to **trust**. These commands will conveniently do it for you:
 
 ```shell
 # search-replace the methods
@@ -153,7 +154,7 @@ psql -U postgres -d postgres
 
 ## Quick Start and Overview
 
-### Quick Tips while inside `psql`
+### Nice Helpers inside `psql`
 
 - `\?` help
 - `\c other-db` connect to another db
@@ -164,7 +165,7 @@ psql -U postgres -d postgres
 - `\e` to invoke your `$EDITOR` and use a real editor
 - `\q` to quit
 
-Add to your `~/.psqlrc` file:
+Add these settings to your `~/.psqlrc` file:
 
 - `\set COMP_KEYWORD_CASE upper` to auto-complete keywords in CAPS
 - `\pset null ¤` to render NULL as ¤ instead
@@ -174,7 +175,6 @@ Add to your `~/.psqlrc` file:
 ### Add a System User
 
 ```shell
-# create a new system user
 sudo adduser postgres_user
 ```
 
@@ -182,10 +182,12 @@ sudo adduser postgres_user
 
 Inside Postgres prompt, create a new Postgres user with the same name as the user we created earlier, "postgres_user".
 
-```sql
+```shell
 sudo su - postgres
 psql
+```
 
+```sql
 CREATE USER postgres_user WITH PASSWORD 'pass';
 ```
 
@@ -337,7 +339,7 @@ SELECT attributes->'category' FROM products;
 SELECT attributes->>'category' FROM products;
 ```
 
-## Roles / Users
+## Deeper Dive on Roles / Users
 
 ### List Roles
 
@@ -382,7 +384,7 @@ ALTER ROLE demo_role WITH NOLOGIN;
 ALTER ROLE demo_role WITH LOGIN;
 ```
 
-## Database
+## Deeper Dive on Database
 
 ### Connect to a Database
 
@@ -404,7 +406,7 @@ CREATE DATABASE my_postgres_db OWNER postgres_user;
 DROP DATABASE IF EXISTS my_postgres_db;
 ```
 
-## Table
+## Deeper Dive on Table
 
 ### List Tables
 
@@ -462,7 +464,7 @@ DROP TABLE table_name CASCADE;
 DELETE FROM mytable;
 ```
 
-## Table Columns
+## Deeper Dive on Columns
 
 ### Modifying Table Columns
 
