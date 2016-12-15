@@ -63,7 +63,7 @@ The installation created a system user called **postgres**, which is associated 
 
 ```shell
 # signin to "postgres" system account created by installer
-sudo su -u postgres
+sudo su - postgres
 
 # invoke postgres console, which without arguments is equivalent to:
 # psql -U current_sys_user -d current_sys_user_as_db_name
@@ -90,7 +90,7 @@ Add to your `~/.psqlrc` file:
 
 ### Configuration
 
-If your postgres server is down, you'll get a *Is the server running locally...* error message. You need to start up the postgres server: `service postgresql start`. What does that command execute? Let's find out with `ps aux | grep postgres | grep -- -D`
+If your postgres server is down, you'll get a *"Is the server running locally..."* error message. You need to start up the postgres server: `service postgresql start`. What does that command execute? Let's find out with `ps aux | grep postgres | grep -- -D`
 
 ```shell
 # `postgres` starts the server
@@ -102,11 +102,49 @@ If your postgres server is down, you'll get a *Is the server running locally...*
 
 Postgres looks at the following locations for config and storage:
 
-`config_file = '/etc/postgresql/9.6/main/postgresql.conf'` - main server config where you can tune performance, chagne connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc. Some basic settings to consider:
+#### Server Configuration
+
+`config_file = '/etc/postgresql/9.6/main/postgresql.conf'`
+
+Main server config where you can tune performance, change connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc. Some basic settings include:
+
   - `listen_addresses` what IP addresses to listen on; use '*' to allow all; separate IP by comma.
 
-`hba_file = '/etc/postgresql/9.6/main/pg_hba.conf'` - authentication config
-`ident_file = '/etc/postgresql/9.6/main/pg_ident.conf'` - user name mapping
+#### Client Authentication
+
+`hba_file = '/etc/postgresql/9.6/main/pg_hba.conf'`
+
+This file is stored in the database cluster's data directory. HBA stands for host-based authentication. This is where you set rules on who or what can connect to the server.
+
+##### Authentication Methods
+
+**trust** assumes that anyone who can connect to the server is authorized to access the database. This is appropriate for single-user workstation, but not on multi-user machines.
+
+**password** (cleartext) and **md5** if you want to authenticate by text. Change a user's password with `CREATE USER` or `ALTER ROLE`, e.g., `CREATE USER joe WITH PASSWORD 'secret'`. Note that *if no password has been setup for a user, the stored password is null and authentication will always fail*
+
+**ident** works by obtaining client's OS user name from an ident server
+
+**peer** works by obtaining the client's OS system user name from the kernel and uses it as the allowed database user name
+
+#### User Name Mapping
+
+`ident_file = '/etc/postgresql/9.6/main/pg_ident.conf'`
+
+This maps external user names to their corresponding PostgreSQL user names. General form of setting is: *MAPNAME SYSTEM-USERNAME PG-USERNAME*. To use user name mapping, change `map=map-name` setting in **pg_hba.conf**. Here are some examples of mapping:
+
+```
+# mapname   system-username   pg-username
+mymap       brian             brian
+mymap       jane              jane
+# "rob" has postgres role "bob"
+mymap       rob               bob
+# "brian" can use roles "bob" and "guest1"
+mymap       brian             bob
+mymap       brian             guest1
+```
+
+#### Misc
+
 `external_pid_file = '/var/run/postgresql/9.6-main.pid'` - path to additional PID
 `data_directory = '/var/lib/postgresql/9.6/main'` - data storage location
 
@@ -170,6 +208,8 @@ sudo su - postgres_user
 # Sign into the database you created
 psql my_postgres_db
 ```
+
+<!--more-->
 
 #### Let's add a Sample Table
 
@@ -299,8 +339,6 @@ SELECT attributes->'category' FROM products;
 -- extract query as text
 SELECT attributes->>'category' FROM products;
 ```
-
-<!--more-->
 
 ## Roles (Unix-style Users)
 
