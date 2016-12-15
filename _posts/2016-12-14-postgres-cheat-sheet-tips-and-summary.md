@@ -6,35 +6,18 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-This post is continually updated. Modify this by creating a pull request [here](https://github.com/jancarloviray/jancarloviray.github.io/blob/master/_posts/2016-12-14-postgres-cheat-sheet-tips-and-summary.md)
+This post is continually updated. Modify this by creating a pull request [here](https://github.com/jancarloviray/jancarloviray.github.io/blob/master/_posts/2016-12-14-postgres-cheat-sheet-tips-and-summary.md). I hope this helps, and thanks in advance!
 
 ## Create a Postgres Docker Container
 
 ```shell
+# get latest image and create a container
 docker pull postgres
 docker run --name pg -d postgres
 
-# enter the container
+# invoke a shell in the container to enter
 docker exec -it pg bash
 ```
-
-## Productivity Tips inside `psql`
-
-- `\?` shows help with psql commands
-- `\c other-db` to connect to another db without quitting the console
-- `\l+` to list databases
-- `\dn+` to list schemas
-- `\dt+ *.users` to list tables with pattern `*.users`
-- `\df *somefuncname*` to find functions with pattern `*somefuncname*`
-- `\e` to invoke your `$EDITOR` and use a real editor
-- `\q` to quit
-
-Add these to your `~/.psqlrc` file!
-
-- `\set COMP_KEYWORD_CASE upper` to auto-complete keywords in CAPS
-- `\pset null ¤` to render NULL as ¤ instead
-- `\x [on|off|auto]` for expanded output (default is "off")
-- `\timing [on|off]` to toggle timing of commands - great for benchmarks
 
 ## PostgreSQL Installation and Configuration
 
@@ -45,19 +28,29 @@ This is for Ubuntu/Debian distribution. For other packages, read [this](https://
 ```shell
 sudo apt-get update
 
-# installs core, client, contrib and new cluster
+# install core, client, contrib and new cluster
 # config: /etc/postgresql/9.5/main
 # data: /var/lib/postgresql/9.5/main
 # port: 5432
 sudo apt-get install postgresql-9.5
 
 # start the postgres server
+# /etc/init.d/postgresql start - older systems
 service postgresql start
 ```
 
-Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. Config is located in **pg_hba.conf**, e.g.: `cat /etc/postgresql/9.5/main/pg_hba.conf`. The installation also created a system user called **postgres** - `cat /etc/passwd`. This is associated with a default Postgres role.
+Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. Auth config is located in **pg_hba.conf** - `/etc/postgresql/9.5/main/pg_hba.conf`
 
-To run `psql`, you must log into that account first with `sudo -u postgres`. Then, you can run postgres client `psql` which without argument is equivalent to `psql -U current_sys_user -d current_sys_user_as_db_name`.
+The installation created a system user called **postgres**, which is associated with a default role. Check out `/etc/passwd`
+
+```shell
+# you must be signed into the postgres account
+sudo -u postgres
+
+# then you can invoke psql, which without arguments:
+# psql -U current_sys_user -d current_sys_user_as_db_name
+psql
+```
 
 By default, users are only allowed to login locally if the system username matches the PostgreSQL username. Optionally, you can change this behavior in **pg_hba.conf** manually or by running this:
 
@@ -73,9 +66,23 @@ sed -i 's/local.*all.*all.*peer/local all all md5/' /etc/postgresql/9.5/main/pg_
 service postgresql restart
 ```
 
-Start the postgres service if it's down with `service postgresql start` or `/etc/init.d/postgresql start` in older sytems.
+### Quick Tips inside `psql`
 
-Check if postgres is running and the configuration file it is using with `ps aux | grep postgres | grep -- -D`
+- `\?` shows help with psql commands
+- `\c other-db` to connect to another db without quitting the console
+- `\l+ *optional-pattern*` to list databases
+- `\dn+ *optional-pattern*` to list schemas
+- `\dt+ *optional-pattern*` to list tables with pattern
+- `\df *optional-pattern*` to find functions with pattern
+- `\e` to invoke your `$EDITOR` and use a real editor
+- `\q` to quit
+
+Good to add to your `~/.psqlrc` file:
+
+- `\set COMP_KEYWORD_CASE upper` to auto-complete keywords in CAPS
+- `\pset null ¤` to render NULL as ¤ instead
+- `\x [on|off|auto]` for expanded output (default is "off")
+- `\timing [on|off]` to toggle timing of commands - great for benchmarks
 
 ### Quick Start and Overview
 
