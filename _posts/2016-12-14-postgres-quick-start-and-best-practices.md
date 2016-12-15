@@ -38,9 +38,8 @@ This is for Ubuntu/Debian distribution. For other versions, read [this](https://
 apt-get update
 apt-get install -y software-properties-common wget sudo
 
-# add the repository - if using Ubuntu Trusty, change xenial to trusty
-# check your version first with, `cat /etc/lsb-release`
-sudo add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
+# add repo based on Ubuntu version - `cat /etc/lsb_release`
+sudo add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main"
 
 # get keys
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
@@ -48,12 +47,7 @@ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-
 # update again to include the added repository
 sudo apt-get update
 
-# install core, client, contrib and new cluster
-# config /etc/postgresql/9.6/main
-# data   /var/lib/postgresql/9.6/main
-# locale C.UTF-8
-# socket /var/run/postgresql
-# port   5432
+# install core, client, contrib and start cluster
 sudo apt-get install postgresql-9.6
 
 # start the postgres server
@@ -63,22 +57,62 @@ service postgresql start
 systemctl enable postgresql
 ```
 
-Note that Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. Auth config is located in **pg_hba.conf** - `/etc/postgresql/9.6/main/pg_hba.conf`
+Note that Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. This is why you need to login as a specific user first before `psql`
 
-The installation created a system user called **postgres**, which is associated with a default role. Check out `/etc/passwd`
+The installation created a system user called **postgres**, which is associated with a default role. Check out **/etc/passwd**.
 
 ```shell
-# signin to "postgres" system acct created by installer
+# signin to "postgres" system account created by installer
 sudo su -u postgres
 
-# run psql, which without arguments is equivalent to:
+# invoke postgres console, which without arguments is equivalent to:
 # psql -U current_sys_user -d current_sys_user_as_db_name
 psql
 ```
 
+### Quick Tips while inside `psql`
+
+- `\?` help
+- `\c other-db` connect to another db
+- `\l+ *optional-pattern*` list databases
+- `\dn+ *optional-pattern*` list schemas
+- `\dt+ *optional-pattern*` list tables
+- `\df *optional-pattern*` find functions
+- `\e` to invoke your `$EDITOR` and use a real editor
+- `\q` to quit
+
+Add to your `~/.psqlrc` file:
+
+- `\set COMP_KEYWORD_CASE upper` to auto-complete keywords in CAPS
+- `\pset null ¤` to render NULL as ¤ instead
+- `\x [on|off|auto]` for expanded output (default is "off")
+- `\timing [on|off]` to toggle timing of commands - great for benchmarks
+
+### Configuration
+
+If your postgres server is down, you'll get a *Is the server running locally...* error message. You need to start up the postgres server: `service postgresql start`. What does that command execute? Let's find out with `ps aux | grep postgres | grep -- -D`
+
+```shell
+# `postgres` starts the server
+# `-D` points where the data will live
+# `-c` points to the config file postgresql.conf it will use
+
+/usr/lib/postgresql/9.6/bin/postgres -D /var/lib/postgresql/9.6/main -c config_file=/etc/postgresql/9.6/main/postgresql.conf
+```
+
+Postgres looks at the following locations for config and storage:
+
+`config_file = '/etc/postgresql/9.6/main/postgresql.conf'` - main server config where you can tune performance, chagne connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc. Some basic settings to consider:
+  - `listen_addresses` what IP addresses to listen on; use '*' to allow all; separate IP by comma.
+
+`hba_file = '/etc/postgresql/9.6/main/pg_hba.conf'` - authentication config
+`ident_file = '/etc/postgresql/9.6/main/pg_ident.conf'` - user name mapping
+`external_pid_file = '/var/run/postgresql/9.6-main.pid'` - path to additional PID
+`data_directory = '/var/lib/postgresql/9.6/main'` - data storage location
+
 #### Remove Authentication (NOT recommended)
 
-If you don't want to deal with authentication for convenience (...famous last words) you can change the settings in `/etc/postgresql/9.6/main/pg_hba.conf` file by manually changing **peer** to **trust**. These commands will do it for you:
+If you don't want to deal with authentication for convenience (...famous last words) you can change the settings in **/etc/postgresql/9.6/main/pg_hba.conf** file by manually changing **peer** to **trust**. These commands will do it for you:
 
 ```shell
 # search-replace the methods
@@ -93,45 +127,6 @@ service postgresql restart
 # psql -U some_user -d db_name -h localhost
 psql -U postgres -d postgres
 ```
-
-### Quick Tips while inside `psql`
-
-- `\?` shows help with psql commands
-- `\c other-db` to connect to another db without quitting the console
-- `\l+ *optional-pattern*` to list databases
-- `\dn+ *optional-pattern*` to list schemas
-- `\dt+ *optional-pattern*` to list tables with pattern
-- `\df *optional-pattern*` to find functions with pattern
-- `\e` to invoke your `$EDITOR` and use a real editor
-- `\q` to quit
-
-Good to add to your `~/.psqlrc` file:
-
-- `\set COMP_KEYWORD_CASE upper` to auto-complete keywords in CAPS
-- `\pset null ¤` to render NULL as ¤ instead
-- `\x [on|off|auto]` for expanded output (default is "off")
-- `\timing [on|off]` to toggle timing of commands - great for benchmarks
-
-### Configuration
-
-Note that If your postgres server is down, you'll get a *Is the server running locally...* error message. You need to start up the server with `service postgresql start`. What does that command do? Let's find out with `ps aux | grep postgres | grep -- -D`
-
-```
-# it invokes the `postgres` database server
-# `-D` points where the data will live
-# `-c` points to the config file postgresql.conf it will use
-/usr/lib/postgresql/9.6/bin/postgres -D /var/lib/postgresql/9.6/main -c config_file=/etc/postgresql/9.6/main/postgresql.conf
-```
-
-Postgres looks at the following file locations for configuration and storage:
-
-`config_file = '/etc/postgresql/9.6/main/postgresql.conf'` - main server config where you can tune performance, chagne connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc. Some basic settings to consider:
-  - `listen_addresses` what IP addresses to listen on; use '*' to allow all; separate IP by comma.
-
-`hba_file = '/etc/postgresql/9.6/main/pg_hba.conf'` - authentication config
-`ident_file = '/etc/postgresql/9.6/main/pg_ident.conf'` - user name mapping
-`external_pid_file = '/var/run/postgresql/9.6-main.pid'` - path to additional PID
-`data_directory = '/var/lib/postgresql/9.6/main'` - data storage location
 
 ### Quick Start and Overview
 
