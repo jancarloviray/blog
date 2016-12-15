@@ -6,7 +6,7 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-Want to add or change something? Feel free to [create a pull request](https://github.com/jancarloviray/jancarloviray.github.io/blob/master/_posts/2016-12-14-postgres-cheat-sheet-tips-and-summary.md). I hope this helps, and thanks in advance!
+Want to add or change something? Feel free to [create a pull request](https://github.com/jancarloviray/jancarloviray.github.io/blob/master/_posts/2016-12-14-postgres-quick-start-and-best-practices.md). I hope this helps, and thanks in advance!
 
 ## Create a Postgres Docker Container
 
@@ -29,25 +29,38 @@ su - postgres -c psql
 
 ## PostgreSQL Installation and Configuration
 
-### Install Postgres
+### Install Postgres (latest, [9.6](https://www.postgresql.org/docs/9.6/static/release-9-6.html))
 
-This is for Ubuntu/Debian distribution. For other packages, read [this](https://www.postgresql.org/download).
+This is for Ubuntu/Debian distribution. For other versions, read [this](https://www.postgresql.org/download).
 
 ```shell
+# update system and get some common tools
+apt-get update
+apt-get install -y software-properties-common wget sudo
+
+# add the postgres repository - if using Ubuntu Trusty, change xenial to trusty
+# check your version first with, `cat /etc/lsb-release`
+sudo add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
+
+# get keys
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+# update again to include the added repository
 sudo apt-get update
 
 # install core, client, contrib and new cluster
-# config: /etc/postgresql/9.5/main
-# data: /var/lib/postgresql/9.5/main
-# port: 5432
-sudo apt-get install postgresql-9.5
+# config /etc/postgresql/9.6/main
+# data   /var/lib/postgresql/9.6/main
+# locale C.UTF-8
+# socket /var/run/postgresql
+# port   5432
+sudo apt-get install postgresql-9.6
 
 # start the postgres server
-# `/etc/init.d/postgresql start` for older systems
 service postgresql start
 ```
 
-Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. Auth config is located in **pg_hba.conf** - `/etc/postgresql/9.5/main/pg_hba.conf`
+Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. Auth config is located in **pg_hba.conf** - `/etc/postgresql/9.6/main/pg_hba.conf`
 
 The installation created a system user called **postgres**, which is associated with a default role. Check out `/etc/passwd`
 
@@ -62,13 +75,13 @@ psql
 
 #### Optionally Remove Authentication
 
-If you don't want to deal with authentication (not recommended), you can change the settings in `/etc/postgresql/9.5/main/pg_hba.conf` file by manually changing **peer** to **trust**. These commands will do it for you:
+If you don't want to deal with authentication (not recommended), you can change the settings in `/etc/postgresql/9.6/main/pg_hba.conf` file by manually changing **peer** to **trust**. These commands will do it for you:
 
 ```shell
 # search-replace the methods
-sed -i 's/local.*all.*postgres.*peer/local all postgres trust/' /etc/postgresql/9.5/main/pg_hba.conf
+sed -i 's/local.*all.*postgres.*peer/local all postgres trust/' /etc/postgresql/9.6/main/pg_hba.conf
 
-sed -i 's/local.*all.*all.*peer/local all all trust/' /etc/postgresql/9.5/main/pg_hba.conf
+sed -i 's/local.*all.*all.*peer/local all all trust/' /etc/postgresql/9.6/main/pg_hba.conf
 
 # restart postgres to reload the configuration
 service postgresql restart
