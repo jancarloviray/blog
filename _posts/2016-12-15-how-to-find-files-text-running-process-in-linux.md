@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to Find Files, Text, Processes and etc in Linux
+title: Find Files, Texts, Processes and etc
 permalink: blog/how-to-find-files-text-running-process-in-linux.md/
 comments: True
 excerpt_separator: <!--more-->
