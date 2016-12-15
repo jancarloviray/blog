@@ -27,7 +27,7 @@ su - postgres -c psql
 # enjoy!
 ```
 
-## PostgreSQL Installation and Configuration
+## Installation
 
 ### Install Postgres (latest, [9.6](https://www.postgresql.org/docs/9.6/static/release-9-6.html))
 
@@ -50,16 +50,16 @@ sudo apt-get update
 # install core, client, contrib and start cluster
 sudo apt-get install postgresql-9.6
 
-# start the postgres server
+# start the postgres server - this is important
 service postgresql start
 
 # autostart postgres on boot (for Ubuntu 15+)
 systemctl enable postgresql
 ```
 
-Note that Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. This is why you need to login as a specific user first before `psql`
+Note that Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. This is why you need to login as a specific user first before you can `psql`
 
-The installation created a system user called **postgres**, which is associated with a default role. Check out **/etc/passwd**.
+The installation also created a system user called **postgres**, which is associated with a default role. Check out **/etc/passwd**.
 
 ```shell
 # signin to "postgres" system account created by installer
@@ -69,6 +69,89 @@ sudo su - postgres
 # psql -U current_sys_user -d current_sys_user_as_db_name
 psql
 ```
+
+## Quick Intro to Configuration
+
+Let's enter through the starting point and work our way in. Make sure postgres is running. If not, run `service postgresql start`
+
+```shell
+# let's check if the process is running and its arguments
+# if you don't see any results, postgres server is not running
+ps aux | grep postgres | grep -- -D
+
+# You should see this result:
+# /usr/lib/postgresql/9.6/bin/postgres -D /var/lib/postgresql/9.6/main -c config_file=/etc/postgresql/9.6/main/postgresql.conf
+
+# `postgres` starts the server
+# `-D` points where the data will live
+# `-c` points to the main config file postgresql.conf it will use
+```
+
+The main configuration file is **postgresql.conf**. From there, postgres fetches other configuration stated inside the file.
+
+### Main Server Configuration
+
+`config_file = '/etc/postgresql/9.6/main/postgresql.conf'`
+
+Main server config where you can tune performance, change connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc. Some basic settings include:
+
+  - `listen_addresses` what IP addresses to listen on; use '*' to allow all; separate IP by comma.
+
+### Client Authentication
+
+`hba_file = '/etc/postgresql/9.6/main/pg_hba.conf'`
+
+This file is stored in the database cluster's data directory. HBA stands for host-based authentication. This is where you set rules on who or what can connect to the server.
+
+#### Authentication Methods
+
+**trust** assumes that anyone who can connect to the server is authorized to access the database. This is appropriate for single-user workstation, but not on multi-user machines.
+
+**password** (cleartext) and **md5** if you want to authenticate by text. Change a user's password with `CREATE USER` or `ALTER ROLE`, e.g., `CREATE USER joe WITH PASSWORD 'secret'`. Note that *if no password has been setup for a user, the stored password is null and authentication will always fail*
+
+**peer** works by obtaining the client's OS system user name from the kernel and uses it as the allowed database user name
+
+Check out the documentation for more.
+
+### User Name Mapping
+
+`ident_file = '/etc/postgresql/9.6/main/pg_ident.conf'`
+
+This maps external user names to their corresponding PostgreSQL user names. General form of setting is: *MAPNAME SYSTEM-USERNAME PG-USERNAME*. To use user name mapping, change `map=map-name` setting in **pg_hba.conf**. Here are some examples of mapping:
+
+```
+# mapname   system-username   pg-username
+mymap       brian             brian
+mymap       jane              jane
+# "rob" has postgres role "bob"
+mymap       rob               bob
+# "brian" can use roles "bob" and "guest1"
+mymap       brian             bob
+mymap       brian             guest1
+```
+
+### Misc
+
+`external_pid_file = '/var/run/postgresql/9.6-main.pid'` - path to additional PID
+`data_directory = '/var/lib/postgresql/9.6/main'` - data storage location
+
+### Remove Default Authentication (NOT recommended)
+
+If you don't want to deal with authentication, you can change the settings in **pg_hba.conf** file by changing **peer** to **trust**. These commands will do it for you:
+
+```shell
+# search-replace the methods
+sed -i 's/local.*all.*postgres.*peer/local all postgres trust/' /etc/postgresql/9.6/main/pg_hba.conf
+sed -i 's/local.*all.*all.*peer/local all all trust/' /etc/postgresql/9.6/main/pg_hba.conf
+
+# reload config
+service postgresql restart
+
+# now you can log in as any user
+psql -U postgres -d postgres
+```
+
+## Quick Start and Overview
 
 ### Quick Tips while inside `psql`
 
@@ -88,130 +171,46 @@ Add to your `~/.psqlrc` file:
 - `\x [on|off|auto]` for expanded output (default is "off")
 - `\timing [on|off]` to toggle timing of commands - great for benchmarks
 
-### Configuration
-
-If your postgres server is down, you'll get a *"Is the server running locally..."* error message. You need to start up the postgres server: `service postgresql start`. What does that command execute? Let's find out with `ps aux | grep postgres | grep -- -D`
+### Add a System User
 
 ```shell
-# `postgres` starts the server
-# `-D` points where the data will live
-# `-c` points to the config file postgresql.conf it will use
-
-/usr/lib/postgresql/9.6/bin/postgres -D /var/lib/postgresql/9.6/main -c config_file=/etc/postgresql/9.6/main/postgresql.conf
-```
-
-Postgres looks at the following locations for config and storage:
-
-#### Server Configuration
-
-`config_file = '/etc/postgresql/9.6/main/postgresql.conf'`
-
-Main server config where you can tune performance, change connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc. Some basic settings include:
-
-  - `listen_addresses` what IP addresses to listen on; use '*' to allow all; separate IP by comma.
-
-#### Client Authentication
-
-`hba_file = '/etc/postgresql/9.6/main/pg_hba.conf'`
-
-This file is stored in the database cluster's data directory. HBA stands for host-based authentication. This is where you set rules on who or what can connect to the server.
-
-##### Authentication Methods
-
-**trust** assumes that anyone who can connect to the server is authorized to access the database. This is appropriate for single-user workstation, but not on multi-user machines.
-
-**password** (cleartext) and **md5** if you want to authenticate by text. Change a user's password with `CREATE USER` or `ALTER ROLE`, e.g., `CREATE USER joe WITH PASSWORD 'secret'`. Note that *if no password has been setup for a user, the stored password is null and authentication will always fail*
-
-**ident** works by obtaining client's OS user name from an ident server
-
-**peer** works by obtaining the client's OS system user name from the kernel and uses it as the allowed database user name
-
-#### User Name Mapping
-
-`ident_file = '/etc/postgresql/9.6/main/pg_ident.conf'`
-
-This maps external user names to their corresponding PostgreSQL user names. General form of setting is: *MAPNAME SYSTEM-USERNAME PG-USERNAME*. To use user name mapping, change `map=map-name` setting in **pg_hba.conf**. Here are some examples of mapping:
-
-```
-# mapname   system-username   pg-username
-mymap       brian             brian
-mymap       jane              jane
-# "rob" has postgres role "bob"
-mymap       rob               bob
-# "brian" can use roles "bob" and "guest1"
-mymap       brian             bob
-mymap       brian             guest1
-```
-
-#### Misc
-
-`external_pid_file = '/var/run/postgresql/9.6-main.pid'` - path to additional PID
-`data_directory = '/var/lib/postgresql/9.6/main'` - data storage location
-
-#### Remove Authentication (NOT recommended)
-
-If you don't want to deal with authentication for convenience (...famous last words) you can change the settings in **/etc/postgresql/9.6/main/pg_hba.conf** file by manually changing **peer** to **trust**. These commands will do it for you:
-
-```shell
-# search-replace the methods
-sed -i 's/local.*all.*postgres.*peer/local all postgres trust/' /etc/postgresql/9.6/main/pg_hba.conf
-
-sed -i 's/local.*all.*all.*peer/local all all trust/' /etc/postgresql/9.6/main/pg_hba.conf
-
-# restart postgres to reload the configuration
-service postgresql restart
-
-# now you can log in as any user
-# psql -U some_user -d db_name -h localhost
-psql -U postgres -d postgres
-```
-
-### Quick Start and Overview
-
-#### Add a System User
-
-```shell
-# create a new Unix system user
+# create a new system user
 sudo adduser postgres_user
-# log onto the default postgres user created by default
-sudo su - postgres
-# go inside postgres prompt
-psql
 ```
+
+### Add a Postgres User
 
 Inside Postgres prompt, create a new Postgres user with the same name as the user we created earlier, "postgres_user".
 
-#### Add a Postgres User
-
 ```sql
-CREATE USER postgres_user WITH PASSWORD 'password';
+sudo su - postgres
+psql
+
+CREATE USER postgres_user WITH PASSWORD 'pass';
 ```
 
-#### Create a Database for Postgres User
+### Create a Database for Postgres User
 
 ```sql
--- create database
 CREATE DATABASE my_postgres_db;
 
--- associate created database to postgres_user
+-- associate to postgres_user
 GRANT ALL ON DATABASE my_postgres_db TO postgres_user;
 ```
 
-Exit the prompt `\q`.
-
-Also exit current shell (associated with "postgres" system account) `exit`
+Exit the prompt `\q`. Also exit current shell (associated with "postgres" system account) `exit`
 
 ```shell
 # Log into the user you created
 sudo su - postgres_user
 
-# Sign into the database you created
+# connect to the database you created
 psql my_postgres_db
 ```
 
 <!--more-->
 
-#### Let's add a Sample Table
+### Add a Sample Table
 
 ```sql
 -- create a table
@@ -258,7 +257,7 @@ Exit the postgres prompt `\q`
 
 Also exit the shell associated with "postgres_user" `exit`. This should bring you back to root user.
 
-#### Let's now import a sample database
+### Import a sample database
 
 ```shell
 # log into default "postgres" user
@@ -281,13 +280,11 @@ psql worlddb < world.sql
 psql worlddb
 ```
 
-#### Let's query the sample database
+### Query the sample database
 
 ```sql
 -- `\dt+` to see list of tables in this database
--- `\d city` to see columns that make up the city table
--- and see information such as "check constraints",
--- "indexes", and "foreign-key constaints"
+-- `\d city` to see columns, constraints, indexes, etc
 
 -- select
 SELECT * FROM city;
@@ -312,7 +309,7 @@ JOIN city
 ORDER BY continent, country;
 ```
 
-#### Let's work with JSON
+### Let's work with JSON
 
 ```sql
 -- create table with a json column
@@ -340,7 +337,7 @@ SELECT attributes->'category' FROM products;
 SELECT attributes->>'category' FROM products;
 ```
 
-## Roles (Unix-style Users)
+## Roles / Users
 
 ### List Roles
 
@@ -393,13 +390,11 @@ ALTER ROLE demo_role WITH LOGIN;
 psql -d postgres
 ```
 
-### psql
-
 - `\l` to list all databases
 - `\conninfo` to get info on current db
 - `c dbname` to connect to a different db
 
-### Database
+### Create Database
 
 ```sql
 -- CREATE DATABASE [name] OWNER [role_name];
@@ -580,13 +575,6 @@ CREATE INDEX ON users (name);
 SELECT * FROM accounts WHERE email LIKE 'Peter%';
 ```
 
-For suffix lookups, use functional indexes.
-
-```sql
-CREATE INDEX backsearch ON users (reverse(email));
-SELECT * FROM accounts WHERE reverse(email) LIKE reverse('%doe.com');
-```
-
 #### Dates and Times
 
 Always use `timestamptz` instead of `time`.
@@ -645,77 +633,6 @@ INSERT INTO enum_test(state) VALUES ('destroyed');
 -- You Can Add New Values
 ALTER TYPE server_states ADD VALUE 'destroyed' AFTER 'offline';
 INSERT INTO enum_test(state) VALUES ('destroyed');
-```
-
-#### JSON
-
-Use `jsonb` which is a binary-encoded version of JSON. This means space padding is gone and is more efficient than `json`. Don't use `json` type.
-
-```sql
-CREATE TABLE filmsjsonb ( id BIGSERIAL PRIMARY KEY, data JSONB );
-
-INSERT INTO filmsjsonb (data) VALUES ('{
-  "title": "The Shawshank Redemption",
-  "num_votes": 1566874,
-  "rating": 9.3,
-  "year": "1994",
-  "type": "feature",
-  "can_rate": true,
-  "tconst": "tt0111161",
-  "image": {
-    "url": "http://ia.media-imdb.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1_.jpg",
-    "width": 933,
-    "height": 1388
-  }
-}');
-
-SELECT * FROM filmsjsonb; -- format is ugly here
-
-SELECT jsonb_pretty(data) FROM filmsjsonb WHERE id=1; -- prettify json format
-```
-
-##### Defining Columns
-
-```sql
-CREATE TABLE cards (
-  id integer NOT NULL,
-  board_id integer NOT NULL,
-  data jsonb
-);
-```
-
-##### Inserting JSON data
-
-```sql
-INSERT INTO cards
-VALUES (1, 1, '{"name": "Paint house", "tags": ["Improvements", "Office"], "finished": true}');
-```
-
-##### Querying Data
-
-```sql
-SELECT data->>'name' AS name FROM cards
-```
-
-##### Filtering Results
-
-```sql
-SELECT * FROM cards WHERE data->>'finished' = 'true';
-```
-
-##### Checking for Column Existence
-
-```sql
-SELECT count(*) FROM cards WHERE data ? 'ingredients';
-```
-
-##### Expanding Data into Rows
-
-```sql
-SELECT
-  jsonb_array_elements_text(data->'tags') as tag
-FROM cards
-WHERE id = 1;
 ```
 
 ## Backup and Export
