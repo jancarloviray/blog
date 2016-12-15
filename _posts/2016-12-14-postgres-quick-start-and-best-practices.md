@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Postgres Cheat Sheet, Tips and Summary
-permalink: blog/postgres-cheat-sheet-tips-and-summary/
+title: Postgres Quick Start and Best Practices
+permalink: blog/postgres-quick-start-and-best-practices/
 comments: True
 excerpt_separator: <!--more-->
 ---
@@ -10,6 +10,8 @@ Want to add or change something? Feel free to [create a pull request](https://gi
 
 ## Create a Postgres Docker Container
 
+Want to test something quick? Install [Docker](https://www.docker.com/) and run these commands!
+
 ```shell
 # get latest image and create a container
 docker pull postgres
@@ -17,6 +19,12 @@ docker run --name pg -d postgres
 
 # invoke a shell in the container to enter
 docker exec -it pg bash
+
+# now that you're inside the container, get inside postgres
+# by switching to "postgres" user and running `psql`
+su - postgres -c psql
+
+# enjoy!
 ```
 
 ## PostgreSQL Installation and Configuration
