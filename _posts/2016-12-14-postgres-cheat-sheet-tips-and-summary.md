@@ -6,7 +6,7 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-This post is continually updated. Modify this by creating a pull request [here](https://github.com/jancarloviray/jancarloviray.github.io/blob/master/_posts/2016-12-14-postgres-cheat-sheet-tips-and-summary.md). I hope this helps, and thanks in advance!
+This post is continually updated. Want to add or change something? Feel free to [creating a pull request](https://github.com/jancarloviray/jancarloviray.github.io/blob/master/_posts/2016-12-14-postgres-cheat-sheet-tips-and-summary.md). I hope this helps, and thanks in advance!
 
 ## Create a Postgres Docker Container
 
@@ -35,7 +35,7 @@ sudo apt-get update
 sudo apt-get install postgresql-9.5
 
 # start the postgres server
-# /etc/init.d/postgresql start - older systems
+# `/etc/init.d/postgresql start` for older systems
 service postgresql start
 ```
 
@@ -44,29 +44,33 @@ Postgres is set up to use **peer** auth by default, which associates roles with 
 The installation created a system user called **postgres**, which is associated with a default role. Check out `/etc/passwd`
 
 ```shell
-# you must be signed into the postgres account
-sudo -u postgres
+# signin to "postgres" system acct created by installer
+sudo su -u postgres
 
-# then you can invoke psql, which without arguments:
+# run psql, which without arguments is equivalent to:
 # psql -U current_sys_user -d current_sys_user_as_db_name
 psql
 ```
 
-By default, users are only allowed to login locally if the system username matches the PostgreSQL username. Optionally, you can change this behavior in **pg_hba.conf** manually or by running this:
+#### Optionally Remove Authentication
+
+If you don't want to deal with authentication (not recommended), you can change the settings in `/etc/postgresql/9.5/main/pg_hba.conf` file by manually changing **peer** to **trust**. These commands will do it for you:
 
 ```shell
-sudo -u postgres
-psql
+# search-replace the methods
+sed -i 's/local.*all.*postgres.*peer/local all postgres trust/' /etc/postgresql/9.5/main/pg_hba.conf
 
-# search-replace authentication method to md5
-sed -i 's/local.*all.*postgres.*peer/local all postgres md5/' /etc/postgresql/9.5/main/pg_hba.conf
-sed -i 's/local.*all.*all.*peer/local all all md5/' /etc/postgresql/9.5/main/pg_hba.conf
+sed -i 's/local.*all.*all.*peer/local all all trust/' /etc/postgresql/9.5/main/pg_hba.conf
 
-# restart postgres
+# restart postgres to reload the configuration
 service postgresql restart
+
+# now you can log in as any user
+# psql -U some_user -d db_name -h localhost
+psql -U postgres -d postgres
 ```
 
-### Quick Tips inside `psql`
+### Quick Tips while inside `psql`
 
 - `\?` shows help with psql commands
 - `\c other-db` to connect to another db without quitting the console
