@@ -58,9 +58,12 @@ sudo apt-get install postgresql-9.6
 
 # start the postgres server
 service postgresql start
+
+# autostart postgres on boot (for Ubuntu 15+)
+systemctl enable postgresql
 ```
 
-Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. Auth config is located in **pg_hba.conf** - `/etc/postgresql/9.6/main/pg_hba.conf`
+Note that Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. Auth config is located in **pg_hba.conf** - `/etc/postgresql/9.6/main/pg_hba.conf`
 
 The installation created a system user called **postgres**, which is associated with a default role. Check out `/etc/passwd`
 
@@ -108,6 +111,27 @@ Good to add to your `~/.psqlrc` file:
 - `\pset null ¤` to render NULL as ¤ instead
 - `\x [on|off|auto]` for expanded output (default is "off")
 - `\timing [on|off]` to toggle timing of commands - great for benchmarks
+
+### Configuration
+
+Note that If your postgres server is down, you'll get a *Is the server running locally...* error message. You need to start up the server with `service postgresql start`. What does that command do? Let's find out with `ps aux | grep postgres | grep -- -D`
+
+```
+# it invokes the `postgres` database server
+# `-D` points where the data will live
+# `-c` points to the config file postgresql.conf it will use
+/usr/lib/postgresql/9.6/bin/postgres -D /var/lib/postgresql/9.6/main -c config_file=/etc/postgresql/9.6/main/postgresql.conf
+```
+
+Postgres looks at the following file locations for configuration and storage:
+
+`config_file = '/etc/postgresql/9.6/main/postgresql.conf'` - main server config where you can tune performance, chagne connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc. Some basic settings to consider:
+  - `listen_addresses` what IP addresses to listen on; use '*' to allow all; separate IP by comma.
+
+`hba_file = '/etc/postgresql/9.6/main/pg_hba.conf'` - authentication config
+`ident_file = '/etc/postgresql/9.6/main/pg_ident.conf'` - user name mapping
+`external_pid_file = '/var/run/postgresql/9.6-main.pid'` - path to additional PID
+`data_directory = '/var/lib/postgresql/9.6/main'` - data storage location
 
 ### Quick Start and Overview
 
