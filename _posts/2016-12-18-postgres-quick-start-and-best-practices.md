@@ -104,7 +104,52 @@ This is the main server config where you can tune performance, change connection
 
 This file is stored in the database cluster's data directory. HBA stands for host-based authentication. This is where you set rules on who or what can connect to the server.
 
-#### Authentication Methods
+Fields include: Connection Type, Database Name, User Name, Address, Authentication Method.
+
+The first record with a matching connection type, client address, requested database, and user name is used to perform authentication. There is no "fall-through". If one record is chosen and the authentication fails, subsequent records are not considered. If no record matches, access is denied.
+
+Example:
+
+```
+local   database    user    auth-method   [auth-options]
+host    database    user    address       auth-method     [auth-options]
+hostssl database    user    address       auth-method     [auth-options]
+...
+# allow any user on the local system to connect to any database
+local   all         all                   trust
+
+# allow any user from any host with specified ip to connect
+# to database "postgres" as the same user name that ident reports
+host    postgres    all     192.168.93.0/24   ident
+
+# allow any user from host ip to connect to db "postgres" if pass is valid
+host    postgres    all     192.168.12.10/32  md5
+
+# allow any user from hosts in the example.com domain if pass is valid
+host    all         all     .example.com      md5
+```
+
+#### Connection Types:
+
+**local** record matches connection attemps using unix-domain sockets; without a record of this type, unix-domain socket connections are disallowed. Unix domain socket is inter-process communication on the same host operating system.
+
+**host** record matches connection attempts made using TCP/IP; this matches either SSL or non-SSL attempts. Note that this will also not work if it's not given an appropriate **listen_addressess** configuration parameter since the default for this is only on the local loopback address **localhost**.
+
+...
+
+#### Database:
+
+This specifies which db names this record matches; value of **all** specifies that it matches all. **sameuser** specifies if database name is the same as the user.
+
+#### User:
+
+Specifies which database user name(s) this record matches. The value **all** specifies that it matches all users.
+
+#### Address:
+
+Specifies the client machine address(es) that this record matches.
+
+#### Auth Methods:
 
 **trust** assumes that anyone who can connect to the server is authorized to access the database. This is appropriate for single-user workstation, but not on multi-user machines.
 
