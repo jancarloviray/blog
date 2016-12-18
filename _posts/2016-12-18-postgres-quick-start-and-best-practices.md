@@ -106,14 +106,16 @@ This file is stored in the database cluster's data directory. HBA stands for hos
 
 Fields include: Connection Type, Database Name, User Name, Address, Authentication Method.
 
-The first record with a matching connection type, client address, requested database, and user name is used to perform authentication. There is no "fall-through". If one record is chosen and the authentication fails, subsequent records are not considered. If no record matches, access is denied.
+The first record with a matching connection type, client address, requested database, and user name is used to perform authentication.
+
+There is no "fall-through". If one record is chosen and the authentication fails, subsequent records are not considered. If no record matches, access is denied.
 
 Example:
 
 ```
-local   database    user    auth-method   [auth-options]
-host    database    user    address       auth-method     [auth-options]
-hostssl database    user    address       auth-method     [auth-options]
+local   database    user    auth-method   [auth-opts]
+host    database    user    address       auth-method     [auth-opts]
+hostssl database    user    address       auth-method     [auth-opts]
 ...
 # allow any user on the local system to connect to any database
 local   all         all                   trust
@@ -384,52 +386,37 @@ SELECT attributes->'category' FROM products;
 SELECT attributes->>'category' FROM products;
 ```
 
-## Deeper Dive on Roles / Users
+## Database Roles
 
-### List Roles
+A role can be thought of either as, a user, a group of users depending how it is set up. Roles can own database objects and have specific privileges. There are no users or groups. There's just roles.
 
-```
-\du
-```
-
-### Create a User and a Role
+Every connection is made using a particular role.
 
 ```sql
+-- \du: list roles
+-- \h CREATE ROLE: check available privileges
+
+CREATE ROLE name;
+
 -- create role but don't give a password
-CREATE ROLE jonathan LOGIN;
+CREATE ROLE name LOGIN; -- add login ability
+CREATE USER name; -- same as above
 
 -- create role with a password
 -- CREATE USER is same as CREATE ROLE except it implies LOGIN
-CREATE USER someuser WITH PASSWORD 'pass';
+CREATE USER name WITH PASSWORD 'pass';
 
--- create role that can create databases and manage roles
-CREATE ROLE role_name WITH optional_permissions;
-CREATE ROLE admin WITH CREATEDB CREATEROLE;
-```
+-- change a user's password
+ALTER ROLE name WITH PASSWORD '[new_password]';
 
-### Change a User's Password
+-- change privileges
+ALTER ROLE demo_role WITH NOLOGIN;
+ALTER ROLE demo_role WITH LOGIN;
 
-```sql
-ALTER ROLE [role_name] WITH PASSWORD '[new_password]';
-```
-
-### Drop Role
-
-```sql
 DROP ROLE IF EXISTS role_name;
 ```
 
-### Define and Change Provileges
-
-Use `\h CREATE ROLE` to check attributes
-
-```sql
--- ALTER ROLE role_name WITH attribute_options;
-ALTER ROLE demo_role WITH NOLOGIN;
-ALTER ROLE demo_role WITH LOGIN;
-```
-
-## Deeper Dive on Database
+## Postgres Database
 
 ### Connect to a Database
 
@@ -706,10 +693,20 @@ psql -f backup_file postgres
 ```shell
 # backup a database
 sudo su - postgres
-pg_dump postgres > postgres_db.bak
+pg_dump dbame > dbname.bak
 
 # backup a database remotely
 pg_dump -U user_name -h remote_host -p remote_port name_of_database > name_of_backup_file
+```
+
+### Compressed Dump
+
+```shell
+# use a compressed dump
+pg_dump dbname | gzip > filename.gz
+
+# restore
+gunzip -c filename.gz | psql dbname
 ```
 
 ### Restore a Database
