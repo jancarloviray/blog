@@ -44,39 +44,31 @@ sudo add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_rele
 # get keys
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 
-# update again to include the added repository
+# update to include added repo and install postgres
 sudo apt-get update
-
-# install core, client, contrib and start cluster
 sudo apt-get install postgresql-9.6
 
-# start the postgres server - this is important
+# start the postgres server and enable autostart
 service postgresql start
-
-# autostart postgres on boot (for Ubuntu 15+)
 systemctl enable postgresql
 ```
 
-Note that Postgres is set up to use **peer** auth by default, which associates roles with a matching Unix account. This is why you need to login as a specific user before you can `psql`. Check out **/etc/postgresql/9.6/main/pg_hba.conf** to change this behavior.
-
-The installation also created a system user called **postgres**, which is associated with a default role. Check out **/etc/passwd**.
+Postgres is set up to **peer** auth by default, associating roles with a matching system account. This is why you need to login as a specific user before you can `psql`. The setup also created a system user, **postgres**. Check out **/etc/passwd**.
 
 ```shell
 # signin to "postgres" system account created by installer
 sudo su - postgres
 
-# invoke postgres console, which without arguments is equivalent to:
-# psql -U current_sys_user -d current_sys_user_as_db_name
+# same as psql -U current_sys_user -d current_sys_user_as_db_name
 psql
 ```
 
-## Quick Intro to Configuration
+## Intro to Postgres Configuration
 
-Let's enter through the starting point and work our way in. Make sure postgres is running. If not, run `service postgresql start`
+Let's enter through the starting point and work our way in. Make sure postgres is running first with `service postgresql start`
 
 ```shell
 # let's check if the process is running and its arguments
-# if you don't see any results, postgres server is not running
 ps aux | grep postgres | grep -- -D
 
 # You should see this result:
@@ -87,16 +79,13 @@ ps aux | grep postgres | grep -- -D
 # `-c` points to the main config file postgresql.conf it will use
 ```
 
-The main configuration file is **postgresql.conf** or whatever you saw in the results above **config_file=/etc/postgresql/9.6/main/postgresql.conf**. Open that file and check out the section callled "FILE LOCATIONS".
+The main configuration file is **postgresql.conf**. Open that file and check out the section callled "FILE LOCATIONS". This sections will show configuration and data files postgres looks for.
 
 ### Main Server Configuration
 
 `config_file = '/etc/postgresql/9.6/main/postgresql.conf'`
 
-This is the main server config where you can tune performance, change connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc. Some basic settings include:
-
-  - `listen_addresses` what IP addresses to listen on; use '*' to allow all; separate IP by comma.
-  - ...
+This is the main server config where you can tune performance, change connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc.
 
 ### Client Authentication
 
@@ -159,7 +148,7 @@ Specifies the client machine address(es) that this record matches.
 
 **peer** works by obtaining the client's OS system user name from the kernel and uses it as the allowed database user name
 
-Check out the official documentation for more.
+...
 
 ### User Name Mapping
 
@@ -192,25 +181,14 @@ If you don't want to deal with authentication, you can change the settings in **
 sed -i 's/local.*all.*postgres.*peer/local all postgres trust/' /etc/postgresql/9.6/main/pg_hba.conf
 sed -i 's/local.*all.*all.*peer/local all all trust/' /etc/postgresql/9.6/main/pg_hba.conf
 
-# reload config
+# reload config and login to any user/db
 service postgresql restart
-
-# now you can log in as any user
 psql -U postgres -d postgres
 ```
 
-## Quick Start and Overview
+## Quick Start Overview
 
-### Nice Helpers inside `psql`
-
-- `\?` help
-- `\c other-db` connect to another db
-- `\l+ *optional-pattern*` list databases
-- `\dn+ *optional-pattern*` list schemas
-- `\dt+ *optional-pattern*` list tables
-- `\df *optional-pattern*` find functions
-- `\e` to invoke your `$EDITOR` and use a real editor
-- `\q` to quit
+### Nice Helpers for `psql`
 
 Add these settings to your `~/.psqlrc` file:
 
@@ -247,7 +225,7 @@ CREATE DATABASE my_postgres_db;
 GRANT ALL ON DATABASE my_postgres_db TO postgres_user;
 ```
 
-Exit the prompt `\q`. Also exit current shell (associated with "postgres" system account) `exit`
+Exit the prompt `\q`.
 
 ```shell
 # Log into the user you created
@@ -256,8 +234,6 @@ sudo su - postgres_user
 # connect to the database you created
 psql my_postgres_db
 ```
-
-<!--more-->
 
 ### Add a Sample Table
 
@@ -386,11 +362,11 @@ SELECT attributes->'category' FROM products;
 SELECT attributes->>'category' FROM products;
 ```
 
+<!--more-->
+
 ## Database Roles
 
-A role can be thought of either as, a user, a group of users depending how it is set up. Roles can own database objects and have specific privileges. There are no users or groups. There's just roles.
-
-Every connection is made using a particular role.
+A role can be thought of either as, a user, a group of users depending how it is set up. Roles can own database objects and have specific privileges. There are no users or groups - just roles. Every connection is made using a particular role.
 
 ```sql
 -- \du: list roles
@@ -407,7 +383,7 @@ CREATE USER name; -- same as above
 CREATE USER name WITH PASSWORD 'pass';
 
 -- change a user's password
-ALTER ROLE name WITH PASSWORD '[new_password]';
+ALTER ROLE name WITH PASSWORD 'new_password';
 
 -- change privileges
 ALTER ROLE demo_role WITH NOLOGIN;
@@ -431,8 +407,6 @@ psql -d postgres
 ### Create Database
 
 ```sql
--- CREATE DATABASE [name] OWNER [role_name];
-
 CREATE USER postgres_user WITH PASSWORD 'password';
 CREATE DATABASE my_postgres_db OWNER postgres_user;
 DROP DATABASE IF EXISTS my_postgres_db;
