@@ -456,7 +456,7 @@ CREATE TABLE table_name (
 );
 ```
 
-Example:
+Basic Example:
 
 ```sql
 CREATE TABLE playground (
@@ -468,6 +468,43 @@ CREATE TABLE playground (
   'southeast', 'southwest', 'northwest')),
   install_date date
 );
+```
+
+Real World Example:
+
+```sql
+CREATE TABLE inherit_base_transaction (
+  created_date  TIMESTAMP WITHOUT TIME ZONE default NOW(),
+  updated_date  TIMESTAMP WITHOUT TIME ZONE,
+  created_by  TEXT default current_user,
+  updated_by  TEXT
+)
+
+CREATE TABLE creditcard_invoice_order (
+  id            SERIAL NOT NULL PRIMARY KEY,
+  account_id    INT REFERENCES account(id),
+  invoice_payment_id  INT REFERENCES invoice_payment(id),
+  total         NUMERIC(10,2),
+  paid          NUMERIC(10,2) DEFAULT 0,
+  paid_date     TIMESTAMP WITHOUT TIME ZONE,
+  descr         TEXT NOT NULL,
+  reference_number TEXT
+) INHERITS(inherit_base_transaction)
+
+CREATE TABLE creditcard_transaction(
+  id                              SERIAL NOT NULL PRIMARY KEY,
+  creditcard_transaction_type_id  INT NOT NULL REFERENCES creditcard_invoice_transaction_type(id),
+  creditcard_session_id           TEXT,
+  creditcard_token_id             INT REFERENCES creditcard_invoic_token(id),
+  creditcard_transaction_id       INT REFERENCES creditcard_invoice_transaction(id),
+  creditcard_order_id             INT NOT NULL REFERENCES creditcard_invoice_order(id),
+  amount                          NUMERIC(10,2),
+  payload                         TEXT,
+  captured_date                   TIMESTAMP WITHOUT TIME ZONE,
+  notified_date                   TIMESTAMP WITHOUT TIME ZONE,
+  reference_number                TEXT,
+  job_id                          INT REFERENCES job(id)
+) INHERITS(inherit_base_transaction)
 ```
 
 ### Check Table
@@ -499,6 +536,70 @@ DROP TABLE IF EXISTS mytable
 -- drop table and dependencies
 DROP TABLE table_name CASCADE;
 ```
+
+## Common Types
+
+### Primary Keys
+
+### GUID
+
+Creates globally unique identifiers. There's no sequence or auto increment here. If you need offline writes that will synchronize later to an online server, this is your only option. Another use case if if you have tables in multiple databases that must be merged later on.
+
+Downsides include performance implications when using Indexes as new inserts cause rewrites instead of just adding to last page when using serials. Also, due to its size, it can potentially add disk and memory overhead.
+
+For scalability, this is better choice than serial.
+
+This should be a safe default. Read [this article](https://www.clever-cloud.com/blog/engineering/2015/05/20/why-auto-increment-is-a-terrible-idea/) on why.
+
+Ways you can generate UUID:
+
+**Within Application Code**
+
+```javascript
+// npm install node-uuid
+var uuid = require("node-uuid");
+uuid.v4();
+```
+
+**Within Database Using Extension [pgcrypto](http://www.postgresql.org/docs/9.4/static/pgcrypto.html)**
+
+```sql
+-- load precompiled library code
+CREATE EXTENSION pgcrypto;
+
+-- can now do this:
+-- SELECT gen_random_uuid();
+
+CREATE SCHEMA IF NOT EXISTS snw;
+CREATE TABLE snw.contacts(
+   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+   name TEXT,
+   email TEXT
+);
+```
+
+#### Serial
+
+Note that `SERIAL` type is the same as:
+
+```sql
+CREATE TABLE tablename (
+    colname SERIAL
+);
+```
+
+```sql
+CREATE SEQUENCE tablename_colname_seq;
+CREATE TABLE tablename (
+    colname integer NOT NULL DEFAULT nextval('tablename_colname_seq')
+);
+ALTER SEQUENCE tablename_colname_seq OWNED BY tablename.colname;
+```
+### Text
+### Numbers
+### Currency
+
+- use [numeric](http://stackoverflow.com/questions/15726535/postgresql-which-datatype-should-be-used-for-currency)
 
 ## Columns
 
