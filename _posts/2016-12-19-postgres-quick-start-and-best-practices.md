@@ -476,34 +476,36 @@ Real World Example:
 CREATE TABLE inherit_base_transaction (
   created_date  TIMESTAMP WITHOUT TIME ZONE default NOW(),
   updated_date  TIMESTAMP WITHOUT TIME ZONE,
-  created_by  TEXT default current_user,
-  updated_by  TEXT
+  created_by    TEXT default current_user,
+  updated_by    TEXT
 )
 
-CREATE TABLE creditcard_invoice_order (
-  id            SERIAL NOT NULL PRIMARY KEY,
-  account_id    INT REFERENCES account(id),
+CREATE TABLE cc_invoice_order (
+  id                  SERIAL NOT NULL PRIMARY KEY,
+  account_id          INT REFERENCES account(id),
   invoice_payment_id  INT REFERENCES invoice_payment(id),
-  total         NUMERIC(10,2),
-  paid          NUMERIC(10,2) DEFAULT 0,
-  paid_date     TIMESTAMP WITHOUT TIME ZONE,
-  descr         TEXT NOT NULL,
-  reference_number TEXT
+  total               NUMERIC(10,2),
+  paid                NUMERIC(10,2) DEFAULT 0,
+  paid_date           TIMESTAMP WITHOUT TIME ZONE,
+  descr               TEXT NOT NULL,
+  reference_number    TEXT
 ) INHERITS(inherit_base_transaction)
 
-CREATE TABLE creditcard_transaction(
-  id                              SERIAL NOT NULL PRIMARY KEY,
-  creditcard_transaction_type_id  INT NOT NULL REFERENCES creditcard_invoice_transaction_type(id),
-  creditcard_session_id           TEXT,
-  creditcard_token_id             INT REFERENCES creditcard_invoic_token(id),
-  creditcard_transaction_id       INT REFERENCES creditcard_invoice_transaction(id),
-  creditcard_order_id             INT NOT NULL REFERENCES creditcard_invoice_order(id),
-  amount                          NUMERIC(10,2),
-  payload                         TEXT,
-  captured_date                   TIMESTAMP WITHOUT TIME ZONE,
-  notified_date                   TIMESTAMP WITHOUT TIME ZONE,
-  reference_number                TEXT,
-  job_id                          INT REFERENCES job(id)
+CREATE TABLE cc_transaction(
+  id                      SERIAL NOT NULL PRIMARY KEY,
+  cc_transaction_type_id  INT NOT NULL
+                          REFERENCES cc_invoice_transaction_type(id),
+  cc_session_id           TEXT,
+  cc_token_id             INT REFERENCES cc_invoice_token(id),
+  cc_transaction_id       INT REFERENCES cc_invoice_transaction(id),
+  cc_order_id             INT NOT NULL
+                          REFERENCES cc_invoice_order(id),
+  amount                  NUMERIC(10,2),
+  payload                 TEXT,
+  captured_date           TIMESTAMP WITHOUT TIME ZONE,
+  notified_date           TIMESTAMP WITHOUT TIME ZONE,
+  reference_number        TEXT,
+  job_id                  INT REFERENCES job(id)
 ) INHERITS(inherit_base_transaction)
 ```
 
