@@ -643,9 +643,11 @@ Inserting:
 ```sql
 -- '{ val1 delim val2 delim ... }'
 INSERT INTO sal_emp
-    VALUES ('Bill',
-    '{10000, 10000, 10000, 10000}',
-    '{{"meeting", "lunch"}, {"training", "presentation"}}');
+    VALUES (
+      'Bill',
+      '{10000, 10000, 10000, 10000}',
+      '{ {"meeting", "lunch"}, {"training", "presentation"} }'
+    );
 ```
 
 Accessing:
