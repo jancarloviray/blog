@@ -545,15 +545,11 @@ DROP TABLE table_name CASCADE;
 
 ### GUID
 
-Creates globally unique identifiers. There's no sequence or auto increment here. If you need offline writes that will synchronize later to an online server, this is your only option. Another use case if if you have tables in multiple databases that must be merged later on.
+Creates globally unique identifiers. If you need offline writes that will synchronize later to an online server, this is your only option. Another use case if if you have tables in multiple databases that must be merged later on. For scalability, this is better choice than serial.
 
 Downsides include performance implications when using Indexes as new inserts cause rewrites instead of just adding to last page when using serials. Also, due to its size, it can potentially add disk and memory overhead.
 
-For scalability, this is better choice than serial.
-
-This should be a safe default. Read [this article](https://www.clever-cloud.com/blog/engineering/2015/05/20/why-auto-increment-is-a-terrible-idea/) on why.
-
-Ways you can generate UUID:
+This should be a safe default. Read [this article](https://www.clever-cloud.com/blog/engineering/2015/05/20/why-auto-increment-is-a-terrible-idea/) on why. Ways you can generate UUID:
 
 **Within Application Code**
 
@@ -568,15 +564,13 @@ uuid.v4();
 ```sql
 -- load precompiled library code
 CREATE EXTENSION pgcrypto;
-
--- can now do this:
 -- SELECT gen_random_uuid();
 
 CREATE SCHEMA IF NOT EXISTS snw;
 CREATE TABLE snw.contacts(
-   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-   name TEXT,
-   email TEXT
+   id UUID  PRIMARY KEY DEFAULT gen_random_uuid(),
+   name     TEXT,
+   email    TEXT
 );
 ```
 
@@ -600,7 +594,7 @@ ALTER SEQUENCE tablename_colname_seq OWNED BY tablename.colname;
 
 ### Boolean
 
-Use **BOOLEAN**, which has valid values of: **TRUE/FALSE, 't'/'f', 'y'/'n', 1/0**
+Use `BOOLEAN`, which has valid values of: **TRUE/FALSE, 't'/'f', 'y'/'n', 1/0**
 
 ```sql
 CREATE TABLE test1 (a boolean, b text);
@@ -614,11 +608,11 @@ Use `TEXT` and avoid `VARCHAR` or `CHAR` and especially `VARCHAR(n)` unless you 
 
 ### Numbers
 
-**INT** is a typical choice for integers. There are more choices [here](https://www.postgresql.org/docs/9.6/static/datatype-numeric.html) if needed for your use case.
+`INT` is a typical choice for integers. There are more choices [here](https://www.postgresql.org/docs/9.6/static/datatype-numeric.html) if needed for your use case.
 
 ### Currency
 
-Use [numeric](http://stackoverflow.com/questions/15726535/postgresql-which-datatype-should-be-used-for-currency) instead of money due to potential for rounding errors.
+Use [NUMERIC](http://stackoverflow.com/questions/15726535/postgresql-which-datatype-should-be-used-for-currency) instead of money due to potential for rounding errors.
 
 ```sql
 CREATE TABLE cc_invoice_order (
@@ -648,7 +642,6 @@ Inserting:
 
 ```sql
 -- '{ val1 delim val2 delim ... }'
-
 INSERT INTO sal_emp
     VALUES ('Bill',
     '{10000, 10000, 10000, 10000}',
@@ -665,12 +658,10 @@ SELECT pay_by_quarter[3] FROM sal_emp;
 Modifying:
 
 ```sql
-UPDATE sal_emp SET pay_by_quarter = '{25000,25000,27000,27000}'
-    WHERE name = 'Carol';
+UPDATE sal_emp SET pay_by_quarter = '{25000,25000,27000,27000}' WHERE name = 'Carol';
 
 -- update a single element
-UPDATE sal_emp SET pay_by_quarter[4] = 15000
-    WHERE name = 'Bill';
+UPDATE sal_emp SET pay_by_quarter[4] = 15000 WHERE name = 'Bill';
 
 -- New array values can also be constructed
 -- using the concatenation operator, ||
