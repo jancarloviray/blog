@@ -437,7 +437,7 @@ CREATE DATABASE my_postgres_db OWNER postgres_user;
 DROP DATABASE IF EXISTS my_postgres_db;
 ```
 
-## Table Definition
+## Tables
 
 ### Create Table
 
@@ -509,32 +509,24 @@ CREATE TABLE cc_transaction(
 ) INHERITS(inherit_base_transaction)
 ```
 
-### Check Table
+### Example Usage
+
+Check Table:
 
 ```
 \d
 ```
 
-### Insert into Table
-
 ```sql
 INSERT INTO playground (type, color, location, install_date)
 VALUES ('slide', 'blue', 'south', '2014-04-28');
-```
 
-### Drop Table
-
-```sql
--- just delete all rows from table
+-- delete rows from table
 DELETE FROM mytable;
 
 -- drop table
 DROP TABLE IF EXISTS mytable
-```
 
-### Drop Table and Dependencies
-
-```sql
 -- drop table and dependencies
 DROP TABLE table_name CASCADE;
 ```
@@ -543,7 +535,7 @@ DROP TABLE table_name CASCADE;
 
 ### Primary Key
 
-### GUID
+#### GUID
 
 Creates globally unique identifiers. If you need offline writes that will synchronize later to an online server, this is your only option. Another use case if if you have tables in multiple databases that must be merged later on. For scalability, this is better choice than serial.
 
@@ -697,37 +689,192 @@ ALTER TYPE server_states ADD VALUE 'destroyed' AFTER 'offline';
 INSERT INTO enum_test(state) VALUES ('destroyed');
 ```
 
-## Columns
+## Data Definition
+
+### Default Values
+
+A column can be assigned a default value. When a new row is created and no values are specified for some of the columns, those will be filled with their respective default values. **If not default value is declared, the default value is null**.
+
+```sql
+CREATE TABLE products ( product_no integer,
+  name  text,
+  price numeric DEFAULT 9.99
+);
+```
+
+Default value can be an expressions, which is evaluated whenever the value is inserted, not when the table is created. An example is timestamp column to have default of CURRENT_TIMESTAMP. Example:
+
+```sql
+CREATE TABLE products (
+  product_no integer DEFAULT nextval(’products_product_no_seq’), ...
+);
+```
+
+### Constraints
+
+This is a way to limit kind of data that is stored.
+
+#### Check Constraints
+
+This is the most generic constraint. It must satisfy a Boolean expression. Example:
+
+```sql
+CREATE TABLE products (
+  product_no integer,
+  name text,
+  price numeric
+    CHECK (price > 0),              -- column constraint
+  discounted_price numeric
+    CHECK (discounted_price > 0),   -- column constraint
+
+  CHECK (price > discounted_price)  -- table constraint
+);
+```
+
+#### NotNull Constraints
+
+```sql
+CREATE TABLE products (
+  product_no integer NOT NULL,
+  name text NOT NULL,
+  price numeric
+);
+```
+
+#### Unique Constraints
+
+```sql
+CREATE TABLE products (
+  product_no integer UNIQUE,
+  name text,
+  price numeric
+);
+```
+
+#### Primary Keys Constraints
+
+```sql
+CREATE TABLE products (
+  product_no integer PRIMARY KEY, name text,
+  price numeric
+);
+```
+
+```sql
+CREATE EXTENSION pgcrypto;
+CREATE SCHEMA IF NOT EXISTS snw;
+CREATE TABLE snw.contacts(
+   id UUID  PRIMARY KEY DEFAULT gen_random_uuid(),
+   name     TEXT,
+   email    TEXT
+);
+```
+
+#### Foreign Keys Constraints
+
+```sql
+CREATE TABLE products (
+    product_no integer PRIMARY KEY,
+    name text,
+    price numeric
+);
+CREATE TABLE orders (
+  order_id integer PRIMARY KEY,
+  product_no integer REFERENCES products (product_no), quantity integer
+);
+```
+
+Many to Many Example:
+
+```sql
+CREATE TABLE products (
+    product_no integer PRIMARY KEY,
+    name text,
+    price numeric
+);
+CREATE TABLE orders (
+    order_id integer PRIMARY KEY,
+    shipping_address text,
+    ...
+);
+CREATE TABLE order_items (
+  product_no integer REFERENCES products ON DELETE RESTRICT,
+  order_id integer REFERENCES orders ON DELETE CASCADE, quantity integer,
+  PRIMARY KEY (product_no, order_id)
+);
+```
+
+- `RESTRICT` prevents deletion of referenced row.
+- `CASCADE` means that when a referenced row is deleted, rows referencing it should be automatically deleted as well.
 
 ### Modifying Table Columns
 
+Adding a Column:
+
 ```sql
 -- Add Column to Table
-ALTER TABLE table_name
-ADD COLUMN column_name data_type;
+ALTER TABLE table_name ADD COLUMN column_name data_type;
 
--- Remove Column from Table
-ALTER TABLE table_name
-DROP COLUMN column_name;
+-- Add Column with Check
+ALTER TABLE products ADD COLUMN description text CHECK (description <> ”);
+```
 
+Adding a Constraint:
+
+```sql
+ALTER TABLE products ADD CHECK (name <> ”);
+ALTER TABLE products ADD CONSTRAINT some_name UNIQUE (product_no);
+ALTER TABLE products ADD FOREIGN KEY (product_group_id) REFERENCES product_groups;
+
+-- Removing a Constraint.
+-- If it reference, add CASCADE
+ALTER TABLE products DROP CONSTRAINT some_name;
+```
+
+Adding a Default Value:
+
+```sql
+ALTER TABLE products ALTER COLUMN price SET DEFAULT 7.77;
+
+-- remove default value
+ALTER TABLE products ALTER COLUMN price DROP DEFAULT;
+```
+
+Removing a Column:
+
+```sql
+-- Remove Column from Table. If it has a constraint,
+-- Postgres will not silently drop that constraint.
+ALTER TABLE table_name DROP COLUMN column_name;
+
+-- Remove Column and Dependencies
+ALTER TABLE products DROP COLUMN description CASCADE;
+```
+
+Changing Data Type:
+
+```sql
 -- Change Column Data Type
-ALTER TABLE table_name
-ALTER COLUMN column_name data_type;
+-- ALTER TABLE table_name ALTER COLUMN column_name data_type;
+ALTER TABLE products ALTER COLUMN price TYPE numeric(10,2);
+```
 
+Renaming a Column:
+
+```sql
 -- Change Column Name
-ALTER TABLE table_name
-RENAME COLUMN column_name TO new_name;
+ALTER TABLE table_name RENAME COLUMN column_name TO new_name;
+```
 
--- Set Default Value for Existing Column
-ALTER TABLE table_name
-ALTER_COLUMN created_at SET DEFAULT now();
+Renaming a Table:
 
--- Add UNIQUE constrain to Existing Column
-ALTER TABLE table_name
-ADD UNIQUE (column_name);
+```sql
+ALTER TABLE products RENAME TO items;
 ```
 
 ## Data Manipulation
+
+### Insert
 
 ```sql
 CREATE TABLE weather (
@@ -748,6 +895,22 @@ VALUES ('San Francisco', 43, 57, 0.0, '1994-11-29');
 -- unordered columns
 INSERT INTO weather (date, city, temp_hi, temp_lo)
 VALUES ('1994-11-29', 'Hayward', 54, 37);
+```
+
+### Update
+
+```sql
+UPDATE products SET price = 10 WHERE price = 5;
+UPDATE products SET price = price * 1.10;
+
+-- update multiple columns
+UPDATE mytable SET a = 5, b = 3, c = 1 WHERE a > 0;
+```
+
+### Delete
+
+```sql
+DELETE FROM products WHERE price = 10;
 ```
 
 ## Querying
