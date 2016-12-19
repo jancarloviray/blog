@@ -676,7 +676,7 @@ More info in [official documentation](https://www.postgresql.org/docs/9.6/static
 
 Check out [official documentation](https://www.postgresql.org/docs/9.6/static/datatype-json.html)
 
-#### Enum
+### Enum
 
 Are fast, transparent mapping of words to integer and lives in `pg_enum`. Use this as labels, otherwise, it's similar to other languages.
 
@@ -727,7 +727,7 @@ ALTER TABLE table_name
 ADD UNIQUE (column_name);
 ```
 
-## General SQL
+## Data Manipulation
 
 ```sql
 CREATE TABLE weather (
@@ -750,7 +750,7 @@ INSERT INTO weather (date, city, temp_hi, temp_lo)
 VALUES ('1994-11-29', 'Hayward', 54, 37);
 ```
 
-### Querying
+## Querying
 
 ```sql
 SELECT * FROM weather;
@@ -762,6 +762,10 @@ SELECT city, (temp_hi + temp_lo)/2 AS temp_avg, date FROM weather;
 ```
 
 ### Joins
+
+### LIMIT and OFFSET
+
+### WITH queries (CTE)
 
 ### Views
 
