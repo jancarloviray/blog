@@ -81,13 +81,13 @@ ps aux | grep postgres | grep -- -D
 
 The main configuration file is **postgresql.conf**. Open that file and check out the section callled "FILE LOCATIONS". This sections will show configuration and data files postgres looks for.
 
-### Main Server Configuration
+## Server Configuration
 
 `config_file = '/etc/postgresql/9.6/main/postgresql.conf'`
 
 This is the main server config where you can tune performance, change connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc.
 
-### Client Authentication
+## Client Authentication
 
 `hba_file = '/etc/postgresql/9.6/main/pg_hba.conf'`
 
@@ -120,7 +120,7 @@ host    postgres    all     192.168.12.10/32  md5
 host    all         all     .example.com      md5
 ```
 
-#### Connection Types:
+### Connection Types:
 
 **local** record matches connection attemps using unix-domain sockets; without a record of this type, unix-domain socket connections are disallowed. Unix domain socket is inter-process communication on the same host operating system.
 
@@ -128,19 +128,19 @@ host    all         all     .example.com      md5
 
 ...
 
-#### Database:
+### Database:
 
 This specifies which db names this record matches; value of **all** specifies that it matches all. **sameuser** specifies if database name is the same as the user.
 
-#### User:
+### User:
 
 Specifies which database user name(s) this record matches. The value **all** specifies that it matches all users.
 
-#### Address:
+### Address:
 
 Specifies the client machine address(es) that this record matches.
 
-#### Auth Methods:
+### Auth Methods:
 
 **trust** assumes that anyone who can connect to the server is authorized to access the database. This is appropriate for single-user workstation, but not on multi-user machines.
 
@@ -150,7 +150,7 @@ Specifies the client machine address(es) that this record matches.
 
 ...
 
-### User Name Mapping
+## User Name Mapping
 
 `ident_file = '/etc/postgresql/9.6/main/pg_ident.conf'`
 
@@ -167,7 +167,7 @@ mymap       brian             bob
 mymap       brian             guest1
 ```
 
-### Misc
+## Misc
 
 `external_pid_file = '/var/run/postgresql/9.6-main.pid'` - path to additional PID
 `data_directory = '/var/lib/postgresql/9.6/main'` - data storage location
