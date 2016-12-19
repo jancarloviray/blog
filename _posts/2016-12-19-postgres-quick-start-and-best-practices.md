@@ -504,7 +504,7 @@ CREATE TABLE cc_transaction(
   payload                 TEXT,
   captured_date           TIMESTAMP WITHOUT TIME ZONE,
   notified_date           TIMESTAMP WITHOUT TIME ZONE,
-  reference_number        TEXT,
+  ref_num                 TEXT,
   job_id                  INT REFERENCES job(id)
 ) INHERITS(inherit_base_transaction)
 ```
@@ -541,7 +541,7 @@ DROP TABLE table_name CASCADE;
 
 ## Common Types
 
-### Primary Keys
+### Primary Key
 
 ### GUID
 
@@ -597,11 +597,112 @@ CREATE TABLE tablename (
 );
 ALTER SEQUENCE tablename_colname_seq OWNED BY tablename.colname;
 ```
+
+### Boolean
+
+Use **BOOLEAN**, which has valid values of: **TRUE/FALSE, 't'/'f', 'y'/'n', 1/0**
+
+```sql
+CREATE TABLE test1 (a boolean, b text);
+INSERT INTO test1 VALUES (TRUE, 'sic est');
+INSERT INTO test1 VALUES (FALSE, 'non est');
+```
+
 ### Text
+
+Use `TEXT` and avoid `VARCHAR` or `CHAR` and especially `VARCHAR(n)` unless you specifically want to have a hard limit. Read [this](http://stackoverflow.com/questions/4848964/postgresql-difference-between-text-and-varchar-character-varying). Performance wise, `TEXT` is faster.
+
 ### Numbers
+
+**INT** is a typical choice for integers. There are more choices [here](https://www.postgresql.org/docs/9.6/static/datatype-numeric.html) if needed for your use case.
+
 ### Currency
 
-- use [numeric](http://stackoverflow.com/questions/15726535/postgresql-which-datatype-should-be-used-for-currency)
+Use [numeric](http://stackoverflow.com/questions/15726535/postgresql-which-datatype-should-be-used-for-currency) instead of money due to potential for rounding errors.
+
+```sql
+CREATE TABLE cc_invoice_order (
+  ...
+  account_id          INT REFERENCES account(id),
+  total               NUMERIC(10,2),
+  paid                NUMERIC(10,2) DEFAULT 0,
+  paid_date           TIMESTAMP WITHOUT TIME ZONE,
+  descr               TEXT NOT NULL,
+  ...
+)
+```
+
+### Arrays
+
+Arrays of any built-in or user-defined base type, enum type or composite type can be created.
+
+```sql
+CREATE TABLE sal_emp (
+    name            text,
+    pay_by_quarter  integer[],  -- one dimensional array
+    schedule        text[][]    -- two dimensional array
+);
+```
+
+Inserting:
+
+```sql
+-- '{ val1 delim val2 delim ... }'
+
+INSERT INTO sal_emp
+    VALUES ('Bill',
+    '{10000, 10000, 10000, 10000}',
+    '{{"meeting", "lunch"}, {"training", "presentation"}}');
+```
+
+Accessing:
+
+```sql
+SELECT name FROM sal_emp WHERE pay_by_quarter[1] <> pay_by_quarter[2];
+SELECT pay_by_quarter[3] FROM sal_emp;
+```
+
+Modifying:
+
+```sql
+UPDATE sal_emp SET pay_by_quarter = '{25000,25000,27000,27000}'
+    WHERE name = 'Carol';
+
+-- update a single element
+UPDATE sal_emp SET pay_by_quarter[4] = 15000
+    WHERE name = 'Bill';
+
+-- New array values can also be constructed
+-- using the concatenation operator, ||
+SELECT ARRAY[1,2] || ARRAY[3,4]; -- {1,2,3,4}
+```
+
+More info in [official documentation](https://www.postgresql.org/docs/9.6/static/arrays.html)
+
+### JSON
+
+Check out [official documentation](https://www.postgresql.org/docs/9.6/static/datatype-json.html)
+
+#### Enum
+
+Are fast, transparent mapping of words to integer and lives in `pg_enum`. Use this as labels, otherwise, it's similar to other languages.
+
+```sql
+CREATE TYPE weekdays AS ('Mon', 'Tue', 'Wed', 'Thu', 'Fri');
+
+-- Enum Example
+CREATE TYPE server_states AS ENUM ('running', 'offline', 'restarting');
+CREATE TABLE enum_test(id serial, state server_states);
+INSERT INTO enum_test(state) VALUES ('offline');
+
+-- Example of Bad Insert
+-- ERROR:  invalid input value for enum server_states: "destroyed"
+INSERT INTO enum_test(state) VALUES ('destroyed');
+
+-- You Can Add New Values
+ALTER TYPE server_states ADD VALUE 'destroyed' AFTER 'offline';
+INSERT INTO enum_test(state) VALUES ('destroyed');
+```
 
 ## Columns
 
@@ -690,90 +791,6 @@ WHERE
 -- query the view
 SELECT *
 FROM employee_view
-```
-
-## Data Types
-
-### Basic Types and Best Practices
-
-#### Surrogate Keys
-
-Use `uuid` for primary key
-
-```sql
-CREATE EXTENSION pgcrypto;
-SELECT gen_random_uuid();
-```
-
-#### Text
-
-Use `text` and avoid `varchar` or `char` and especially `varchar(n)` unless you specifically want to have a hard limit. Read [this](http://stackoverflow.com/questions/4848964/postgresql-difference-between-text-and-varchar-character-varying). Performance wise, `text` is faster.
-
-Use indexes for pattern matching.
-
-```sql
-CREATE INDEX ON users (name);
-SELECT * FROM accounts WHERE email LIKE 'Peter%';
-```
-
-#### Dates and Times
-
-Always use `timestamptz` instead of `time`.
-
-Use `date` when you just need the date.
-
-#### Boolean
-
-Use `bool` and not `bit`.
-
-#### Numbers
-
-- Avoid `money` since it's not up to standards
-- Use `numeric` instead of `float` or `integer`
-
-#### Arrays
-
-Make an array
-
-```sql
-SELECT ARRAY[1, 2, 3];
-
--- another way
-SELECT '{1, 2, 3}'::numeric[];
-```
-
-Extend an Array
-
-```sql
-SELECT ARRAY[1,2] || 3;
-SELECT ARRAY[1,2] || ARRAY[3, 4];
-```
-
-Access an Array (SQL arrays are 1-indexed instead of the typical 0-index arrays!)
-
-```sql
-SELECT ('{one, two, three}'::text[])[1]; -- one
-```
-
-#### Enum
-
-Are fast, transparent mapping of words to integer and lives in `pg_enum`. Use this as labels, otherwise, it's similar to other languages.
-
-```sql
-CREATE TYPE weekdays AS ('Mon', 'Tue', 'Wed', 'Thu', 'Fri');
-
--- Enum Example
-CREATE TYPE server_states AS ENUM ('running', 'offline', 'restarting');
-CREATE TABLE enum_test(id serial, state server_states);
-INSERT INTO enum_test(state) VALUES ('offline');
-
--- Example of Bad Insert
--- ERROR:  invalid input value for enum server_states: "destroyed"
-INSERT INTO enum_test(state) VALUES ('destroyed');
-
--- You Can Add New Values
-ALTER TYPE server_states ADD VALUE 'destroyed' AFTER 'offline';
-INSERT INTO enum_test(state) VALUES ('destroyed');
 ```
 
 ## Backup and Export
