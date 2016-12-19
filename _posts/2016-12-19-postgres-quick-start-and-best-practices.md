@@ -53,10 +53,10 @@ service postgresql start
 systemctl enable postgresql
 ```
 
-Postgres is set up to **peer** auth by default, associating roles with a matching system account. This is why you need to login as a specific user before you can `psql`. The setup also created a system user, **postgres**. Check out **/etc/passwd**.
+Postgres is set up to **peer** auth by default, associating roles with a matching system account. This is why you need to login as a specific user before you can `psql`. The installation also created a system user, **postgres**. Check out **/etc/passwd**.
 
 ```shell
-# signin to "postgres" system account created by installer
+# signin to "postgres" system account
 sudo su - postgres
 
 # same as psql -U current_sys_user -d current_sys_user_as_db_name
@@ -68,7 +68,7 @@ psql
 Let's enter through the starting point and work our way in. Make sure postgres is running first with `service postgresql start`
 
 ```shell
-# let's check if the process is running and its arguments
+# check if the process is running
 ps aux | grep postgres | grep -- -D
 
 # You should see this result:
@@ -79,13 +79,13 @@ ps aux | grep postgres | grep -- -D
 # `-c` points to the main config file postgresql.conf it will use
 ```
 
-The main configuration file is **postgresql.conf**. Open that file and check out the section callled "FILE LOCATIONS". This sections will show configuration and data files postgres looks for.
+The main configuration file is **postgresql.conf**. Open it and check out the section callled "FILE LOCATIONS" - this will show configuration and data files postgres looks for.
 
 ## Server Configuration
 
 `config_file = '/etc/postgresql/9.6/main/postgresql.conf'`
 
-This is the main server config where you can tune performance, change connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc.
+The main server config where you can tune: performance, change connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc.
 
 ## Client Authentication
 
@@ -93,11 +93,11 @@ This is the main server config where you can tune performance, change connection
 
 This file is stored in the database cluster's data directory. HBA stands for host-based authentication. This is where you set rules on who or what can connect to the server.
 
-Fields include: Connection Type, Database Name, User Name, Address, Authentication Method.
+Fields include: **Connection Type, Database Name, User Name, Address, Authentication Method**
 
 The first record with a matching connection type, client address, requested database, and user name is used to perform authentication.
 
-There is no "fall-through". If one record is chosen and the authentication fails, subsequent records are not considered. If no record matches, access is denied.
+There is no "fall-through" - if one record is chosen and the authentication fails, subsequent records are not considered. If no record matches, access is denied.
 
 Example:
 
@@ -126,11 +126,11 @@ host    all         all     .example.com      md5
 
 **host** record matches connection attempts made using TCP/IP; this matches either SSL or non-SSL attempts. Note that this will also not work if it's not given an appropriate **listen_addressess** configuration parameter since the default for this is only on the local loopback address **localhost**.
 
-...
+Check out documentation for more types.
 
 ### Database:
 
-This specifies which db names this record matches; value of **all** specifies that it matches all. **sameuser** specifies if database name is the same as the user.
+Specifies which db names this record matches; value of **all** specifies that it matches all. **sameuser** specifies if database name is the same as the user.
 
 ### User:
 
@@ -144,7 +144,7 @@ Specifies the client machine address(es) that this record matches.
 
 **trust** assumes that anyone who can connect to the server is authorized to access the database. This is appropriate for single-user workstation, but not on multi-user machines.
 
-**password** (cleartext) and **md5** if you want to authenticate by text. Change a user's password with `CREATE USER` or `ALTER ROLE`, e.g., `CREATE USER joe WITH PASSWORD 'secret'`. Note that *if no password has been setup for a user, the stored password is null and authentication will always fail*
+**password** (cleartext) and **md5** if you want to authenticate by text. Change a user's password with `CREATE USER` or `ALTER ROLE`, e.g., `CREATE USER joe WITH PASSWORD 'secret'`. **Note that if no password has been setup for a user, the stored password is null and authentication will always fail**
 
 **peer** works by obtaining the client's OS system user name from the kernel and uses it as the allowed database user name
 
@@ -160,8 +160,10 @@ This maps external user names to their corresponding PostgreSQL user names. Gene
 # MAPNAME   SYSTEM-USERNAME   PG-USERNAME
 mymap       brian             brian
 mymap       jane              jane
+
 # "rob" has postgres role "bob"
 mymap       rob               bob
+
 # "brian" can use roles "bob" and "guest1"
 mymap       brian             bob
 mymap       brian             guest1
@@ -170,15 +172,17 @@ mymap       brian             guest1
 ## Misc
 
 `external_pid_file = '/var/run/postgresql/9.6-main.pid'` - path to additional PID
+
 `data_directory = '/var/lib/postgresql/9.6/main'` - data storage location
 
 ### Remove Default Authentication (NOT recommended)
 
-If you don't want to deal with authentication, you can change the settings in **pg_hba.conf** file by changing **peer** to **trust**. These commands will conveniently do it for you:
+If you don't want to deal with authentication, you can change the settings in **pg_hba.conf** file by changing **peer** to **trust**.
 
 ```shell
 # search-replace the methods
 sed -i 's/local.*all.*postgres.*peer/local all postgres trust/' /etc/postgresql/9.6/main/pg_hba.conf
+
 sed -i 's/local.*all.*all.*peer/local all all trust/' /etc/postgresql/9.6/main/pg_hba.conf
 
 # reload config and login to any user/db
@@ -235,7 +239,7 @@ sudo su - postgres_user
 psql my_postgres_db
 ```
 
-### Add a Sample Table
+### Add a Table
 
 ```sql
 -- create a table
@@ -249,7 +253,11 @@ CREATE TABLE pg_equipment (
     ),
   install_date DATE
 );
+```
 
+### Modify a Table
+
+```sql
 -- add column
 ALTER TABLE pg_equipment
 ADD COLUMN functioning bool;
@@ -280,15 +288,13 @@ DROP TABLE IF EXISTS playground_equip;
 
 Exit the postgres prompt `\q`
 
-Also exit the shell associated with "postgres_user" `exit`. This should bring you back to root user.
-
-### Import a sample database
+### Import a Database
 
 ```shell
 # log into default "postgres" user
 sudo su - postgres
 
-# Download sample database. If you don't have wget, run `apt-get update` and `apt-get install`
+# Download sample database.
 wget http://pgfoundry.org/frs/download.php/527/world-1.0.tar.gz
 
 # extract archive and change to content directory
@@ -305,7 +311,7 @@ psql worlddb < world.sql
 psql worlddb
 ```
 
-### Query the sample database
+### Querying
 
 ```sql
 -- `\dt+` to see list of tables in this database
@@ -314,15 +320,27 @@ psql worlddb
 -- select
 SELECT * FROM city;
 SELECT name,continent FROM country;
+```
 
+#### Order By
+
+```sql
 -- order by
 SELECT name,continent FROM country ORDER BY continent, name;
+```
 
+#### Filtering
+
+```sql
 -- filter
 SELECT name FROM city WHERE countrycode = 'USA';
 SELECT name FROM city WHERE countrycode = 'USA' AND name LIKE 'N%';
 SELECT name FROM city WHERE countrycode = 'USA' AND name LIKE 'N%' ORDER BY name;
+```
 
+#### Join
+
+```sql
 -- join
 SELECT
   country.NAME AS country,
@@ -368,9 +386,10 @@ SELECT attributes->>'category' FROM products;
 
 A role can be thought of either as, a user, a group of users depending how it is set up. Roles can own database objects and have specific privileges. There are no users or groups - just roles. Every connection is made using a particular role.
 
+### Creating Roles
+
 ```sql
 -- \du: list roles
--- \h CREATE ROLE: check available privileges
 
 CREATE ROLE name;
 
@@ -381,6 +400,12 @@ CREATE USER name; -- same as above
 -- create role with a password
 -- CREATE USER is same as CREATE ROLE except it implies LOGIN
 CREATE USER name WITH PASSWORD 'pass';
+```
+
+### Altering Roles
+
+```sql
+-- \h CREATE ROLE: check available privileges
 
 -- change a user's password
 ALTER ROLE name WITH PASSWORD 'new_password';
@@ -392,7 +417,7 @@ ALTER ROLE demo_role WITH LOGIN;
 DROP ROLE IF EXISTS role_name;
 ```
 
-## Postgres Database
+## Database
 
 ### Connect to a Database
 
@@ -412,25 +437,26 @@ CREATE DATABASE my_postgres_db OWNER postgres_user;
 DROP DATABASE IF EXISTS my_postgres_db;
 ```
 
-## Deeper Dive on Table
+## Table Definition
 
-### List Tables
+### Create Table
+
+List Tables:
 
 ```
 \dt
 ```
 
-### Create Table
-
-Basic Syntax
+Basic Syntax:
 
 ```sql
 CREATE TABLE table_name (
     column_name1 col_type (field_length) column_constraints,
     column_name2 col_type (field_length),
-    column_name3 col_type (field_length)
 );
 ```
+
+Example:
 
 ```sql
 CREATE TABLE playground (
@@ -460,17 +486,21 @@ VALUES ('slide', 'blue', 'south', '2014-04-28');
 ### Drop Table
 
 ```sql
--- drop table
-DROP TABLE IF EXISTS mytable
-
--- drop table and dependencies
-DROP TABLE table_name CASCADE;
-
 -- just delete all rows from table
 DELETE FROM mytable;
+
+-- drop table
+DROP TABLE IF EXISTS mytable
 ```
 
-## Deeper Dive on Columns
+### Drop Table and Dependencies
+
+```sql
+-- drop table and dependencies
+DROP TABLE table_name CASCADE;
+```
+
+## Columns
 
 ### Modifying Table Columns
 
