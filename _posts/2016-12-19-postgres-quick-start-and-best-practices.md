@@ -6,7 +6,7 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-Want to add or change something? Feel free to [create a pull request](https://github.com/jancarloviray/jancarloviray.github.io/blob/master/_posts/2016-12-14-postgres-quick-start-and-best-practices.md). I hope this helps, and thanks in advance!
+Want to add or change something? Feel free to [create a pull request](https://github.com/jancarloviray/jancarloviray.github.io/blob/master/_posts/2016-12-19-postgres-quick-start-and-best-practices.md). I hope this helps!
 
 ## Create a Postgres Docker Container
 
@@ -1029,6 +1029,37 @@ pg_restore binary_file.backup > sql_file.sql
 ```shell
 pg_dump -U [role_name] [db_name] -s > schema.sql
 ```
+
+### Scenarios
+
+Get Quick Snapshot and Send Remotely
+
+```shell
+# get backup
+# note that this file will be big and uncompressed
+pg_dump -d mydb -f mydb.sql
+
+# transfer files
+scp mydb.sql joe@198.199.19.19:~/mydb.sql
+
+# on remote
+psql mydb < mydb.sql
+```
+
+Create Nightly Backups with Cron
+
+```shell
+# readup on cron documentation
+crontab -e
+
+# backup everyday of the month, everyday of the week
+# pg_dump -Fc means custom file backup
+0 0 * * * joe pg_dump -Fc mydb > backups/mydb.bk
+```
+
+For more advanced scenarios like rotating backups, check the official documentation about [Automated Backup on Linux](https://wiki.postgresql.org/wiki/Automated_Backup_on_Linux). Add the script provided in the documentation to your cron and you should be set!
+
+Make sure that you also create backups offsite! Like Amazon S3 and etc!
 
 ## Indexes
 
