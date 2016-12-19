@@ -693,7 +693,7 @@ INSERT INTO enum_test(state) VALUES ('destroyed');
 
 ### Default Values
 
-A column can be assigned a default value. When a new row is created and no values are specified for some of the columns, those will be filled with their respective default values. **If not default value is declared, the default value is null**.
+A column can be assigned a default value. When a new row is created and no values are specified for some of the columns, those will be filled with their respective default values. **If no default value is declared, the default value is null**.
 
 ```sql
 CREATE TABLE products ( product_no integer,
@@ -706,7 +706,8 @@ Default value can be an expressions, which is evaluated whenever the value is in
 
 ```sql
 CREATE TABLE products (
-  product_no integer DEFAULT nextval(’products_product_no_seq’), ...
+  product_no integer DEFAULT nextval('products_product_no_seq'),
+  ...
 );
 ```
 
@@ -780,7 +781,8 @@ CREATE TABLE products (
 );
 CREATE TABLE orders (
   order_id integer PRIMARY KEY,
-  product_no integer REFERENCES products (product_no), quantity integer
+  product_no integer REFERENCES products (product_no),
+  quantity integer
 );
 ```
 
@@ -798,8 +800,12 @@ CREATE TABLE orders (
     ...
 );
 CREATE TABLE order_items (
-  product_no integer REFERENCES products ON DELETE RESTRICT,
-  order_id integer REFERENCES orders ON DELETE CASCADE, quantity integer,
+  product_no integer
+    REFERENCES products ON DELETE RESTRICT,
+  order_id integer
+    REFERENCES orders ON DELETE CASCADE,
+  quantity integer,
+
   PRIMARY KEY (product_no, order_id)
 );
 ```
@@ -816,13 +822,13 @@ Adding a Column:
 ALTER TABLE table_name ADD COLUMN column_name data_type;
 
 -- Add Column with Check
-ALTER TABLE products ADD COLUMN description text CHECK (description <> ”);
+ALTER TABLE products ADD COLUMN description text CHECK (description <> '');
 ```
 
 Adding a Constraint:
 
 ```sql
-ALTER TABLE products ADD CHECK (name <> ”);
+ALTER TABLE products ADD CHECK (name <> '');
 ALTER TABLE products ADD CONSTRAINT some_name UNIQUE (product_no);
 ALTER TABLE products ADD FOREIGN KEY (product_group_id) REFERENCES product_groups;
 
@@ -886,7 +892,8 @@ CREATE TABLE weather (
 );
 
 -- basic insert
-INSERT INTO weather VALUES ('San Francisco', 46, 50, 0.25, '1994-11-27');
+INSERT INTO weather
+VALUES ('San Francisco', 46, 50, 0.25, '1994-11-27');
 
 -- explicit columns
 INSERT INTO weather (city, temp_lo, temp_hi, prcp, date)
