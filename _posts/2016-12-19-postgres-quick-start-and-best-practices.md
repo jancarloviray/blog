@@ -1082,7 +1082,7 @@ Postgres has two main types of triggers: row and statement. For example, if you 
 
 Syntax when creating a trigger:
 
-```sql
+```
 CREATE TRIGGER trigger_name {BEFORE | AFTER | INSTEAD OF} {event [OR ...]}
    ON table_name
    [FOR [EACH] {ROW | STATEMENT}]
