@@ -482,10 +482,10 @@ CREATE TABLE inherit_base_transaction (
   updated_by    TEXT
 )
 
-CREATE TABLE cc_invoice_order (
+CREATE TABLE cc_inv_order (
   id                  SERIAL NOT NULL PRIMARY KEY,
   acct_id             INT REFERENCES acct(id),
-  invoice_payment_id  INT REFERENCES invoice_payment(id),
+  inv_payment_id  INT REFERENCES inv_payment(id),
   total               NUMERIC(10,2),
   paid                NUMERIC(10,2) DEFAULT 0,
   paid_date           TIMESTAMP WITHOUT TIME ZONE,
@@ -496,12 +496,12 @@ CREATE TABLE cc_invoice_order (
 CREATE TABLE cc_transaction(
   id                      SERIAL NOT NULL PRIMARY KEY,
   cc_transaction_type_id  INT NOT NULL
-                          REFERENCES cc_invoice_transaction_type(id),
+                          REFERENCES cc_inv_transaction_type(id),
   cc_session_id           TEXT,
-  cc_token_id             INT REFERENCES cc_invoice_token(id),
-  cc_transaction_id       INT REFERENCES cc_invoice_transaction(id),
+  cc_token_id             INT REFERENCES cc_inv_token(id),
+  cc_transaction_id       INT REFERENCES cc_inv_transaction(id),
   cc_order_id             INT NOT NULL
-                          REFERENCES cc_invoice_order(id),
+                          REFERENCES cc_inv_order(id),
   amount                  NUMERIC(10,2),
   payload                 TEXT,
   captured_date           TIMESTAMP WITHOUT TIME ZONE,
@@ -609,7 +609,7 @@ Use `TEXT` and avoid `VARCHAR` or `CHAR` and especially `VARCHAR(n)` unless you 
 Use [NUMERIC](http://stackoverflow.com/questions/15726535/postgresql-which-datatype-should-be-used-for-currency) instead of money due to potential for rounding errors.
 
 ```sql
-CREATE TABLE cc_invoice_order (
+CREATE TABLE cc_inv_order (
   ...
   acct_id             INT REFERENCES acct(id),
   total               NUMERIC(10,2),
@@ -1070,6 +1070,126 @@ SELECT customer_id, SUM (amount)
 FROM payment
 GROUP BY customer_id
 ORDER BY SUM (amount) DESC;
+```
+
+## Create Triggers
+
+What if you want to update a row's `update_date` and `updated_by` whenever a row is modified? Use **triggers**, which is a function that is invoked automatically whenever an event associated with a table occurs. Any event could be `INSERT`, `UPDATE`, `DELETE` or `TRUNCATE`.
+
+A trigger is a special user-defined function that binds to a table. To create a new trigger, you must define a trigger function first, adn then bind this trigger function to a table.
+
+Postgres has two main types of triggers: row and statement. For example, if you issue an UPDATE statement that affects 20 rows, the row level trigger will be invoked 20 times, while the statement level trigger will be invoked 1 time.
+
+Syntax when creating a trigger:
+
+```sql
+CREATE TRIGGER trigger_name {BEFORE | AFTER | INSTEAD OF} {event [OR ...]}
+   ON table_name
+   [FOR [EACH] {ROW | STATEMENT}]
+   EXECUTE PROCEDURE trigger_function
+```
+
+Example:
+
+Let's create Tables:
+
+```sql
+-- create a table
+CREATE TABLE employees(
+   id int4 serial primary key,
+   first_name varchar(40) NOT NULL,
+   last_name varchar(40) NOT NULL
+);
+```
+
+```sql
+-- whenever employee's last name changes, we log
+-- it to a separate table
+CREATE TABLE employee_audits (
+   id int4 serial primary key,
+   employee_id int4 NOT NULL,
+   last_name varchar(40) NOT NULL,
+   changed_on timestamp(6) NOT NULL
+)
+```
+
+First, create a new function:
+
+```sql
+-- checks if last name of employee changes, it will insert the
+-- old last name into the employee_audits table
+CREATE OR REPLACE FUNCTION log_last_name_changes()
+  RETURNS trigger AS
+$BODY$
+BEGIN
+ IF NEW.last_name <> OLD.last_name THEN
+ INSERT INTO employee_audits(employee_id,last_name,changed_on)
+ VALUES(OLD.id,OLD.last_name,now());
+ END IF;
+
+ RETURN NEW;
+END;
+$BODY$
+```
+
+Let's bind the trigger function to the employee's table:
+
+```sql
+CREATE TRIGGER last_name_changes
+  BEFORE UPDATE
+  ON employees
+  FOR EACH ROW
+  EXECUTE PROCEDURE log_last_name_changes();
+```
+
+Let's insert some sample data for testing:
+
+```sql
+INSERT INTO employees (first_name, last_name)
+VALUES ('John', 'Doe');
+
+INSERT INTO employees (first_name, last_name)
+VALUES ('Lily', 'Bush');
+```
+
+Check if they worked:
+
+```sql
+SELECT * FROM employees;
+SELECT * FROM employee_audits;
+```
+
+Another Example:
+
+```sql
+-- Table
+CREATE TABLE cc_order (
+  id            SERIAL NOT NULL PRIMARY KEY,
+  acct_id       INT REFERENCES acct(id),
+  inv_payment_id  INT REFERENCES inv_payment(id),
+  total         NUMERIC(10,2),
+  paid          NUMERIC(10,2) DEFAULT 0,
+  paid_date     TIMESTAMP WITHOUT TIME ZONE,
+  descr         TEXT NOT NULL,
+  ref_num       TEXT
+);
+
+-- Create a Trigger
+DROP TRIGGER IF EXISTS cc_order_trigger ON cc_order;
+CREATE TRIGGER cc_order_trigger BEFORE UPDATE ON
+  cc_order FOR EACH ROW
+  EXECUTE PROCEDURE cc_order_check_paid()
+
+-- Function to Execute
+CREATE OR REPLACE FUNCTION cc_order_check_paid() RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.paid >= NEW.total THEN
+    NEW.paid_date := NOW();
+  END IF;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql
 ```
 
 ## Backup and Export
