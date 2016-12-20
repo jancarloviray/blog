@@ -1016,7 +1016,63 @@ SELECT * FROM COMPANY LIMIT 4;
 SELECT * FROM COMPANY LIMIT 3 OFFSET 2;
 ```
 
-### GROUP BY clause
+### GROUP BY and HAVING clause
+
+`GROUP BY` divides rows returned from `SELECT` statement into groups. For each group, you can apply an aggregate function like `SUM` or `COUNT`.
+
+```sql
+-- basic format
+SELECT column_1, aggregate_function(column_2)
+FROM tbl_name
+GROUP BY column_1;
+```
+
+```sql
+SELECT customer_id, SUM (amount)
+FROM payment
+GROUP BY customer_id;
+
+SELECT staff_id, COUNT (payment_id)
+FROM payment
+GROUP BY staff_id;
+```
+
+This can also act like `DISTINCT`, for example: `SELECT cust_id FROM payment GROUP BY cust_id`.
+
+To filter, use `HAVING` clause instead of `WHERE`
+
+```sql
+-- basic format
+SELECT column_1, aggregate_function (column_2)
+FROM tbl_name
+GROUP BY column_1
+HAVING condition;
+```
+
+```sql
+-- select customers who spend >200
+SELECT customer_id, SUM (amount)
+FROM payment
+GROUP BY customer_id
+HAVING SUM (amount) > 200;
+```
+
+```sql
+-- select store that has >300 customers
+SELECT store_id, COUNT (customer_id)
+FROM customer
+GROUP BY store_id
+HAVING COUNT (customer_id) > 300;
+```
+
+Can also sort with `ORDER BY`
+
+```sql
+SELECT customer_id, SUM (amount)
+FROM payment
+GROUP BY customer_id
+ORDER BY SUM (amount) DESC;
+```
 
 ## Backup and Export
 
