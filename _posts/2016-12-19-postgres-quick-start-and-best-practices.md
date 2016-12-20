@@ -1204,7 +1204,7 @@ It's typically not recommended to make an application stored-procedure heavy:
 - putting logic in db locks your application to the platform
 - it becomes confusing where logic is, unless the team is strictly disciplined and well-versed with sql
 - databases are harder and more EXPENSIVE to scale horizontally instead of app servers; it's the least scalable part of the architecture
-- in the end, **place logic in a layer that is the most testable, debuggable and versionable**
+- in the end, **place logic in a layer that is the most testable, debuggable, versionable AND scalable layer**
 
 ## Backup and Export
 
