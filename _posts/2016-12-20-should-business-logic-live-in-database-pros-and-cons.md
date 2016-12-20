@@ -4,7 +4,7 @@ title: Should Business Logic Be in Database? Pros and Cons
 permalink: blog/should-business-logic-live-in-database-pros-and-cons/
 comments: True
 excerpt_separator: <!--more-->
---
+---
 
 This debate has been labeled as the "Vietnam of Computer Engineering" and deservingly so. Even after a decade, it is still a highly contested issue. In the end, it really depends on the requirements and resources of the business that determines this. There are a lot of factor that involves such as, "is the team proficient in stored procedures?" or "are we permanently staying with this database vendor?" or "how will we test and scale this?" etc.
 
