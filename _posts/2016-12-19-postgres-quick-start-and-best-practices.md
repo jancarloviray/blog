@@ -1192,6 +1192,20 @@ END;
 $$ LANGUAGE plpgsql
 ```
 
+### When to use Triggers?
+
+It's an ongoing debate [1](http://stackoverflow.com/questions/119540/business-logic-database-or-application-layer), [2](http://stackoverflow.com/questions/1473624/business-logic-in-database-versus-code?rq=1), [3](http://softwareengineering.stackexchange.com/questions/158534/pros-and-cons-of-holding-all-the-business-logic-in-stored-procedures-in-web-appl), [4](http://www.vertabelo.com/blog/notes-from-the-lab/business-logic-in-the-database-yes-or-no-it-depends), but certain things are always beneficial to place in triggers, and these depend highly on each use case or requirements:
+
+- anything that is on data integrity and data auditing should be placed in triggers/stored procedures
+- complex business logic should be placed in application level
+
+It's typically not recommended to make an application stored-procedure heavy:
+
+- putting logic in db locks your application to the platform
+- it becomes confusing where logic is, unless the team is strictly disciplined and well-versed with sql
+- databases are harder and more EXPENSIVE to scale horizontally instead of app servers; it's the least scalable part of the architecture
+- in the end, **place logic in a layer that is the most testable, debuggable and versionable**
+
 ## Backup and Export
 
 ### Export as CSV
