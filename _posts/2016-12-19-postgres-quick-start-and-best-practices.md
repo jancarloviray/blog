@@ -53,13 +53,15 @@ service postgresql start
 systemctl enable postgresql
 ```
 
-Postgres is set up to **peer** auth by default, associating roles with a matching system account. This is why you need to login as a specific user before you can `psql`. The installation also created a system user, **postgres**. Check out **/etc/passwd**.
+Postgres is set up to **peer** auth by default, associating roles with a matching system acct. This is why you need to login as a specific user before you can `psql`. The installation also created a system user, **postgres**. Check out **/etc/passwd**.
 
 ```shell
-# signin to "postgres" system account
+# signin to "postgres" system acct
 sudo su - postgres
 
-# same as psql -U current_sys_user -d current_sys_user_as_db_name
+# this command by default, is equivalent to:
+# psql -U current_system_user \
+#      -d current_system_user_as_db_name
 psql
 ```
 
@@ -71,27 +73,28 @@ Let's enter through the starting point and work our way in. Make sure postgres i
 # check if the process is running
 ps aux | grep postgres | grep -- -D
 
-# You should see this result:
 # /usr/lib/postgresql/9.6/bin/postgres -D /var/lib/postgresql/9.6/main -c config_file=/etc/postgresql/9.6/main/postgresql.conf
-
-# `postgres` starts the server
-# `-D` points where the data will live
-# `-c` points to the main config file postgresql.conf it will use
 ```
 
-The main configuration file is **postgresql.conf**. Open it and check out the section callled "FILE LOCATIONS" - this will show configuration and data files postgres looks for.
+`postgres` starts the server, `-D` points where the data will live, and `-c` points to the main configuration file it will use. The main configuration file is **postgresql.conf**.
+
+Open the file, `less /etc/postgresql/9.6/main/postgresql.conf` and check out the section called "FILE LOCATIONS"
 
 ## Server Configuration
 
-`config_file = '/etc/postgresql/9.6/main/postgresql.conf'`
+```
+config_file = '/etc/postgresql/9.6/main/postgresql.conf'
+```
 
 The main server config where you can tune: performance, change connection settings, security and authentication settings, ssl, memory consumption, replication, query planning, error reporting and logging and etc.
 
 ## Client Authentication
 
-`hba_file = '/etc/postgresql/9.6/main/pg_hba.conf'`
+```
+hba_file = '/etc/postgresql/9.6/main/pg_hba.conf'
+```
 
-This file is stored in the database cluster's data directory. HBA stands for host-based authentication. This is where you set rules on who or what can connect to the server.
+This file is stored in the database cluster's data directory. HBA stands for **host-based authentication**. This is where you set rules on who or what can connect to the server.
 
 Fields include: **Connection Type, Database Name, User Name, Address, Authentication Method**
 
@@ -99,13 +102,11 @@ The first record with a matching connection type, client address, requested data
 
 There is no "fall-through" - if one record is chosen and the authentication fails, subsequent records are not considered. If no record matches, access is denied.
 
-
-
 ```
 local   database    user    auth-method   [auth-opts]
 host    database    user    address       auth-method     [auth-opts]
-hostssl database    user    address       auth-method     [auth-opts]
-...
+# ...
+
 # allow any user on the local system to connect to any database
 local   all         all                   trust
 
@@ -113,7 +114,8 @@ local   all         all                   trust
 # to database "postgres" as the same user name that ident reports
 host    postgres    all     192.168.93.0/24   ident
 
-# allow any user from host ip to connect to db "postgres" if pass is valid
+# allow any user from host ip to
+# connect to db "postgres" if pass is valid
 host    postgres    all     192.168.12.10/32  md5
 
 # allow any user from hosts in the example.com domain if pass is valid
@@ -122,19 +124,19 @@ host    all         all     .example.com      md5
 
 ### Connection Types:
 
-**local** record matches connection attemps using unix-domain sockets; without a record of this type, unix-domain socket connections are disallowed. Unix domain socket is inter-process communication on the same host operating system.
+`local` record matches connection attemps using unix-domain sockets, which are inter-process communication on the same host operating system. Without a record of this type, unix-domain socket connections are disallowed.
 
-**host** record matches connection attempts made using TCP/IP; this matches either SSL or non-SSL attempts. Note that this will also not work if it's not given an appropriate **listen_addressess** configuration parameter since the default for this is only on the local loopback address **localhost**.
+`host` record matches connection attempts made using TCP/IP. Note that this will also not work if it's not given an appropriate **listen_addressess** configuration parameter since the default for this is only on the local loopback address **localhost**.
 
 Check out documentation for more types.
 
 ### Database:
 
-Specifies which db names this record matches; value of **all** specifies that it matches all. **sameuser** specifies if database name is the same as the user.
+Specifies which db names this record matches; value of `all` specifies that it matches all. `sameuser` specifies if database name is the same as the user.
 
 ### User:
 
-Specifies which database user name(s) this record matches. The value **all** specifies that it matches all users.
+Specifies which database user name(s) this record matches. The value `all` specifies that it matches all users.
 
 ### Address:
 
@@ -142,17 +144,19 @@ Specifies the client machine address(es) that this record matches.
 
 ### Auth Methods:
 
-**trust** assumes that anyone who can connect to the server is authorized to access the database. This is appropriate for single-user workstation, but not on multi-user machines.
+`trust` assumes that anyone who can connect to the server is authorized to access the database. This is appropriate for single-user workstation, but not on multi-user machines.
 
-**password** (cleartext) and **md5** if you want to authenticate by text. Change a user's password with `CREATE USER` or `ALTER ROLE`, e.g., `CREATE USER joe WITH PASSWORD 'secret'`. **Note that if no password has been setup for a user, the stored password is null and authentication will always fail**
+`password` (cleartext) and `md5` if you want to authenticate by text. **Note that if no password has been setup for a user, the stored password is null and authentication will always fail**
 
-**peer** works by obtaining the client's OS system user name from the kernel and uses it as the allowed database user name
+`peer` works by obtaining the client's OS system user name from the kernel and uses it as the allowed database user name
 
 ...
 
 ## User Name Mapping
 
-`ident_file = '/etc/postgresql/9.6/main/pg_ident.conf'`
+```
+ident_file = '/etc/postgresql/9.6/main/pg_ident.conf'
+```
 
 This maps external user names to their corresponding PostgreSQL user names. General form of setting is: *mapname sys-name pg-name*. To use user name mapping, change `map=map-name` setting in **pg_hba.conf**. Here are some examples and scenarios of mapping:
 
@@ -171,23 +175,16 @@ mymap       brian             guest1
 
 ## Misc
 
-`external_pid_file = '/var/run/postgresql/9.6-main.pid'` - path to additional PID
+Path to additional PID:
 
-`data_directory = '/var/lib/postgresql/9.6/main'` - data storage location
+```
+external_pid_file = '/var/run/postgresql/9.6-main.pid'
+```
 
-### Remove Default Authentication (NOT recommended)
+Data storage location:
 
-If you don't want to deal with authentication, you can change the settings in **pg_hba.conf** file by changing **peer** to **trust**.
-
-```shell
-# search-replace the methods
-sed -i 's/local.*all.*postgres.*peer/local all postgres trust/' /etc/postgresql/9.6/main/pg_hba.conf
-
-sed -i 's/local.*all.*all.*peer/local all all trust/' /etc/postgresql/9.6/main/pg_hba.conf
-
-# reload config and login to any user/db
-service postgresql restart
-psql -U postgres -d postgres
+```
+data_directory = '/var/lib/postgresql/9.6/main'
 ```
 
 ## Quick Start Overview
@@ -204,12 +201,12 @@ Add these settings to your `~/.psqlrc` file:
 ### Add a System User
 
 ```shell
-sudo adduser postgres_user
+sudo adduser some_user
 ```
 
 ### Add a Postgres User
 
-Inside Postgres prompt, create a new Postgres user with the same name as the user we created earlier, "postgres_user".
+Inside Postgres prompt, create a new Postgres user with the same name as the user we created earlier, "some_user".
 
 ```shell
 sudo su - postgres
@@ -217,7 +214,7 @@ psql
 ```
 
 ```sql
-CREATE USER postgres_user WITH PASSWORD 'pass';
+CREATE USER some_user WITH PASSWORD 'pass';
 ```
 
 ### Create a Database for Postgres User
@@ -225,15 +222,15 @@ CREATE USER postgres_user WITH PASSWORD 'pass';
 ```sql
 CREATE DATABASE my_postgres_db;
 
--- associate to postgres_user
-GRANT ALL ON DATABASE my_postgres_db TO postgres_user;
+-- associate to some_user
+GRANT ALL ON DATABASE my_postgres_db TO some_user;
 ```
 
 Exit the prompt `\q`.
 
 ```shell
 # Log into the user you created
-sudo su - postgres_user
+sudo su - some_user
 
 # connect to the database you created
 psql my_postgres_db
@@ -243,7 +240,7 @@ psql my_postgres_db
 
 ```sql
 -- create a table
-CREATE TABLE pg_equipment (
+CREATE TABLE items (
   equip_id serial PRIMARY KEY,
   type VARCHAR(50) NOT NULL,
   color VARCHAR(25) NOT NULL,
@@ -259,28 +256,18 @@ CREATE TABLE pg_equipment (
 
 ```sql
 -- add column
-ALTER TABLE pg_equipment
-ADD COLUMN functioning bool;
+ALTER TABLE items ADD COLUMN functioning bool;
 
--- add a default value to column
-ALTER TABLE pg_equipment
-ALTER COLUMN functioning SET DEFAULT 'true';
-
--- set column to not null
-ALTER TABLE pg_equipment
-ALTER COLUMN functioning SET NOT NULL;
-
--- rename column
-ALTER TABLE pg_equipment
-RENAME COLUMN functioning TO working_order;
+-- alter column
+ALTER TABLE items ALTER COLUMN functioning SET DEFAULT 'true';
+ALTER TABLE items ALTER COLUMN functioning SET NOT NULL;
+ALTER TABLE items RENAME COLUMN functioning TO working_order;
 
 -- remove column
-ALTER TABLE pg_equipment
-DROP COLUMN working_order;
+ALTER TABLE items DROP COLUMN working_order;
 
 -- rename entire table
-ALTER TABLE pg_equipment
-RENAME TO playground_equip;
+ALTER TABLE items RENAME TO playground_equip;
 
 -- drop table
 DROP TABLE IF EXISTS playground_equip;
@@ -333,9 +320,9 @@ SELECT name,continent FROM country ORDER BY continent, name;
 
 ```sql
 -- filter
-SELECT name FROM city WHERE countrycode = 'USA';
-SELECT name FROM city WHERE countrycode = 'USA' AND name LIKE 'N%';
-SELECT name FROM city WHERE countrycode = 'USA' AND name LIKE 'N%' ORDER BY name;
+SELECT name FROM city WHERE cc = 'USA';
+SELECT name FROM city WHERE cc = 'USA' AND name LIKE 'N%';
+SELECT name FROM city WHERE cc = 'USA' AND name LIKE 'N%' ORDER BY name;
 ```
 
 #### Join
@@ -433,13 +420,13 @@ psql -d postgres
 
 ```sql
 -- create user to own database
-CREATE USER postgres_user WITH PASSWORD 'password';
+CREATE USER some_user WITH PASSWORD 'password';
 
 -- create database
 CREATE DATABASE my_postgres_db;
 
 -- associate database to owner
-GRANT ALL ON DATABASE my_postgres_db TO postgres_user;
+GRANT ALL ON DATABASE my_postgres_db TO some_user;
 ```
 
 ### Delete Database
@@ -497,13 +484,13 @@ CREATE TABLE inherit_base_transaction (
 
 CREATE TABLE cc_invoice_order (
   id                  SERIAL NOT NULL PRIMARY KEY,
-  account_id          INT REFERENCES account(id),
+  acct_id             INT REFERENCES acct(id),
   invoice_payment_id  INT REFERENCES invoice_payment(id),
   total               NUMERIC(10,2),
   paid                NUMERIC(10,2) DEFAULT 0,
   paid_date           TIMESTAMP WITHOUT TIME ZONE,
   descr               TEXT NOT NULL,
-  reference_number    TEXT
+  ref_num    TEXT
 ) INHERITS(inherit_base_transaction)
 
 CREATE TABLE cc_transaction(
@@ -624,7 +611,7 @@ Use [NUMERIC](http://stackoverflow.com/questions/15726535/postgresql-which-datat
 ```sql
 CREATE TABLE cc_invoice_order (
   ...
-  account_id          INT REFERENCES account(id),
+  acct_id             INT REFERENCES acct(id),
   total               NUMERIC(10,2),
   paid                NUMERIC(10,2) DEFAULT 0,
   paid_date           TIMESTAMP WITHOUT TIME ZONE,
@@ -667,10 +654,14 @@ SELECT pay_by_quarter[3] FROM sal_emp;
 Modifying:
 
 ```sql
-UPDATE sal_emp SET pay_by_quarter = '{25000,25000,27000,27000}' WHERE name = 'Carol';
+UPDATE sal_emp
+SET pay_by_quarter = '{25000,25000,27000,27000}'
+WHERE name = 'Carol';
 
 -- update a single element
-UPDATE sal_emp SET pay_by_quarter[4] = 15000 WHERE name = 'Bill';
+UPDATE sal_emp
+SET pay_by_quarter[4] = 15000
+WHERE name = 'Bill';
 
 -- New array values can also be constructed
 -- using the concatenation operator, ||
@@ -690,13 +681,20 @@ Are fast, transparent mapping of words to integer and lives in `pg_enum`. Use th
 ```sql
 CREATE TYPE weekdays AS ('Mon', 'Tue', 'Wed', 'Thu', 'Fri');
 
--- Enum Example
-CREATE TYPE server_states AS ENUM ('running', 'offline', 'restarting');
-CREATE TABLE enum_test(id serial, state server_states);
+-- create type
+CREATE TYPE server_states
+  AS ENUM ('running', 'offline', 'restarting');
+
+-- create table with enum type
+CREATE TABLE enum_test(
+  id    serial,
+  state server_states
+);
+
+-- good insert
 INSERT INTO enum_test(state) VALUES ('offline');
 
--- Example of Bad Insert
--- ERROR:  invalid input value for enum server_states: "destroyed"
+-- Example of Bad Insert: "ERROR: invalid input value..."
 INSERT INTO enum_test(state) VALUES ('destroyed');
 
 -- You Can Add New Values
@@ -708,20 +706,21 @@ INSERT INTO enum_test(state) VALUES ('destroyed');
 
 ### Default Values
 
-A column can be assigned a default value. When a new row is created and no values are specified for some of the columns, those will be filled with their respective default values. **If no default value is declared, the default value is null**.
-
-```sql
-CREATE TABLE products ( product_no integer,
-  name  text,
-  price numeric DEFAULT 9.99
-);
-```
-
-Default value can be an expressions, which is evaluated whenever the value is inserted, not when the table is created. An example is timestamp column to have default of CURRENT_TIMESTAMP.
+A column can be assigned a default value. **If no default value is declared, the default value is null**.
 
 ```sql
 CREATE TABLE products (
-  product_no integer DEFAULT nextval('products_product_no_seq'),
+  product_no  integer,
+  name        text,
+  price       numeric DEFAULT 9.99
+);
+```
+
+Default value can be an expression, which is evaluated whenever the value is inserted, not when the table is created.
+
+```sql
+CREATE TABLE products (
+  product_no  integer DEFAULT nextval('products_product_no_seq'),
   ...
 );
 ```
@@ -730,13 +729,11 @@ CREATE TABLE products (
 
 #### Check Constraints
 
-This is the most generic constraint. It must satisfy a Boolean expression.
-
 ```sql
 CREATE TABLE products (
-  product_no integer,
-  name text,
-  price numeric
+  product_no  integer,
+  name        text,
+  price       numeric
     CHECK (price > 0),              -- column constraint
   discounted_price numeric
     CHECK (discounted_price > 0),   -- column constraint
@@ -807,18 +804,19 @@ CREATE TABLE products (
     name text,
     price numeric
 );
+
 CREATE TABLE orders (
     order_id integer PRIMARY KEY,
     shipping_address text,
     ...
 );
+
 CREATE TABLE order_items (
   product_no integer
     REFERENCES products ON DELETE RESTRICT,
   order_id integer
     REFERENCES orders ON DELETE CASCADE,
   quantity integer,
-
   PRIMARY KEY (product_no, order_id)
 );
 ```
@@ -1244,6 +1242,21 @@ EXPLAIN SELECT * FROM users WHERE id IN (SELECT user_id FROM groups WHERE name =
 \o b.txt
 EXPLAIN SELECT users.* FROM users LEFT JOIN groups WHERE groups.name = 'admins';
 \! vimdiff a.txt b.txt
+```
+
+### Remove Default Authentication (NOT recommended)
+
+If you don't want to deal with authentication, you can change the settings in **pg_hba.conf** file by changing **peer** to **trust**.
+
+```shell
+# search-replace the methods
+sed -i 's/local.*all.*postgres.*peer/local all postgres trust/' /etc/postgresql/9.6/main/pg_hba.conf
+
+sed -i 's/local.*all.*all.*peer/local all all trust/' /etc/postgresql/9.6/main/pg_hba.conf
+
+# reload config and login to any user/db
+service postgresql restart
+psql -U postgres -d postgres
 ```
 
 ## Dos and Donts
