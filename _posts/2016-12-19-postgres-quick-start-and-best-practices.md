@@ -566,7 +566,7 @@ var uuid = require("node-uuid");
 uuid.v4();
 ```
 
-**Within Database Using Extension [pgcrypto](http://www.postgresql.org/docs/9.4/static/pgcrypto.html)**
+**Within Database Using Extension [pgcrypto](https://www.postgresql.org/docs/9.6/static/pgcrypto.html)**
 
 ```sql
 -- load precompiled library code
@@ -835,7 +835,8 @@ Adding a Column:
 ALTER TABLE table_name ADD COLUMN column_name data_type;
 
 -- Add Column with Check
-ALTER TABLE products ADD COLUMN description text CHECK (description <> '');
+ALTER TABLE products ADD COLUMN description text
+  CHECK (description <> '');
 ```
 
 Adding a Constraint:
@@ -843,7 +844,8 @@ Adding a Constraint:
 ```sql
 ALTER TABLE products ADD CHECK (name <> '');
 ALTER TABLE products ADD CONSTRAINT some_name UNIQUE (product_no);
-ALTER TABLE products ADD FOREIGN KEY (product_group_id) REFERENCES product_groups;
+ALTER TABLE products ADD FOREIGN KEY (product_group_id)
+  REFERENCES product_groups;
 
 -- Removing a Constraint.
 -- If it reference, add CASCADE
@@ -975,32 +977,15 @@ FROM employee_view
 
 ### Operators
 
-- Addition: `+`
-- Subtraction: `-`
-- Multiplication: `*`
-- Division: `/`
-- Modulus: `%`
-- Exponent: `^`
+`+` `-` `*` `/` `%` `^`
 
-- Equals: `=`
-- Not Equal: `!=`
-- Not Equal: `<>`
-- Greater Than: `>`
-- Less Than: `<`
-- Greater Than or Equal: `>=`
-- Less Than or Equal: `<=`
+Comparison:
 
-- `AND`
-- `NOT`
-- `OR`
+`=` `!=` `<>` `>` `<` `>=` `<=`
 
-```sql
-SELECT * FROM COMPANY WHERE AGE >= 25 AND SALARY >= 6500;
-SELECT * FROM COMPANY WHERE AGE >= 25 OR SALARY >= 6500;
-SELECT * FROM COMPANY WHERE SALARY IS NOT NULL;
-```
+`AND` `NOT` `OR`
 
-### WHERE Clause
+### WHERE clause
 
 ```sql
 SELECT * FROM COMPANY WHERE AGE >= 25 AND SALARY >= 65000;
