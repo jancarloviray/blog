@@ -99,7 +99,7 @@ The first record with a matching connection type, client address, requested data
 
 There is no "fall-through" - if one record is chosen and the authentication fails, subsequent records are not considered. If no record matches, access is denied.
 
-Example:
+
 
 ```
 local   database    user    auth-method   [auth-opts]
@@ -432,10 +432,25 @@ psql -d postgres
 ### Create Database
 
 ```sql
+-- create user to own database
 CREATE USER postgres_user WITH PASSWORD 'password';
-CREATE DATABASE my_postgres_db OWNER postgres_user;
+
+-- create database
+CREATE DATABASE my_postgres_db;
+
+-- associate database to owner
+GRANT ALL ON DATABASE my_postgres_db TO postgres_user;
+```
+
+### Delete Database
+
+Get a list of databases with `\l` inside `psql`.
+
+```sql
 DROP DATABASE IF EXISTS my_postgres_db;
 ```
+
+You cannot drop a database that has any open connections, including the one you are in through `psql` or pgAdmin. You must switch to another database or `template1`. It's typically more convenient to use `dropdb` command instead. `dropdb -h localhost -p 5432 -U postgres testdb`
 
 ## Tables
 
@@ -447,7 +462,7 @@ List Tables:
 \dt
 ```
 
-Basic Syntax:
+Syntax:
 
 ```sql
 CREATE TABLE table_name (
@@ -456,21 +471,21 @@ CREATE TABLE table_name (
 );
 ```
 
-Basic Example:
+Example:
 
 ```sql
 CREATE TABLE playground (
-  equip_id serial PRIMARY KEY,
-  type varchar(50) NOT NULL,
-  color varchar(25) NOT NULL,
-  location varchar(25)
+  equip_id      SERIAL PRIMARY KEY,
+  type          VARCHAR(50) NOT NULL,
+  color         VARCHAR(25) NOT NULL,
+  location      VARCHAR(25)
   CHECK (location IN ('north', 'south', 'west', 'east', 'northeast',
   'southeast', 'southwest', 'northwest')),
-  install_date date
+  install_date  DATE
 );
 ```
 
-Real World Example:
+Real World:
 
 ```sql
 CREATE TABLE inherit_base_transaction (
@@ -702,7 +717,7 @@ CREATE TABLE products ( product_no integer,
 );
 ```
 
-Default value can be an expressions, which is evaluated whenever the value is inserted, not when the table is created. An example is timestamp column to have default of CURRENT_TIMESTAMP. Example:
+Default value can be an expressions, which is evaluated whenever the value is inserted, not when the table is created. An example is timestamp column to have default of CURRENT_TIMESTAMP.
 
 ```sql
 CREATE TABLE products (
@@ -713,11 +728,9 @@ CREATE TABLE products (
 
 ### Constraints
 
-This is a way to limit kind of data that is stored.
-
 #### Check Constraints
 
-This is the most generic constraint. It must satisfy a Boolean expression. Example:
+This is the most generic constraint. It must satisfy a Boolean expression.
 
 ```sql
 CREATE TABLE products (
@@ -786,7 +799,7 @@ CREATE TABLE orders (
 );
 ```
 
-Many to Many Example:
+Many to Many
 
 ```sql
 CREATE TABLE products (
@@ -959,6 +972,66 @@ WHERE
 SELECT *
 FROM employee_view
 ```
+
+### Operators
+
+- Addition: `+`
+- Subtraction: `-`
+- Multiplication: `*`
+- Division: `/`
+- Modulus: `%`
+- Exponent: `^`
+
+- Equals: `=`
+- Not Equal: `!=`
+- Not Equal: `<>`
+- Greater Than: `>`
+- Less Than: `<`
+- Greater Than or Equal: `>=`
+- Less Than or Equal: `<=`
+
+- `AND`
+- `NOT`
+- `OR`
+
+```sql
+SELECT * FROM COMPANY WHERE AGE >= 25 AND SALARY >= 6500;
+SELECT * FROM COMPANY WHERE AGE >= 25 OR SALARY >= 6500;
+SELECT * FROM COMPANY WHERE SALARY IS NOT NULL;
+```
+
+### WHERE Clause
+
+```sql
+SELECT * FROM COMPANY WHERE AGE >= 25 AND SALARY >= 65000;
+SELECT * FROM COMPANY WHERE AGE >= 25 OR SALARY >= 65000;
+SELECT * FROM COMPANY WHERE AGE IS NOT NULL;
+SELECT * FROM COMPANY WHERE NAME LIKE 'Pa%';
+SELECT * FROM COMPANY WHERE AGE IN ( 25, 27 );
+SELECT * FROM COMPANY WHERE AGE NOT IN ( 25, 27 );
+SELECT * FROM COMPANY WHERE AGE BETWEEN 25 AND 27;
+
+SELECT AGE FROM COMPANY
+  WHERE EXISTS (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
+
+SELECT * FROM COMPANY
+  WHERE AGE > (SELECT AGE FROM COMPANY WHERE SALARY > 65000);
+
+-- integer needs to be converted to text to use LIKE
+SELECT * FROM COMPANY WHERE AGE::text LIKE '2%';
+
+-- find records where address has hyphen
+SELECT * FROM COMPANY WHERE ADDRESS  LIKE '%-%';
+```
+
+### LIMIT clause
+
+```sql
+SELECT * FROM COMPANY LIMIT 4;
+SELECT * FROM COMPANY LIMIT 3 OFFSET 2;
+```
+
+### GROUP BY clause
 
 ## Backup and Export
 
