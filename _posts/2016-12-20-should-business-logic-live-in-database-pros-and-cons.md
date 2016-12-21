@@ -6,24 +6,22 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-This debate has been labeled as the "Vietnam of Computer Engineering" and deservingly so. Even after a decade, it is still a highly contested issue. In the end, it really depends on the requirements and resources of the business that determines this. There are a lot of factor that involves such as, "is the team proficient in stored procedures?" or "are we permanently staying with this database vendor?" or "how will we test and scale this?" etc.
-
-Here are some pros and cons, in my opinion, of why should business logic be in database?
+This debate has been labeled as the "Vietnam of Computer Engineering" and deservingly so. Here are some pros and cons I have learned through experience so far. 
 
 ### Pros
 
 - centralized business logic
-- be independent from application language, type, OS, etc.. node vs golang vs php vs ruby will not be an issue
+- be independent from application language.. node vs golang vs php vs ruby will not be an issue
 - compared to applications, databases are less likely to need major refactorings
-- it is often more performant to have business logic here
+- it is often more performant to have business logic closer to the metal
 - stored procedures can reduce network traffic since you avoid multiple requests
 
 ### Cons
 
-- database vendor lock-in, especially that major databases expand SQL standards or do not follow it
-- very difficult to code-reuse
-- it is much more difficult and more expensive to scale database layer horizontally
+- database vendor lock-in, especially that major databases expand upon SQL standards
+- it is much more difficult and expensive to scale database layer horizontally
 - source control is more difficult to do properly with stored procedures
+- very difficult for code-reuse
 
 ### Conclusion
 
