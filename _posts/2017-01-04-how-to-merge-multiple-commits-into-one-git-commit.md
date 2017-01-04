@@ -6,13 +6,21 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-First, check your commit log:
+To do this, we use the command `git rebase`. Typically, it is used to:
+
+- Edit previous commit messages
+- Combine multiple commits into one
+- Delete or revert commits that are no longer necessary
+
+Let's work through an example.
+
+Let's say we already have an existing repository with a lot of commits. First, check your commit log:
 
 ```shell
 git log --oneline
 ```
 
-Let's saw we want to merge last 4 commits. Run `git rebase` with `-i` which means interactive and `HEAD~4` which means to look at last 4 commits
+Now, let's say we want to merge last 4 commits. Run `git rebase` with `-i` which means interactive and `HEAD~4` which means to look at last 4 commits
 
 ```shell
 git rebase -i HEAD~4
@@ -45,4 +53,4 @@ git pull origin master
 git push origin master
 ```
 
-Done!
+Done? Yes, but a piece of advice here: this is considered a bad practice as it squashes commits and makes it difficult for everyone else that are using the repository. **Do this at your own risk.**
