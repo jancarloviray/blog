@@ -1,0 +1,10 @@
+React
+Pro:
+- very simple - you're just writing javascript
+- React in itself has very little concepts to learn. In fact, it's just a view WITHOUT view directives to remember. You're just writing javascript.
+- It's fast
+Con:
+- Though React in itself is simple, it's ecosystem is not. In fact, the React ecosystem is so unstable that you'll more likely going to burn out or be fatigued even before you start writing production code
+- Tooling standards change so much, that you'll often wonder where to start
+- Flux > then Redux > then Relay > then Relay 2
+- React Router v1, React Router v2, React Router v3, React Router v4.. all bringing massive breaking changes
