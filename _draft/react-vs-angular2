@@ -1,21 +1,31 @@
 Still being in development..
 
-React
-Pro:
-- very simple - you're just writing javascript
-- React in itself has very little concepts to learn. In fact, it's just a view WITHOUT view directives to remember. You're just writing javascript.
-- It's fast
-- It's built with Flux in mind, enabling a simpler and more architecturally maintainable one-way data flow
-Con:
-- Though React in itself is simple, it's ecosystem is not. In fact, the React ecosystem is so unstable that you'll more likely going to burn out or be fatigued even before you start writing production code
-- Tooling standards change so much, that you'll often wonder where to start
-- Flux > then Redux > then Relay > then Relay 2
-- React Router v1, React Router v2, React Router v3, React Router v4.. all bringing massive breaking changes
-- Way too much boilerplate just to create a react project. Even then, there's more boilerplate needed
+These are all my opinion.
 
-Angular
+React (+ecosystem like Router, Flux/Redux.. because that's a real-world use case of React)
+Pro:
+- very simple, elegant and doesn't get in your way - you're really just writing javascript
+- React in itself has very little concepts to learn. In fact, it's just a view WITHOUT directives to remember. Again, you're just writing javascript.
+- It's very fast. Performance is something the library will never let you worry about.
+- It's built with Flux in mind, enabling a simpler and more architecturally maintainable one-way data flow.
+- You will never have to be fighting a framework to do what you need to do.
+Con:
+- Though React in itself is simple, it's ecosystem is not. In fact, the React ecosystem is so unstable that you are more likely going to burn out or be fatigued even before you start writing production code.
+- Simplicity has its cost -> more boilerplate to write. Takes a lot of boilerplate to write just to create a project. More boilerplate still needed to just build things. Be prepared to type a lot.
+- The official router: React Router v1, React Router v2, React Router v3, React Router v4.. all bringing massive breaking changes and uncertainty
+Conclusion:
+- If you want simplicity and straightforward architecture at the cost of productivity, go for React. Just prepared to hire 2x+ more developers to get the same output as those who use Angular 2 in production.
+
+Angular2
 Pro:
 - One standardized framework and tooling allows you to just focus on your releasing your application
+- Compared to React by itself, there are a bit more concepts to learn (if you add React eco-system like Router, Flux/Redux, it's about the same)
+- Angular v1 to v2 was massive breaking change, but moving forward now has less breaking changes than React's ecosystem.
+- Really fast to get started. And with angular-cli, you don't even have to create build files and the loads of boilerplate needed to get react started.
 Con:
 - As a framework, it's a bit more complicated than React, which is just a View
 - Input vs Output is not as graceful as React's passing down of props
+- 
+
+Conclusion:
+- Pick this framework to have a lesser time-to-launch delay. Make sure to use Redux (ngrx) if you want enterprise-level scaling, otherwise prepare to have a lot of pain in the future.
