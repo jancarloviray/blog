@@ -25,7 +25,7 @@ Pro:
 Con:
 - As a framework, it's a bit more complicated than React, which is just a View
 - Input vs Output is not as graceful as React's passing down of props
-- 
+- Why is Redux/Flux not pushed in this ecosystem? The default way of having shared mutational state will cause massive problems in the future.
 
 Conclusion:
-- Pick this framework to have a lesser time-to-launch delay. Make sure to use Redux (ngrx) if you want enterprise-level scaling, otherwise prepare to have a lot of pain in the future.
+- Pick this framework to have a lesser time-to-launch delay. Make sure to use Redux (ngrx) if you want enterprise-level scaling, otherwise prepare to have a lot of pain having shared mutable states.
