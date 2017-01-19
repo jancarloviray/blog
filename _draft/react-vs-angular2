@@ -10,7 +10,7 @@ Pro:
 - It's built with Flux in mind, enabling a simpler and more architecturally maintainable one-way data flow.
 - You will never have to be fighting a framework to do what you need to do.
 Con:
-- Though React in itself is simple, it's ecosystem is not. In fact, the React ecosystem is so unstable that you are more likely going to burn out or be fatigued even before you start writing production code.
+- Though React in itself is simple, it's ecosystem is not. In fact, the React ecosystem is so unstable that you are more likely going to burn out or be fatigued even before you start writing production code. Because there's no standard, i.e: "The Renaissance", everyone is inventing something, either a new best practice or architecture or alternatives.
 - Simplicity has its cost -> more boilerplate to write. Takes a lot of boilerplate to write just to create a project. More boilerplate still needed to just build things. Be prepared to type a lot.
 - The official router: React Router v1, React Router v2, React Router v3, React Router v4.. all bringing massive breaking changes and uncertainty
 Conclusion:
