@@ -1,10 +1,21 @@
+Still being in development..
+
 React
 Pro:
 - very simple - you're just writing javascript
 - React in itself has very little concepts to learn. In fact, it's just a view WITHOUT view directives to remember. You're just writing javascript.
 - It's fast
+- It's built with Flux in mind, enabling a simpler and more architecturally maintainable one-way data flow
 Con:
 - Though React in itself is simple, it's ecosystem is not. In fact, the React ecosystem is so unstable that you'll more likely going to burn out or be fatigued even before you start writing production code
 - Tooling standards change so much, that you'll often wonder where to start
 - Flux > then Redux > then Relay > then Relay 2
 - React Router v1, React Router v2, React Router v3, React Router v4.. all bringing massive breaking changes
+- Way too much boilerplate just to create a react project. Even then, there's more boilerplate needed
+
+Angular
+Pro:
+- One standardized framework and tooling allows you to just focus on your releasing your application
+Con:
+- As a framework, it's a bit more complicated than React, which is just a View
+- Input vs Output is not as graceful as React's passing down of props
