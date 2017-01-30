@@ -1,12 +1,12 @@
 ---
 layout: post
-title: Add Firewall to Linux Server with UFW?
+title: Add Firewall to Linux Server with UFW
 permalink: blog/add-firewall-to-linux-server-with-ufw/
 comments: True
 excerpt_separator: <!--more-->
 ---
 
-So, you have your own server? Setting up a firewall on your server is very important once your server is up and running. Thanks to `ufw`, doing this is fairly easy! Here's a basic setup flow:
+So, you have your own server? Setting up a firewall on your server is very important once it is up and running. Thanks to `ufw`, doing this is fairly easy! Here's a basic setup flow:
 
 ## Setup Basic Firewall
 
