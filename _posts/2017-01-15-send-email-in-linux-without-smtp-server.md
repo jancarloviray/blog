@@ -46,3 +46,24 @@ Install `mail` and other utilities: `apt-get install mailutils`
 And you're done! Now, try sending a mail! `echo "This is the body of the email" | mail -s "This is the subject line" -r from@example.org to@recipient.com`
 
 Note that you may need to change your computer hostname to match the hostname you entered. Check out this [link](http://askubuntu.com/questions/9540/how-do-i-change-the-computer-name) on how to do so.
+
+Now, let's try mapping email accounts to linux system accounts. Append `virtual_alias_maps` settings in postfix config.
+
+`postconf -e 'virtual_alias_maps= hash:/etc/postfix/virtual'`
+
+Edit `/etc/postfix/virtual` by mapping email to system username like this:
+
+```
+contact@example.com joe
+admin@example.com jane
+```
+
+Apply mapping with `postmap /etc/postfix/virtual`
+
+Restart postfix: `systemctl restart postfix`
+
+NOTE: you can change email headers as you send mail by adding `-a` param. For example: 
+
+```shell
+echo "body of email" | mail -s "Subject Line" -a "From: Admin Name <noreply@example.org>" mail@recipient.com
+```
