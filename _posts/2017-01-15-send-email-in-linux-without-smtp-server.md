@@ -44,3 +44,5 @@ Once you are settled, restart Postfix with `systemctl restart postfix`
 Install `mail` and other utilities: `apt-get install mailutils`
 
 And you're done! Now, try sending a mail! `echo "This is the body of the email" | mail -s "This is the subject line" -r from@example.org to@recipient.com`
+
+Note that you may need to change your computer hostname to match the hostname you entered. Check out this [link](http://askubuntu.com/questions/9540/how-do-i-change-the-computer-name) on how to do so.
