@@ -8,21 +8,23 @@ excerpt_separator: <!--more-->
 
 ## Set Your Domain Name Server
 
-First, check out your domain settings from your registrar (Godaddy, Namecheap, etc) and see if the **Domain Name Server** options are correct. If not, change it to point to your server. For example, if your servers are in Digital Ocean, change the domain servers to: **ns1.digitalocean.com, ns2.digitalocean.com, ns3.digitalocean.com**
+First, check out your domain settings from your registrar (Godaddy, Namecheap, etc) and see if the **Domain Name Server** options are correct. If not, change it to point to your server. For example, if your servers are in Digital Ocean, change the domain servers to: **ns1.digitalocean.com, ns2.digitalocean.com, ns3.digitalocean.com**. Note that you still have to configure the network settings in your server provider so that connections will direct to your server IP.
 
-Once you are done, run `whois example.com` to see if the "Name Server" key matches the ones you entered. If not, wait an hour or two for the changes to propagate.
+Once you are done, run `whois example.com` to see if the "Name Server" key matches the ones you entered. If not, wait an hour or two for the changes to propagate. But don't worry about that for now - we can do the rest of the process without that.
 
 ## Configure Your Domain
 
-Note that these options must be done through your server provider. First, add a domain by entering a valid fully qualified domain name that you own, ie: `example.com`. Then, add **A record** to set a host name and **CNAME records** to add aliases like if you want to prepend "www". If you need to set up a mail server, add **MX Records**.
+Note that these options must be done through your server provider. First, add a domain by entering a valid fully qualified domain name that you own, ie: `example.com`. Then, add **A record** to set a host name and **CNAME records** to add aliases like if you want to prepend "www". If you need to set up a mail server, add **MX Records**. Your server provider should have detailed documentations on this.
 
 ## Login to your Server from your Local Machine
 
-If you are using accessing your server from a web terminal provided by your server provider, you don't need to do this.
+Let's get to the good stuff. If you are using accessing your server from a web terminal provided by your server provider, you don't need to do this. If you are going to be accessing your server from your local machine, do this step.
 
 `ssh root@your_server_ip`
 
 ## Let's update Apt-Get
+
+Once you're in, update apt-get.
 
 `apt-get update`
 
@@ -97,15 +99,15 @@ exit
 
 ## Disable Password Authentication
 
-Let's make sure no one can really enter in your server. We'll disable logging in by password. This means the only way to enter your server is if you have the private key that pairs with the public key you copied in *authorized_keys*
+Let's make sure no one can really enter in your server - except yourself of course! Well, technically, only to those who have access to your local computer. Here, we will disable logging in by password. This means that the only way to enter your server is if you have the private key that pairs with the public key you copied in *authorized_keys*. We created that in the previous step.
 
-It is very important to note that only do this after you have completed the previous step, otherwise you are forever locked out from the server.
+It is very important to note to only do this AFTER you have completed the previous step, otherwise you are forever locked out from the server.
 
-Let's edit ssh config:
+Let's now edit ssh config:
 
 `sudo vim /etc/ssh/sshd_config`
 
-Change the line `# PasswordAuthentication no` to `PasswordAuthentication yes`. Notice that it is now "yes" and uncommented.
+Change the line `# PasswordAuthentication no` to `PasswordAuthentication yes`. Notice that it is now "yes" and is uncommented.
 
 Reload the SSH daemon:
 
@@ -113,7 +115,7 @@ Reload the SSH daemon:
 
 ## Set Up a Basic Firewall
 
-Install `ufw` with `sudo apt-get install ufw`.
+Install `ufw` with `sudo apt-get install ufw`
 
 Set up some defaults. These are out-of-the-box settings, but let's just make sure:
 
@@ -151,3 +153,5 @@ Enable the firewall:
 Check the current status of your firewall:
 
 `sudo ufw status`
+
+That's all for the basics! Let me know if the comments below if you would like to learn more steps! There is always another step to secure and harden your server!
