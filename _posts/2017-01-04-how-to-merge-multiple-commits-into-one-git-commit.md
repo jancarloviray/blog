@@ -14,6 +14,8 @@ To do this, we use the command `git rebase`. Typically, it is used to:
 
 Let's work through an example.
 
+<!--more-->
+
 Let's say we already have an existing repository with a lot of commits. First, check your commit log:
 
 ```shell
