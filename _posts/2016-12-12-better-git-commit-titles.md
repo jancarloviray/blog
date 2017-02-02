@@ -6,7 +6,9 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-For almost a year, I've been writing git commits in a more structured way. It has improved code reviews and skimming through code history. Inspired by [angular](https://github.com/angular/angular) commit messages, I adopted their commit message [guidelines](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-guidelines). Here's an example:
+For almost a year, I've been writing git commits in a more structured way. It has improved code reviews and skimming through code history. Inspired by [angular](https://github.com/angular/angular) commit messages, I adopted their commit message [guidelines](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-commit-message-guidelines). Here's are examples
+
+<!--more-->
 
 `fix(release): need to depend on latest rxjs and zone.js`
 `docs(changelog): update change log to beta.5`
@@ -18,8 +20,6 @@ Instantly, you notice a big and small picture based on those commit titles. With
 - **docs:** Documentation only changes
 - **style:** Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
 - **refactor:** A code change that neither fixes a bug nor adds a feature
-...
-<!--more-->
 - **perf:** A code change that improves performance
 - **test:** Adding missing tests or correcting existing tests
 - **build:** Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
