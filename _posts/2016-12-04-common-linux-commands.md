@@ -8,7 +8,7 @@ comments: True
 
 Expand this blog topic if you'd like to see the text version or read more.
 
-<!--![Linux Commands](https://raw.githubusercontent.com/jancarloviray/jancarloviray.github.io/master/_media/Linux.png)-->
+<!--more-->
 
 ## Archiving
 
@@ -31,8 +31,6 @@ Note that *when you exit the shell, the process will also terminate with a hangu
 ### How to run a script in the background without getting it terminated on shell exit?
 
 Append `nohup` in your command, which means "no hangup". It's a poor man's way of running a process as a daemon. Use this only on processes that will take some time, but will not hang around too long.
-
-<!--more-->
 
 ### How to check for background tasks?
 
