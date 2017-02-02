@@ -6,7 +6,9 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-So, you have your own server? Setting up a firewall on your server is very important once it is up and running. Thanks to `ufw`, doing this is fairly easy! Here's a basic setup flow:
+So, you have your own server? Setting up a firewall on your server is very important once it is up and running. Thanks to `ufw`, doing this is fairly easy!
+
+<!--more-->
 
 ## Install UFW - The Uncomplicated Firewall
 
