@@ -6,15 +6,17 @@ excerpt_separator: <!--more-->
 comments: True
 ---
 
-Currently, Docker does not have a command to do this so we will have to do some good old fashioned command piping. **To automatically update all images:**
+Currently, Docker does not have a command to do this so we will have to do some good old fashioned command piping. 
+
+<!--more-->
+
+**To automatically update all images:**
 
 ```
 docker images | grep -v REPOSITORY | awk '{print $1}' | xargs -L1 docker pull
 ```
 
 Docker does not overwrite old images for us. **To cleanup old images**:
-
-<!--more-->
 
 ```
 docker images | grep "<none>" | awk '{print $3}' | xargs -L1 docker rmi
