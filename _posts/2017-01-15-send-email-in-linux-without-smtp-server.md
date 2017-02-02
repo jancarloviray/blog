@@ -8,6 +8,8 @@ excerpt_separator: <!--more-->
 
 Typically, to send email, you would need an smtp server or connect to one. Let's use [Postfix](http://www.postfix.org/) to bypass that need. Basically, Postfix is a free and open-source mail transfer agent (MTA) that routes and delivers electronic mail. Let's start.
 
+<!--more-->
+
 ```shell
 apt-get update
 # install postfix
