@@ -6,7 +6,9 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-NOTE: You should not use this workflow in production, but for development and quick tests, this is fine.
+I will show you a very quick and easy way to properly run your process in the background. You should not use this workflow in production, but for development and quick tests, this is perfectly suitable for you.
+
+<!--more-->
 
 Now that we have that notice out of the way, let's do this! 
 
