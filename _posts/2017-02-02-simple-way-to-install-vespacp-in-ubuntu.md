@@ -6,9 +6,9 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-VespaCP is one of the simplest and straightforward control panels in the market. Best of all, it is open source and free!
+VespaCP is one of the simplest and straightforward control panels in the market. Best of all, it is open source and free! Here's a quick way to install it in your Ubuntu server.
 
-Here's a quick way to install it in your Ubuntu server
+<!--more-->
 
 ```shell
 # connect to your server
