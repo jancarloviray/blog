@@ -6,7 +6,9 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-This debate has been labeled as the "Vietnam of Computer Engineering" and deservingly so. Here are some pros and cons I have learned through experience so far. 
+This debate has been labeled as the "Vietnam of Computer Engineering" and deservingly so. Here are some pros and cons I have learned.
+
+<!--more-->
 
 ### Pros
 
@@ -26,8 +28,6 @@ This debate has been labeled as the "Vietnam of Computer Engineering" and deserv
 ### Conclusion
 
 I believe that core business logic should live in the layer that is most scalable, testable, debuggable and versionable. Putting core business logic in the database makes it very difficult, and very expensive to fulfill those requirements.
-
-<!--more-->
 
 80% of your data access requirements would be simple CRUD and can safely and conveniently live in Application Layer, while 20% of the requirements which may require complex SQL queries or mass data manipulation should probably live in the database, especially if performance is a big concern.
 
