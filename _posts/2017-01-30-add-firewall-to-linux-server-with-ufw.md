@@ -56,8 +56,6 @@ sudo ufw allow 995  #incoming pop3s
 
 That's it!
 
-<!--more-->
-
 ## Want to read more on Firewalls?
 
 - [UFW](https://help.ubuntu.com/community/UFW)
