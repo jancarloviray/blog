@@ -6,9 +6,9 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-Want to add or change something? Feel free to [create a pull request](https://github.com/jancarloviray/jancarloviray.github.io/blob/master/_posts/2016-12-19-postgres-quick-start-and-best-practices.md). I hope this helps!
+Here is a 1500+ lines of PostgreSQL goodness. Want to add or change something? [Create a pull request](https://github.com/jancarloviray/jancarloviray.github.io/blob/master/_posts/2016-12-19-postgres-quick-start-and-best-practices.md). I hope this helps!
 
-## Create a Postgres Docker Container
+## Quickly Create a Postgres Docker Container
 
 Want to test something quick? Install [Docker](https://www.docker.com/) and run these commands!
 
@@ -21,13 +21,13 @@ docker run --name pg -d postgres
 docker exec -it pg bash
 
 # now that you're inside the container, get inside postgres
-# by switching to "postgres" user and running `psql`
+# by switching to "postgres" user and running `psql`. Enjoy!
 su - postgres -c psql
-
-# enjoy!
 ```
 
-## Installation
+<!--more-->
+
+## Manual Installation and Configuration
 
 ### Install Postgres (latest, [9.6](https://www.postgresql.org/docs/9.6/static/release-9-6.html))
 
