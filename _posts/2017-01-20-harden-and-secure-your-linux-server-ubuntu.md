@@ -6,6 +6,10 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
+Don't let your server get hacked and lose all your hard work. Here's a step by step way to harden and secure your Linux server.
+
+<!--more-->
+
 ## Set Your Domain Name Server
 
 First, check out your domain settings from your registrar (Godaddy, Namecheap, etc) and see if the **Domain Name Server** options are correct. If not, change it to point to your server. For example, if your servers are in Digital Ocean, change the domain servers to: **ns1.digitalocean.com, ns2.digitalocean.com, ns3.digitalocean.com**. Note that you still have to configure the network settings in your server provider so that connections will direct to your server IP.
