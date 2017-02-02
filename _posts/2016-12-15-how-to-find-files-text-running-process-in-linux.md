@@ -6,7 +6,9 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-I'm building a "cheat sheet" on finding files, monitoring and everything related to that in Linux. I hope this helps!
+I'm building a "cheat sheet" on finding files, monitoring and everything related to that in Linux. Here's some of them.
+
+<!--more-->
 
 ## Recursively Find Files Containing a Specific Text
 
@@ -43,8 +45,6 @@ The `find` command is very powerful and can do additional things like:
 ```shell
 ps aux | grep postgres
 ```
-
-<!--more-->
 
 ## Find Open Ports and the Processes That Owns Them
 
