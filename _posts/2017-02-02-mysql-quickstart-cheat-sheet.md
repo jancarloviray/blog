@@ -6,7 +6,7 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-Although my favorite database is PostgreSQL, MySQL still has its uses, especially that Google Cloud SQL is only compatible with MySQL. Let's do a quick start, and compile a cheat sheet afterwards. 
+Although my favorite SQL database is PostgreSQL due to its feature-rich capabilities and amazing performance, MySQL still has its benefits, especially in the replication side. In fact, Google Cloud SQL is only compatible with MySQL right now. If they offered PostgreSQL, I would not be writing this. But I'll stop now on opinions. Let's do a quick start, and compile a cheat sheet afterwards. Also, check out some tips I learned including some best practices.
 <!--more-->
 ## Quick Start
 
