@@ -180,7 +180,7 @@ SELECT * FROM table WHERE rec LIKE "blah%"; -- % is wildcard ­
 SELECT * FROM table WHERE rec LIKE "_____"; -- Find 5­char values: _ is 1 char
 SELECT * FROM table WHERE rec RLIKE "^b$";  -- regex
 
--- JOIN 
+-- JOINS
 SELECT * FROM table_1 INNER JOIN table_2 ON conditions;
 SELECT * FROM table1 LEFT JOIN table2 ON conditions;
 
@@ -195,6 +195,30 @@ DELETE table_1, table2 FROM table_1
 INNER JOIN table_2 ON table_1.column_1 = table_2.column_2
 WHERE condition;
 ```
+
+### Joins 
+
+**INNER JOIN** returns rows when there is at least one match in both tables
+based on the condition given
+
+```sql
+SELECT t1.*, t2.* FROM table1 t1
+INNER JOIN table2 t2 ON t1.ID = t2.ID
+```
+
+```sql
+-- adding alias to header on columns
+SELECT  t1.ID AS t1_id, t1.Value AS t1_v, 
+        t2.ID t2_id, t2.Value AS t2_v 
+FROM table1 t1
+INNER JOIN table2 t2 ON t1.ID = t2.ID
+```
+
+**LEFT OUTER JOIN** returns all the rows from the left table with the matching 
+rows from the right table. If no columns in right matches, it returns NULL.
+
+**RIGHT OUTER JOIN** returns all the rows from the right table with the matching 
+rows from the left table. If no columns in left matches, it returns NULL.
 
 ## Common Table Manipulations
 
@@ -219,3 +243,38 @@ ALTER TABLE tbl DROP COLUMN col;
 -- Adding index to an existing table;
 ALTER TABLE table_name ADD INDEX index_name (col_name);
 ```
+
+## Tips
+
+- Always use proper datatype. For example, don't use `VARCHAR(20)` instead of 
+`DATETIME` since it will lead to errors and may store invalid data.
+- Use `CHAR(1)` over `VARCHAR(1)` when storing a single character to save space.
+- If it's a fixed length, use `CHAR` data type. If not, use `VARCHAR`.
+- When using `DATETIME` or `DATE` datatype, always use the `YYYY-MM-DD` date 
+formate or ISO date format that suits your SQL engine. Avoid regional formats.
+- Make sure you index the columns that are used in the join clauses so the query 
+returns the result fast. 
+- Do not use functions over indexed columns since it defeats the purpose of 
+index. For example, instead of `left(code,2)='CA'` rewrite with `code LIKE 'CA%`
+- Use `SELECT *` only when needed. Be explicit and don't blindly use that.
+- Use `ORDER BY` only if needed since it is a slow process.
+- Chose proper Database Engine. If you app reads more often than write, choose 
+MyISAM storage engine. If you develop an application that writes data more than 
+reading (for example, bank transactions), choose INNODB storage engine. Choosing
+the wrong engine affects performance.
+- If you want to check the existence of data, use `IF EXISTS(SELECT*...)`
+- Code with cache in mind. Instead of `WHERE date >= CURDATE()`, store date 
+value in a variable in your application code. Running dynamic functions 
+invalidate the cache.
+- Use `LIMIT 1` in your query if you're just looking for 1 unique item. This
+allows the database to stop scanning once it finds that specific item. 
+`SELECT 1 FROM user WHERE state = 'CA' LIMIT 1`
+- Indexes are not just for primary or unique keys. If there are any columns you 
+will search by, you should almost always index them.
+- When using `JOINS` make sure that the columns you join are index in BOTH sides
+- Also, make sure the column you join have the same data type.
+- Use `ENUM` over `VARCHAR` if using only few values, ie: active, inactive, 
+pending, expired
+- Unless you have a very specific reason to use a `NULL` value, you should
+always set your colums as `NOT NULL`. If there's no reason to have 0 vs NULL,
+you don't need it - they require additional space and add complexity.
