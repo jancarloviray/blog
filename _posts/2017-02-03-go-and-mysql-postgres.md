@@ -13,9 +13,9 @@ Let's use a toolkit from one of Go's standard libraries: `database/sql`. It is a
 
 ### Import Driver
 
-Import `database/sql` and a driver for the database. Don't use drivers directly - only refer to types defined in package if possible to avoid dependency. This is so you can easily change the driver or database later.
+Import `database/sql` and a driver for the database. Don't use drivers directly - only refer to types defined in package if possible. This is to avoid dependency so you can easily change the driver or database later.
 
-Underscore in the import `_` means we are just running the `Init` function of the package. No exported names are visible. Internally, the driver registers itself as being available to the `database/sql` package.
+The underscore in the import `_` means we are just running the `Init` function of the package. No exported package names are visible. Internally, the driver registers itself as being available to the `database/sql` package.
 
 ```go 
 import (
@@ -61,13 +61,14 @@ Additionally, keeping a connection idle for a long time can cause problems. Try 
 
 ### Retrieve Result Sets
 
-There are several idiomatic ways to retrieve results from the datastore:
-- Execute a query that returns rows.
-- Prepare a statement for repeated use. Execute it multiple times. Destroy it.
-- Execute a statement in a one-off fashion, without preparing statements.
-- Execute a query that returns a single row (we use a shortcut func here).
+Idiomatic ways to retrieve results from the datastore:
 
-If a function name includes `Query`, it is designed to ask a question to the database and return a set of rows. Statements that don't return rows must use `Exec()` functions.
+- execute a query that returns rows.
+- prepare a statement for repeated use. Execute it multiple times. Destroy it.
+- execute a statement in a one-off fashion, without preparing statements.
+- execute a query that returns a single row (we use a shortcut func here).
+
+If a function name includes `Query` it is designed to ask a question to the database and return a set of rows. Statements that don't return rows must use `Exec()` function.
 
 ```go
 var (
@@ -79,11 +80,10 @@ rows, err := db.Query("SELECT id, name from users where id = ?", 1)
 if err != nil {
     log.Fatal(err)
 }
-// Important to close! `rows.Close()` is a no-op if already closed
-defer rows.Close()
+defer rows.Close() // Important to close! This is no-op if already closed
 
-// Iterate over the rows - make sure you don't skip or exit the loop early
-// otherwise, the connection remains open. Also, don't defer inside loop.
+// Iterate rows. Make sure you don't skip/exit the loop early 
+// or the connection remains open. Don't defer inside loop also.
 for rows.Next() {
     err := rows.Scan(&id, &name)
     if err != nil {
@@ -92,29 +92,28 @@ for rows.Next() {
     log.Println(id, name)
 }
 
-// always check for errors at the end of the loop
-err = rows.Err()
+err = rows.Err() // check at end of the loop
 if err != nil {
     log.Fatal(err)
 }
 ```
 
-When you iterate over rows and scan them into variables, **Go converts the type for you!** If you have a column that is a string like `varchar` but you know that they are integers, just pass in an `int` in your `Scan()` and Go will call `strconv.ParseInt()` for you. This is the idiomatic Go way. Amazing!
+When you iterate over rows and scan them into variables, **Go converts the type for you!** If you have a column that is a string type, ie: `varchar` but you know they are ints, just pass in an `int` in your `Scan()` and Go will call `strconv.ParseInt()`. This is the idiomatic Go way. Awesome!
 
-If your query returns at most one row, you can use a shortcut to reduce boilerplate code.
+If your query returns at most one row, you can use a shortcut:
 
 ```go
 var name string 
-err = db.QueryRow("SELECT name from users where id = ?" 1).Scan($name)
+err = db.QueryRow("SELECT name from users where id = ?" 1).Scan(&name)
 if err != nil {
     log.Fatal(err)
 }
 fmt.Println(name)
 ```
 
-## Modifying Data 
+## Modify Data 
 
-Use `Exec()` to do `INSERT`, `UPDATE`, `DELETE`. Do not use `db.Query` to execute these statements, otherwise the connection will never be released.
+Use `Exec()` to `INSERT`, `UPDATE`, `DELETE`. Do not use `db.Query` to execute these statements, otherwise the connection will never be released.
 
 ```go 
 _, err := db.Exec("DELETE FROM users")
@@ -125,7 +124,7 @@ Using Prepared Statements
 ```go
 stmt, err := db.Prepare("INSERT INTO squareNum VALUES( ?, ? )")
 if err != nil {
-    panic(err.Error()) // don't do this, just example
+    panic(err.Error()) // don't do this! just an example
 }
 defer stmt.Close()
 
