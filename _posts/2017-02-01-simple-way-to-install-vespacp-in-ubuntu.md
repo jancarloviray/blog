@@ -6,7 +6,7 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-VespaCP is one of the simplest and straightforward control panels in the market. Best of all, it is open source and free! Here's a quick way to install it in your Ubuntu server.
+Vespa is one of the simplest and straightforward control panels in the market. Best of all, it is open source! Here's a quick way to install it in your Ubuntu server. Why did I choose Vespa? I played around with 3 control panels and this did the job out of the box, without bugs, uncertainties or unclear documentation. In fact, you don't even need a documentation to manage this - the UI is just great. For more features, I suggest ISPConfig. If you want to go for paid? cPanel is awesome.
 
 <!--more-->
 
