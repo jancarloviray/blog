@@ -9,8 +9,8 @@ excerpt_separator: <!--more-->
 ## Quick Start
 
 ```sh
-service mysql start         # start mysql if not started
-mysql -u root -p            # login with password prompt
+service mysql start # start mysql if not started
+mysql -u root -p    # login with password prompt
 ```
 
 ### Setup User and Database
@@ -39,11 +39,11 @@ SHOW GRANTS;                                           -- show users and grants
 ```sql
 CREATE TABLE cats
 (
-  id              INT unsigned NOT NULL AUTO_INCREMENT, -- Unique ID for the record
+  id              INT unsigned NOT NULL AUTO_INCREMENT, -- Unique ID
   name            VARCHAR(150) NOT NULL,                -- Name of the cat
   owner           VARCHAR(150) NOT NULL,                -- Owner of the cat
   birth           DATE NOT NULL,                        -- Birthday of the cat
-  PRIMARY KEY     (id)                                  -- Make the id the primary key
+  PRIMARY KEY     (id)                                  -- make id primary key
 );
 
 ALTER TABLE cats ADD gender CHAR(1) AFTER name;
@@ -67,7 +67,6 @@ SELECT name FROM cats WHERE owner = 'Casey';
 
 DELETE FROM cats WHERE name='Cookie';
 ```
-<!--more-->
 
 ## Cheat Sheet
 
@@ -152,20 +151,18 @@ DROP USER 'username'@'hostname';
 
 ```sql
 -- INSERT
-INSERT INTO people (name) VALUES ("tom"),("dick"),("harry");  -- Batch Insert w/ given name column
-INSERT INTO people VALUES ('MyName', '2002­08­31');             -- Inserting one row at a time (Use NULL for NULL)
-INSERT INTO people (name, company_id, created_at) 
-    SELECT name, 50, NOW() FROM people WHERE company_id = 49; -- copying rows from the same table
+INSERT INTO people VALUES ('MyName', '2002­08­31');             
+INSERT INTO people (name, company_id, created_at) -- copy rows from same tbl
+    SELECT name, 50, NOW() FROM people WHERE company_id = 49; 
 
 -- SELECT
-SELECT col FROM tbl WHERE conditions;           -- Retrieving information (general):  
 SELECT * FROM tbl;                              -- All values 
 SELECT * FROM tbl WHERE rec_name = "value";     -- Some values
 SELECT * FROM tbl WHERE rec1 = "value1"         -- Multiple critera
     AND rec2 = "val2"; 
 
 SELECT column_name FROM table;                    -- Selecting specific columns
-SELECT DISTINCT column_name FROM table;           -- Retrieving unique output records
+SELECT DISTINCT column_name FROM table;           -- Retrieving unique outputs
 SELECT col1, col2 FROM table ORDER BY col2;       -- Sorting
 SELECT col1, col2 FROM table ORDER BY col2 DESC;  -- Sorting Backward
 SELECT COUNT(*) FROM table;                       -- Counting Rows
@@ -173,12 +170,12 @@ SELECT owner, COUNT(*) FROM table GROUP BY owner; -- Grouping with Counting
 SELECT MAX(col_name) AS label FROM table;         -- Maximum value
 
 SELECT pet.name, comment FROM pet, event -- Selecting from multiple tables 
-WHERE pet.name = event.name;             -- (You can join again the same table by alias w/ "AS")
+WHERE pet.name = event.name;             
 
 -- SEARCH
 
-SELECT * FROM table WHERE rec LIKE "blah%"; -- % is wildcard ­ arbitrary ### of chars
-SELECT * FROM table WHERE rec LIKE "_____"; -- Find 5­char values: _ is any single character
+SELECT * FROM table WHERE rec LIKE "blah%"; -- % is wildcard ­
+SELECT * FROM table WHERE rec LIKE "_____"; -- Find 5­char values: _ is 1 char
 SELECT * FROM table WHERE rec RLIKE "^b$";  -- regex
 
 -- JOIN 
@@ -186,7 +183,7 @@ SELECT * FROM table_1 INNER JOIN table_2 ON conditions;
 SELECT * FROM table1 LEFT JOIN table2 ON conditions;
 
 -- UPDATE
-UPDATE table SET column_name = "new_value" -- Fixing all records with a certain value
+UPDATE table SET column_name = "new_value" 
 WHERE record_name = "value";
 
 -- DELETE 
