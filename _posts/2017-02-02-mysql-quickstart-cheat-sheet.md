@@ -6,11 +6,18 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
+Although my favorite database is PostgreSQL, MySQL still has its uses, especially that Google Cloud SQL is only compatible with MySQL. Let's do a quick start, and compile a cheat sheet afterwards. Before that, let's first create a test environment with Docker. Make sure you have Docker installed, then run these commands!
+
+```sh
+docker pull mysql 
+docker run -it --name mysql mysql /bin/bash
+```
+<!--more-->
 ## Quick Start
 
 ```sh
-service mysql start # start mysql if not started
-mysql -u root -p    # login with password prompt
+service mysql start     # start mysql if not started
+mysql -u root -p        # login with password prompt
 ```
 
 ### Setup User and Database
