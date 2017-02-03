@@ -6,7 +6,7 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-So, you have your own server? Setting up a firewall on your server is very important once it is up and running. Thanks to `ufw`, doing this is fairly easy!
+So, you have your own server? Setting up a firewall on your server is very important once it is up and running. Thanks to `ufw`, doing this is fairly easy! Don't even think about making your server public without a firewall! Check out my previous post on [securing your server](http://www.jancarloviray.com/blog/harden-and-secure-your-linux-server-ubuntu/) to add more protection.
 
 <!--more-->
 
