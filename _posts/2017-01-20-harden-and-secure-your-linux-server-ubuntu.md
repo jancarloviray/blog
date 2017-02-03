@@ -6,7 +6,7 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-Don't let your server get hacked and lose all your hard work. Here's a step by step way to harden and secure your Linux server.
+Don't let your server get hacked and lose all your hard work. Here's a step by step way to harden and secure your Linux server - from networking, to permissions. For simple deployments and tests, check out [Digital Ocean](https://m.do.co/c/8a0734a5b02f), my favorite platforms. Can't beat $5/mo servers that deploy in less than a minute! By signing up through my link, you are helping extend the life of my servers. Thank you.
 
 <!--more-->
 
