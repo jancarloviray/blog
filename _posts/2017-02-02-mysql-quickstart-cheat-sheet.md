@@ -9,7 +9,6 @@ excerpt_separator: <!--more-->
 ## Quick Start
 
 ```sh
-mysqladmin -u root password # set root pass
 service mysql start         # start mysql if not started
 mysql -u root -p            # login with password prompt
 ```
