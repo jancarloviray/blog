@@ -15,7 +15,7 @@ Let's use a toolkit from one of Go's standard libraries: `database/sql`. It is a
 
 Import `database/sql` and a driver for the database. Don't use drivers directly - only refer to types defined in package if possible. This is to avoid dependency so you can easily change the driver or database later.
 
-The underscore in the import `_` means we are just running the `Init` function of the package. No exported package names are visible. Internally, the driver registers itself as being available to the `database/sql` package.
+The underscore in the import `_` means we are just running the `init()` function of the package. No exported package will be visible. Internally, the driver [registers](https://golang.org/pkg/database/sql/#Register) itself as being available to the `database/sql` package.
 
 ```go 
 import (
@@ -42,7 +42,7 @@ func main() {
 }
 ```
 
-Note that `sql.DB` **is not a connection**. When you use `Open()` you get a handle for the database and connections do not open until you need them. This means that it does not return an error if the server is not available or user/pass is invalid. If you want to check before making queries, use `db.Ping()`
+Note that `sql.DB` **is not a connection** but an abstraction representing a pool of underlying connections. When you use `Open()` you get a handle for the database and connections do not open until you need them. This means that it does not return an error if the server is not available or user/pass is invalid. If you want to check before making queries, use `db.Ping()`
 
 - this does not establish a connection immediately - the first connection will be established lazily when needed
 - remember to always check and handle errors returned on all operations
@@ -51,13 +51,13 @@ Note that `sql.DB` **is not a connection**. When you use `Open()` you get a hand
 
 It is important to note that the `sql.DB` object is designed to be long-lived, so don't open and close databases frequently. Create **one** `sql.DB` object for each distinct database you need to access and keep it open until the program is done. Pass it around as needed, or make it available globally, but make sure you keep it open. If you don't you will experience connection problems or sporadic failures.
 
-#### Are you running out of database connections? 
+#### Connection Issues: Are you running out of database connections? 
 
 If you get a "too many connections" problem, you may need to set [func (*DB) SetMaxOpenConns](https://golang.org/pkg/database/sql/#DB.SetMaxOpenConns) to prevent infinite number of connections. This limits the number of total open connections to the database.
 
 If you perform a query like `db.Query("SELECT * FROM table")`, a connection is opened and will not return until you either `Close()` the connection explicitly or iterate over the rows with `Next()`. Additionally, doing a `sql.Tx` will only return the connection after a `Commit` or `Rollback()` is called. **If you forget to completely iterate the rows and forget to close it, then your connection will NEVER go back to the pool.**
 
-Additionally, keeping a connection idle for a long time can cause problems. Try setting `db.SetMaxIdleConns(0)` if you get connection timeouts because a connection is idle for too long.
+Additionally, keeping a connection idle for a long time can cause problems. Try setting `db.SetMaxIdleConns(0)` if you get connection timeouts because a connection is idle for too long. If however, you are getting latency, you can increase it. This setting will have to depend on your usage.
 
 ### Retrieve Result Sets
 
@@ -116,7 +116,15 @@ fmt.Println(name)
 Use `Exec()` to `INSERT`, `UPDATE`, `DELETE`. Do not use `db.Query` to execute these statements, otherwise the connection will never be released.
 
 ```go 
-_, err := db.Exec("DELETE FROM users")
+res, err := db.Exec("DELETE FROM users LIMIT 1")
+if err != nil {
+    log.Fatal(err)
+}
+rowCount, err := res.RowsAffected()
+if err != nil {
+    log.Fatal(err)
+}
+log.Println(rowCount)
 ```
 
 Using Prepared Statements
@@ -162,6 +170,18 @@ for rows.Next() {
 ```
 
 There's another work around mentioned in [go-sql-driver wiki](https://github.com/go-sql-driver/mysql/wiki/Examples#ignoring-null-values).
+
+## Gotchas
+
+- do not defer inside a loop.
+- you cannot scan a `NULL` into a variable unless you create a `Nullxxxx` type. Best is to just avoid NULLs in database.
+- remember to always do `rows.Close()` if you want to free your connection
+- do not ever use `db.Query()` on non-query statements because you will leak connections
+- always handle `rows.Next()` errors as it can the loop may break abnormally
+- if a statement is only going to be used once, don't use prepared statements as it will do two round trips
+- if a code is concurrent, avoid prepared statements as they will run multiple times on different connections
+- `.Scan()` implicitly converts the values for you, so you don't need to write `strconv` all over
+- your next statement may not use the same connection so avoid writing BEGIN or LOCK in SQL. Use `sql.Tx` instead
 
 ## Full Example 
 
