@@ -75,17 +75,33 @@ import (
 	"fmt"
 	"time"
 
-	"strconv"
-
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
-type Person struct {
-	ID        bson.ObjectId `bson:"_id,omitempty"`
-	Name      string
-	Phone     string
-	Timestamp time.Time
+type Game struct {
+	Winner       string    `bson:"winner"`
+	OfficialGame bool      `bson:"official_game"`
+	Location     string    `bson:"location"`
+	StartTime    time.Time `bson:"start"`
+	EndTime      time.Time `bson:"end"`
+	Players      []Player  `bson:"players"`
+}
+
+type Player struct {
+	Name   string    `bson:"name"`
+	Decks  [2]string `bson:"decks"`
+	Points uint8     `bson:"points"`
+	Place  uint8     `bson:"place"`
+}
+
+func NewPlayer(name, firstDeck, secondDeck string, points, place uint8) Player {
+	return Player{
+		Name:   name,
+		Decks:  [2]string{firstDeck, secondDeck},
+		Points: points,
+		Place:  place,
+	}
 }
 
 var isDropMe = true
@@ -93,25 +109,41 @@ var isDropMe = true
 func main() {
 	Host := []string{
 		"127.0.0.1:27017",
-		// more replica set addrs...
+		// replica set addrs...
 	}
 	const (
-		Username = "YOUR_USERNAME"
-		Password = "YOUR_PASS"
-		Database = "YOUR_DB"
+		Username   = "YOUR_USERNAME"
+		Password   = "YOUR_PASS"
+		Database   = "YOUR_DB"
+		Collection = "YOUR_COLLECTION"
 	)
 	session, err := mgo.DialWithInfo(&mgo.DialInfo{
-		Addrs:    Host,
+		Addrs: Host,
 		// Username: Username,
 		// Password: Password,
 		// Database: Database,
+		// DialServer: func(addr *mgo.ServerAddr) (net.Conn, error) {
+		// 	return tls.Dial("tcp", addr.String(), &tls.Config{})
+		// },
 	})
 	if err != nil {
 		panic(err)
 	}
 	defer session.Close()
 
-	session.SetMode(mgo.Strong, true)
+	game := Game{
+		Winner:       "Dave",
+		OfficialGame: true,
+		Location:     "Austin",
+		StartTime:    time.Date(2015, time.February, 12, 04, 11, 0, 0, time.UTC),
+		EndTime:      time.Now(),
+		Players: []Player{
+			NewPlayer("Dave", "Wizards", "Steampunk", 21, 1),
+			NewPlayer("Javier", "Zombies", "Ghosts", 18, 2),
+			NewPlayer("George", "Aliens", "Dinosaurs", 17, 3),
+			NewPlayer("Seth", "Spies", "Leprechauns", 10, 4),
+		},
+	}
 
 	if isDropMe {
 		err = session.DB("test").DropDatabase()
@@ -120,86 +152,58 @@ func main() {
 		}
 	}
 
-	// Collection People
-	c := session.DB("test").C("people")
-
-	// Create Index
-	index := mgo.Index{
-		Key:        []string{"name", "phone"},
-		Unique:     true,
-		DropDups:   true,
-		Background: true,
-		Sparse:     true,
-	}
-	err = c.EnsureIndex(index)
-	if err != nil {
-		panic(err)
-	}
+	// Collection
+	c := session.DB(Database).C(Collection)
 
 	// Insert
-	err = c.Insert(
-		&Person{Name: "Ale", Phone: "+55 55 9090 8989", Timestamp: time.Now()},
-		&Person{Name: "Cla", Phone: "+77 77 9090 8989", Timestamp: time.Now()},
-	)
+	if err := c.Insert(game); err != nil {
+		panic(err)
+	}
+
+	// Find and Count
+	player := "Dave"
+	gamesWon, err := c.Find(bson.M{"winner": player}).Count()
 	if err != nil {
 		panic(err)
 	}
+	fmt.Printf("%s has won %d games.\n", player, gamesWon)
 
-	// Bulk Insert
-	var data []interface{}
-	for i := 0; i < 10000; i++ {
-		data = append(data, Person{Name: "Ale" + strconv.Itoa(i), Phone: "+55 55 9090 8989", Timestamp: time.Now()})
-	}
-	bulk := c.Bulk()
-	bulk.Unordered()
-	bulk.Insert(data...)
-	_, err = bulk.Run()
+	// Find One (with Projection)
+	var result Game
+	err = c.Find(bson.M{"winner": player, "location": "Austin"}).Select(bson.M{"official_game": 1}).One(&result)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("Is game in Austin Official?", result.OfficialGame)
 
-	// Query All
-	var results []Person
-	err = c.Find(bson.M{"name": "Ale"}).Sort("-timestamp").All(&results)
+	// Find All
+	var games []Game
+	err = c.Find(nil).Sort("-start").All(&games)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Query All: ", results)
-
-	// Get All
-	var allPeople []Person
-	if err := c.Find(nil).Sort("-timestamp").All(&allPeople); err != nil {
-		panic(err)
-	}
-	fmt.Println("Get All", results)
-
-	// Find One
-	result := Person{}
-	if err := c.Find(bson.M{"name": "Ale"}).Select(bson.M{"phone": 0}).One(&result); err != nil {
-		panic(err)
-	}
-	fmt.Println("Phone", result)
+	fmt.Println("Number of Games", len(games))
 
 	// Update
-	selector := bson.M{"name": "Ale"}
-	updator := bson.M{"$set": bson.M{"phone": "86 44 9999 8888", "timestamp": time.Now()}}
+	newPlayer := "John"
+	selector := bson.M{"winner": player}
+	updator := bson.M{"$set": bson.M{"winner": newPlayer}}
 	if err := c.Update(selector, updator); err != nil {
 		panic(err)
 	}
 
-	// Remove
-	if err := c.Find(bson.M{"name": "Cla"}).One(&result); err != nil {
-		panic(err)
-	}
-	if err := c.Remove(bson.M{"_id": result.ID}); err != nil {
-		panic(err)
-	}
-
-	// Count
-	count, err := c.Count()
+	// Update All
+	info, err := c.UpdateAll(selector, updator)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Total Documents:", count)
+	fmt.Println("Updated", info.Updated)
+
+	// Remove
+	info, err = c.RemoveAll(bson.M{"winner": newPlayer})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Removed", info.Removed)
 }
 ```
