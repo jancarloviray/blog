@@ -6,8 +6,6 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-# Go + MongoDB Simple Quickstart 
-
 ## Install and Start MongoDB
 
 ### Install MongoDB on Mac 
