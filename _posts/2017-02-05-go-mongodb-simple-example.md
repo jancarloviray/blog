@@ -6,6 +6,15 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
+Both Golang and MongoDB are a perfect pair for rapid application development and
+building things for scale. They both have native features that allows you to
+focus on your application. When choosing a database, make sure that MongoDB fits 
+your requirements as it is not a one-size-fits all solution. Read the official 
+docs on its design and use cases. In this post, we'll go from Installation to 
+building a CRUD.
+
+<!--more-->
+
 ## Install and Start MongoDB
 
 ### Install MongoDB on Mac 
@@ -50,6 +59,8 @@ to the MongoDB server you just ran, execute the MongoDB shell client:
 `mongo`
 
 ## Go
+
+**NOTE: this section is still in development**
 
 Get mongo drivers for go.
 
