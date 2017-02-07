@@ -6,7 +6,7 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-Hate it or love it, MySQL is widely used in massive scale - think Uber, Google, Facebook, Quora. It may not have the best licensing or be  fastest out-of-the-box but it is a proven database. There are thousands of companies using MySQL out there, but here are some brand name companies using it.
+Hate it or love it, MySQL is widely used in massive scale - think Uber, Google, Facebook, Quora. It may not have the best licensing or be  fastest out-of-the-box but it is a proven database. Want to get started quick? I wrote a [MySQL cheat sheet](http://www.jancarloviray.com/blog/mysql-quickstart-cheat-sheet/) to help you get started with common tasks. There are thousands of companies using MySQL out there, but here are some brand name companies using it. 
 
 <!--more-->
 
