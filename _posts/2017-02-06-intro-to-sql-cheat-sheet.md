@@ -200,6 +200,9 @@ INNER JOIN departments d ON d.department_id = e.department_id
 INNER JOIN jobs j ON j.job_id = e.job_id
 WHERE e.department_id IN (1 , 2, 3);
 
+-- Outer joins also combine rows from two or more tables, but unlike inner joins, they do not require the join condition to be met. Instead, every row in the left table is returned in the result set, and if the join condition is not met, then NULL values are used to fill in the columns from the right table.
+-- The left table is simply the first table that appears in the statement. That means whatever is in the FROM will be the left table.
+
 -- GROUP BY
 SELECT department_id, COUNT(employee_id) headcount FROM employees
 GROUP BY department_id;
