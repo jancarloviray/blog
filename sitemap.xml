@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+<url>
+  <loc>http://www.jancarloviray.com/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/about/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/archive/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/paas-comparison-2017-dokku-flynn-deis-kubernetes-docker-swarm/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/companies-using-mysql/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/mysql-quickstart-cheat-sheet/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/intro-to-sql-cheat-sheet/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/go-mongodb-simple-example/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/why-golang/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/go-and-mysql-postgres/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/postgres-quick-start-and-best-practices/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/simple-way-to-install-vespacp-in-ubuntu/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/harden-and-secure-your-linux-server-ubuntu/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/add-firewall-to-linux-server-with-ufw/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/send-email-in-linux-without-an-smtp-server/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/run-process-in-background-with-screen/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/how-to-merge-multiple-commits-into-one-git-commit/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/should-table-names-be-plural-or-singular-what-about-column-names/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/should-business-logic-live-in-database-pros-and-cons/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/how-to-find-files-text-running-process-in-linux.md/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/better-git-commit-titles/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/how-to-update-all-docker-images/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/common-linux-commands/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/page2/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/how-to-find-files-containing-specific-text-in-linux-using-grep/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/companies-using-docker/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/companies-using-angular/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/companies-using-react/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/react-props-in-state-anti-pattern/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/reactjs-lessons-learned/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/react-best-practice-compilation/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/how-to-share-sync-directory-inside-vagrant/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/how-to-install-vagrant-and-virtualbox/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/state-is-an-anti-pattern/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/jan-carlo-viray-portfolio/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/reduce-docker-image-size/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/what-does-docker-link-do/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/docker-cheat-sheet/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/docker-run/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/reactjs-overview/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/docker-overview/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/disable-terminal-line-wrap/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/run-terminal-in-docker/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/es7-async-await-javascript-simplified/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/install-docker-in-mac-osx-detailed/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/react-flux-tips/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/blog/the-year-2015/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://www.jancarloviray.com/page3/</loc>
+  <lastmod>2017-02-09T10:02:30+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.64</priority>
+</url>
+</urlset>
