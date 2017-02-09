@@ -1,12 +1,12 @@
 ---
 layout: post
-title: PAAS comparison (2017): Dokku, Flynn, Deis, Kubernetes
+title: PAAS comparison (2017) - Dokku, Flynn, Deis, Kubernetes
 permalink: blog/paas-comparison-2017-dokku-flynn-deis-kubernetes/
 comments: True
 excerpt_separator: <!--more-->
 ---
 
-2017 is when container orchestration and technology will mature and clear winners for different use cases will dominate. Here are my personal notes on common paas technology, comparing Dokku vs Flynn vs Deis vs Kubernetes. **tldr**: Easy but no HA: Dokku. Easy with HA: Flynn. The big dawg: Kubernetes.
+2017 is when container orchestration and technology will be standard and clear winners for different use cases will rise. Here are my personal notes on common paas technology, comparing Dokku vs Flynn vs Deis vs Kubernetes. **tldr**: Easy but no HA: Dokku. Easy with HA: Flynn. The big dawg: Kubernetes.
 
 <!--more-->
 
