@@ -1,14 +1,14 @@
 ---
 layout: post
-title: PAAS comparison - Dokku vs Flynn vs Deis vs Kubernetes (2017)
-permalink: blog/paas-comparison-2017-dokku-flynn-deis-kubernetes/
+title: PAAS comparison - Dokku vs Flynn vs Deis vs Kubernetes vs Docker Swarm (2017)
+permalink: blog/paas-comparison-2017-dokku-flynn-deis-kubernetes-docker-swarm/
 comments: True
 excerpt_separator: <!--more-->
 ---
 
-This year (2017) is when container orchestration and technology will be standard and clear winners for different use cases will rise. Here are my personal notes on common paas technology, comparing Dokku vs Flynn vs Deis vs Kubernetes. 
+This year (2017) is when container orchestration and technology will be standard and clear winners for different use cases will rise. Here are my personal notes on common paas technology, comparing Dokku vs Flynn vs Deis vs Kubernetes vs Docker Swarm. 
 
-**tldr**: Easy but no HA? Dokku. Easy with HA? Flynn. The big dawg? Kubernetes.
+**tldr**: Easy but no H/A? Dokku. Easy with H/A? Flynn. Easy with H/A and native out-of-the-box solution? Docker Swarm. Complex, but mature - the big dawg? Kubernetes. Want to make the big dawg less scary but still use the big dawg? Deis.
 
 <!--more-->
 
@@ -22,11 +22,13 @@ The mini PaaS! It is more like the quick introduction to the wonderful world of 
 
 The upgraded Dokku and is used by around a dozen companies. It can scale and has ability to be highly available, so there's no single point of failure. It is noted as more production-ready than Dokku. Runs high availability databases within the platform in addition to stateless apps. Their goal is to have an easy to use unified solution, but at the cost of having a lot of components. Big plus: it has its own web dashboard! You can run in single server or scale out. It's known for its flexibility and ease. This does not use CoreOS so you can run it on Ubuntu.
 
-**WHEN CHOOSE FLYNN**: liked Dokku but need high availability and a web UI to manage your clusters? Choose this.
+**WHEN TO CHOOSE FLYNN**: liked Dokku but need high availability and a web UI to manage your clusters? Choose this.
 
 ## Deis
 
-Similar to Flynn but has more companies using it in production it seems? It is built around the Kubernetes and Docker ecosystems. Doing more research on this...
+Similar to Flynn but has more companies using it in production. It is built around the Kubernetes and Docker ecosystems. For v2, you need Kubernetes as your foundation. It provides a more developer-friendly workflow built on top of Kubernetes.
+
+**WHEN TO CHOOSE DEIS**:
 
 ## Kubernetes
 
@@ -37,8 +39,9 @@ The big giant and the future of container orchestration. This is obviously the c
 ## Conclusion
 
 ```
-Dokku           Hobby Projects / Prototypes
+Dokku           Hobby Projects / Prototypes that are not mission critical
 Flynn           Small Production Deployments
-Deis            ???
-Kubernetes      Huge Deployments
+Kubernetes      Huge Deployments and Mission Critical
+Deis            Need a friendlier workflow on top of Kubernetes
+Docker Swarm    Easy. Native.
 ```
