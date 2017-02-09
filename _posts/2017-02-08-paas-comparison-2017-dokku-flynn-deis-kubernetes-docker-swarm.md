@@ -8,7 +8,7 @@ excerpt_separator: <!--more-->
 
 This year (2017) is when container orchestration and technology will be standard and clear winners for different use cases will rise. Here are my personal notes on common paas technology, comparing Dokku vs Flynn vs Deis vs Kubernetes vs Docker Swarm. 
 
-**tldr**: Easy but no H/A? Dokku. Easy with H/A? Flynn. Easy with H/A and native out-of-the-box solution? Docker Swarm. Complex, but mature - the big dawg? Kubernetes. Want to make the big dawg less scary but still use the big dawg? Deis.
+**tldr**: Easy but no H/A? **Dokku**. Easy with H/A? **Flynn**. Easy with H/A and native out-of-the-box solution? **Docker Swarm**. Complex, but mature and scales infinitely - the big dawg? **Kubernetes**. Want to make the big dawg less scary but still use the big dawg? **Deis**.
 
 <!--more-->
 
