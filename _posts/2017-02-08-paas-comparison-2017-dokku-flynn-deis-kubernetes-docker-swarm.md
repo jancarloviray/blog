@@ -24,17 +24,23 @@ The upgraded Dokku and is used by around a dozen companies. It can scale and has
 
 **WHEN TO CHOOSE FLYNN**: liked Dokku but need high availability and a web UI to manage your clusters? Choose this.
 
-## Deis
-
-Similar to Flynn but has more companies using it in production. It is built around the Kubernetes and Docker ecosystems. For v2, you need Kubernetes as your foundation. It provides a more developer-friendly workflow built on top of Kubernetes.
-
-**WHEN TO CHOOSE DEIS**:
-
 ## Kubernetes
 
 The big giant and the future of container orchestration. This is obviously the choice for more serious deployments. It is packed with 10 years of Google experience, plus it powered Pokemon Go deployment. This is undoubtly what you should choose if you are serious about scaling with container technology. Big caveit: it is very hard to setup that you will most likely want to host your application in a one-click solution that Google Cloud built.
 
-**WHEN TO CHOOSE KUBERNETES**: you are serious pretty serious about deployment and you have serious scaling needs. You need something mature and battle-tested
+**WHEN TO CHOOSE KUBERNETES**: you are serious pretty serious about deployment and you have serious scaling needs. You need something mature and battle-tested.
+
+## Deis Workflow
+
+Similar to Flynn but has more companies using it in production. It is built around the Kubernetes and Docker ecosystems. For v2, you need Kubernetes as your foundation. It provides a more developer-friendly workflow built on top of Kubernetes.
+
+**WHEN TO CHOOSE DEIS**: if you want a layer on top of Kubernetes that makes it easier to manage and deploy your applications and you don't want to use Google Cloud.
+
+## Docker Swarm
+
+If you're using Docker, you should have heard about Docker Swarm. It gives an out of the box solution for you, already preinstalled when you setup Docker. Check more on the official docs about this.
+
+**WHEN TO CHOOSE DOCKER SWARM**: in my opinion, this has a very strong potential to be a contender against current solutions mentioned above but as of right now, it is still evolving.
 
 ## Conclusion
 
@@ -42,6 +48,6 @@ The big giant and the future of container orchestration. This is obviously the c
 Dokku           Hobby Projects / Prototypes that are not mission critical
 Flynn           Small Production Deployments
 Kubernetes      Huge Deployments and Mission Critical
-Deis            Need a friendlier workflow on top of Kubernetes
-Docker Swarm    Easy. Native.
+Deis            A friendlier workflow on top of Kubernetes
+Docker Swarm    Native
 ```
