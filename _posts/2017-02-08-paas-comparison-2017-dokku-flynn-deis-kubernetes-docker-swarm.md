@@ -8,7 +8,7 @@ excerpt_separator: <!--more-->
 
 This year (2017) is when container orchestration and technology will be standard and clear winners for different use cases will rise. Here are my personal notes on common paas technology, comparing Dokku vs Flynn vs Deis vs Kubernetes vs Docker Swarm. 
 
-**tldr**: Easy but no H/A? **Dokku**. Easy with H/A? **Flynn**. Easy with H/A and native out-of-the-box solution? **Docker Swarm**. Complex, but mature and scales infinitely - the big dawg? **Kubernetes**. Want to make the big dawg less scary but still use the big dawg? **Deis**.
+**tldr**: Easy but no H/A? **Dokku**. Easy with H/A? **Flynn**. Easy with H/A and native out-of-the-box solution? **Docker Swarm**. Complex, but mature and scales infinitely - the big dawg? **Kubernetes**. Want to make the big dawg less scary but still use the big dawg? **Deis Workflow**.
 
 <!--more-->
 
@@ -34,7 +34,7 @@ The big giant and the future of container orchestration. This is obviously the c
 
 Similar to Flynn but has more companies using it in production. It is built around the Kubernetes and Docker ecosystems. For v2, you need Kubernetes as your foundation. It provides a more developer-friendly workflow built on top of Kubernetes.
 
-**WHEN TO CHOOSE DEIS**: if you want a layer on top of Kubernetes that makes it easier to manage and deploy your applications and you don't want to use Google Cloud.
+**WHEN TO CHOOSE DEIS WORKFLOW**: if you want a layer on top of Kubernetes that makes it easier to manage and deploy your applications and you don't want to use Google Cloud.
 
 ## Docker Swarm
 
@@ -48,6 +48,6 @@ If you're using Docker, you should have heard about Docker Swarm. It gives an ou
 Dokku           Hobby Projects / Prototypes that are not mission critical
 Flynn           Small Production Deployments
 Kubernetes      Huge Deployments and Mission Critical
-Deis            A friendlier workflow on top of Kubernetes
+Deis Workflow   A friendlier workflow on top of Kubernetes
 Docker Swarm    Native
 ```
