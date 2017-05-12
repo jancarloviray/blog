@@ -73,9 +73,9 @@ Running that command generates the following files:
 
 Do not share the private key! Now, copy the public key to your new server.
 
-`ssh-copy-id jancarloviray@your_server_ip`
+`ssh-copy-id -i ~/.ssh/id_rsa.pub jancarloviray@your_server_ip`
 
-If you have a mac and you don't have that command installed, run `brew install ssh-copy-id`. If that doesn't work, then you have to do things manually. It's a little bit more work, but you'll be grateful for it. Let's manually install the key:
+If you have a mac and you don't have that command installed, run `brew install ssh-copy-id`. If that doesn't work, then you have to do things manually. It's a little bit more work, but you'll be grateful for it. Let's manually install the key (not recommended!):
 
 ```shell
 # in your local computer, print the contents of your public key
@@ -116,6 +116,12 @@ Change the line `# PasswordAuthentication yes` to `PasswordAuthentication no`. N
 Reload the SSH daemon:
 
 `sudo systemctl reload sshd`
+
+You should now be able to log in without entering password, as long as you have the key.
+
+If you need to troubleshoot:
+
+Run this in server `tail -f /var/log/auth.log` and run this in client as you connect `ssh -vvv -i .ssh/id_rsa user@server_ip_or_hostname`
 
 ## Set Up a Basic Firewall
 
