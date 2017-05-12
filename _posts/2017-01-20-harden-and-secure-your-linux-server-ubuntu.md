@@ -88,7 +88,7 @@ cat ~/.ssh/id_rsa.pub
 su - jancarloviray
 
 # create .ssh directory and restrict its permission
-mkdir ~/.ssh
+mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 
 # open the authorized_keys file and insert your public key there
@@ -111,7 +111,7 @@ Let's now edit ssh config:
 
 `sudo vim /etc/ssh/sshd_config`
 
-Change the line `# PasswordAuthentication no` to `PasswordAuthentication yes`. Notice that it is now "yes" and is uncommented.
+Change the line `# PasswordAuthentication yes` to `PasswordAuthentication no`. Notice that it is now "no" and is uncommented.
 
 Reload the SSH daemon:
 
@@ -149,6 +149,10 @@ sudo ufw allow 993  #imaps
 sudo ufw allow 110  #incoming pop3
 sudo ufw allow 995  #incoming pop3s
 ```
+
+Enable Rate Limiting
+
+`sudo ufw limit ssh/tcp`
 
 Enable the firewall:
 
