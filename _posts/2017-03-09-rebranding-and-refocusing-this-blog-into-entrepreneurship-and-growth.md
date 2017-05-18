@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Rebranding and Refocusing This Blog into Entrepreneurship and Growth
+title: Rebranding and Refocusing This Blog into Entrepreneurship and Growth Hacking
 permalink: blog/rebranding-and-refocusing-this-blog-into-entrepreneurship-and-growth/
 comments: True
 excerpt_separator: <!--more-->
