@@ -12,4 +12,10 @@ Future topics include:
 - "How to properly market-validate your idea?"
 - "How to go from idea to product?"
 - "Don't write a line of code before you do these things"
-- and other personal development topics
+
+Reminiscing my most visited blog posts:
+- [How to Harden and Secure Your Linux Server](http://www.jancarloviray.com/blog/harden-and-secure-your-linux-server-ubuntu/)
+- [Should Business Logic Live in Database? Pros and Cons](http://www.jancarloviray.com/blog/should-business-logic-live-in-database-pros-and-cons/)
+- [React Props in State an Anti-Pattern](http://www.jancarloviray.com/blog/react-props-in-state-anti-pattern/)
+- [React Best Practice Compilation](http://www.jancarloviray.com/blog/react-best-practice-compilation/)
+- [Postgres Quick Start and Best Practices](http://www.jancarloviray.com/blog/postgres-quick-start-and-best-practices/)
