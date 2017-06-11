@@ -10,6 +10,8 @@ This year (2017) is when container orchestration and technology will be standard
 
 **tldr**: Easy but no H/A? **Dokku**. Easy with H/A? **Flynn**. Easy with H/A and native out-of-the-box solution? **Docker Swarm**. Complex, but mature and scales infinitely - the big dawg? **Kubernetes**. Want to make the big dawg less scary but still use the big dawg? **Deis Workflow**.
 
+Hacker News Discussion: https://news.ycombinator.com/item?id=14531883
+
 <!--more-->
 
 ## Dokku
