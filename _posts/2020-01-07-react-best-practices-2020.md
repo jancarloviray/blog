@@ -6,8 +6,6 @@ comments: True
 excerpt_separator: <!--more-->
 ---
 
-Hopefully you have enjoyed some of the articles I posted here throughout the years. I geared it more as a personal reference for myself and yet, it has gained a good amount of views. At this point, I will be refocusing and rebranding this blog into topics like entrepreneurship, product creation and growth, as this is now my main focus. Until then, this blog will be under construction. 
-
 ### Domain Driven Design Structure instead of Type Driven Design
 - Organizing projects by function or type works okay in smaller application but as it grows, hundreds of files get created. It then becomes difficult to find dependencies if project is not modularized. Example: /redux/{actions, middleware, reducers, utils}. Instead, it is better to organize by domain.
 
