@@ -6,7 +6,7 @@ comments: True
 
 <p class="message">Hey there! Welcome to my blog! It is currently a work-in-progress until I push a full-blown portfolio site.</p>
 
-I am Jan Carlo Viray a Senior Front-End / Angular / Node Developer. Hope you learn a thing or two. Always feel free to leave comments.
+I am Jan Carlo Viray. Hope you learn a thing or two. Always feel free to leave comments.
 
 Follow me here:
 
